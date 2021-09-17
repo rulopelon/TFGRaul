@@ -1,13 +1,13 @@
 function  plotElement(tp,position,velocity,type)
     %Function to add an element to the plot of the simulation
-    plotter = platformPlotter(tp,'DisplayName',type);
     if strcmp(type,'Avion')
-        plotPlatform(plotter, position, velocity);
+        plotter = platformPlotter(tp,'DisplayName',type);     
     elseif strcmp(type,'Emisor') || strcmp(type,'Receptor')
-        plotPlatform(plotter, position, velocity,'s');
+        plotter = platformPlotter(tp,'DisplayName',type,'Marker','s');
     else
-        plotPlatform(plotter, position, velocity,'d');
+        plotter = platformPlotter(tp,'DisplayName',type,'Marker','d');
     end
+    plotPlatform(plotter, position, velocity);
 
 end
 

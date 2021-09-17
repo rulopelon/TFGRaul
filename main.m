@@ -1,6 +1,6 @@
 %% Passive radar simulation
 % Sensor Fusion and Tracking Toolbox
-%% Constraints are defined
+%% Constraints declared
 %Environment is cleaned
 clc;close all force;clear;
 
@@ -18,13 +18,24 @@ RECIEVER_POSITION = [10,10,0]; % Defining reciever coordinates
 TARGET1_POSITION = [5,5,10];
 TARGET1_VELOCITY = [-10,10,0];   %The reference point is the emitter
 
-%% Variables are defined
+%% Variables declaration
 i = 0;                    %Variable to iterate over the loops
 signal_sended = [];       %Signal on the simulation enviroment  
+TARGETS_POSITIONS = [TARGET1_POSITION];
+TARGETS_VELOCITIES = [TARGET1_VELOCITY];
+%% Elements added to 3d environment
+%This environment is just to visualize data NOT FOR SIMULATION NOR EXTRACT
+%DATA
+%The emitter is plotted
+plotElement(tp,EMITTER_POSITION,[0,0,0],'Emisor')
+%The reciever is plotted
+plotElement(tp,RECIEVER_POSITION,[0,0,0],'Receptor')
 
 %% Main loop of the passive radar simulation
 while i< NUMBER_ITERATIONS
-    %the emitter sends the first signal
+    %The emitter sends the signal
+    %The signal is atenuated through the channel
+    %The signal bounces on the plane
     
     i= i+1;
 end
