@@ -23,6 +23,7 @@ i = 0;                    %Variable to iterate over the loops
 signal_sended = [];       %Signal on the simulation enviroment  
 TARGETS_POSITIONS = [TARGET1_POSITION];
 TARGETS_VELOCITIES = [TARGET1_VELOCITY];
+
 %% Elements added to 3d environment
 %This environment is just to visualize data NOT FOR SIMULATION NOR EXTRACT
 %DATA
