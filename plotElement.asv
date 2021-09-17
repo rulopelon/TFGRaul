@@ -1,0 +1,7 @@
+function  plotElement(tp,position,velocitie,label)
+    %Function to add an element to the plot of the simulation
+    plotter = platformPlotter(tp,'DisplayName','Platforms');
+    plotPlatform(plotter2, position, velocities2, labels2);
+
+end
+
