@@ -46,10 +46,9 @@ plotElement(tp,RECIEVER_POSITION,[0,0,0],'Receptor')
 disp("3D environment created")
 %% Main loop of the passive radar simulation
 disp("The simulation starts")
-[symbol,seq,freq,cont]=OFDMMod(code);
 while i< NUMBER_ITERATIONS
     %The emitter sends the signal
-    
+    OFDMMod()
     %The signal is atenuated through the channel
     %The signal bounces of the plane
     
