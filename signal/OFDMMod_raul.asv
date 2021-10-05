@@ -1,5 +1,5 @@
-function [ofdmSymbolsPa,ofdmSymbolsSe,ofdmSymbolsFreq,ofdmSymbolsFreqCont]=OFDMMod(modSymbols)
-
+function [ofdmSymbolsPa,ofdmSymbolsSe,ofdmSymbolsFreq,ofdmSymbolsFreqCont]=OFDMMod(modSymbols,fc)
+% MODIFIED BY RAUL GONZALEZ TO CHANGE THE FRECUENCY
 %  function [ofdmSymbolsPa,ofdmSymbolsSe,ofdmSymbolsFreq,ofdmSymbolsFreqCont]=OFDMMod(modSymbols)
 
 %  - modSymbols . Vector with the constellation symbols for the Nf data carriers.
@@ -17,32 +17,16 @@ function [ofdmSymbolsPa,ofdmSymbolsSe,ofdmSymbolsFreq,ofdmSymbolsFreqCont]=OFDMM
 
 
 
-PLOT  = true;
+PLOT  = false;
 Fs = 30e3;
 Nf = 4;   % Number of data carriers
 NFFT = 128;
 NFFTcont = 2^20;
 
-if nargin == 0
-    m_ary = 4;
-    Nsym = 10;
-    nBitsPerSym = Nf*log2(m_ary);
-    iBit = round(rand(nBitsPerSym*Nsym,1));
-    
-    % fixed bits
-        iBit = zeros(nBitsPerSym*Nsym,1);
-% Random bits 
-% iBit = round(rand(nBitsPerSym*Nsym,1));
 
-h = comm.PSKModulator('ModulationOrder',m_ary,'SymbolMapping','gray','BitInput',true,'PhaseOffset',0);
 
-    modSymbols = step(h,iBit);
-    PLOT  = true; 
-
-    
-    
-end
-
+h = comm.PSKModulator('ModulationOrder',4,'SymbolMapping','gray','BitInput',true,'PhaseOffset',0);
+modSymbols = h(modSymbols);
 modSymbols = modSymbols(:).'; % arrange in row
 
 if mod(length(modSymbols),Nf)~=0
@@ -60,8 +44,10 @@ ofdmSymbolsFreqCont= fft(ofdmSymbolsPa(:,1),NFFTcont).'/(NFFT/sqrt((Nf)*2));
 ofdmSymbolsFreq = fft(ofdmSymbolsPa(:,1)).'/(NFFT/sqrt((Nf)*2));
 
 ofdmSymbolsSe = reshape(ofdmSymbolsPa,1,Nsym*NFFT);
-
-
+%The signal is multiplied by a carrier to move the frecuency to the desired
+t = 1:1/Fs:(NFFT*Nsym-1)/Fs;
+imaginary_part = imag(ofdmSymbolsSe).*cos(2*pi*fc*t);
+real_part = real(ofdmSymbolsSe).*cos(2*pi*fc*t)
 if PLOT
     % Plotting one OFDM symbol in frequency
     figure
