@@ -58,7 +58,7 @@ disp("The simulation starts")
 %OFDM signal is codificated
 [symbol,seq,freq,cont]=OFDMMod_raul(code,FC,NFFT);
 %The frequency of the carrier of the signal is changed
-fft1 =fftshift(abs(fft(seq,length(seq))));
+fft1 =abs(fft(seq,length(seq)));
 
 figure
 plot(fft1)
