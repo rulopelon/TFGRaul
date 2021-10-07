@@ -16,6 +16,6 @@ jobs:
           code-coverage-cobertura: code-coverage/coverage.xml
           source-folder: test
       - name: Change directory to results
-        run: cd /home/runner/work/TFGRaul/TFGRaul/test-results
+        run: cd /home/runner/work/TFGRaul/TFGRaul/test-results/test-results
       - name: Show results
-        run: cat test-results
+        run: ls
