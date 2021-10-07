@@ -16,8 +16,9 @@ jobs:
           code-coverage-cobertura: code-coverage/coverage.xml
           source-folder: test
           test-results-pdf: test-results/results.pdf
+      - name: Change directory to results
+          run: cd /home/runner/work/TFGRaul/TFGRaul/test-results
       - name: Download a single artifact
         uses: actions/download-artifact@v2
-        run: cd /home/runner/work/TFGRaul/TFGRaul/test-results
         with:
           name: results.pdf
