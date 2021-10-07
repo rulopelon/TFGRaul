@@ -18,4 +18,4 @@ jobs:
       - name: Change directory to results
         run: cd /home/runner/work/TFGRaul/TFGRaul/test-results
       - name: Show results
-        run: ls
+        run: cat test-results
