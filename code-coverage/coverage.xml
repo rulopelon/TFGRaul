@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<coverage branch-rate="NaN" branches-covered="NaN" branches-valid="NaN" complexity="NaN" line-rate="1" lines-covered="2" lines-valid="2" timestamp="1633603165.135" version="">
+
+  <sources>
+    <source>/home/runner/work/TFGRaul/TFGRaul/test/</source>
+  </sources>
+
+  <packages>
+    <package branch-rate="NaN" complexity="NaN" line-rate="1" name="">
+      <classes>
+        <class branch-rate="NaN" complexity="NaN" filename="test_prueba.m" line-rate="1" name="test_prueba">
+          <methods>
+            <method branch-rate="NaN" line-rate="1" name="prueba" signature="prueba(testCase)">
+              <lines>
+                <line hits="1" number="6"/>
+                <line hits="1" number="7"/>
+              </lines>
+            </method>
+          </methods>
+          <lines>
+            <line hits="1" number="6"/>
+            <line hits="1" number="7"/>
+          </lines>
+        </class>
+      </classes>
+    </package>
+  </packages>
+
+</coverage>
