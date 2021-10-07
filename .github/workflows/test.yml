@@ -14,5 +14,5 @@ jobs:
         with:
           test-results-junit: test-results/results.xml
           code-coverage-cobertura: code-coverage/coverage.xml
-          source-folder: source/test
+          source-folder: test
           test-results-pdf: test-results/results.pdf
