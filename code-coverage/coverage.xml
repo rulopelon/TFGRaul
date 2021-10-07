@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<coverage branch-rate="NaN" branches-covered="NaN" branches-valid="NaN" complexity="NaN" line-rate="1" lines-covered="2" lines-valid="2" timestamp="1633603165.135" version="">
+<coverage branch-rate="NaN" branches-covered="NaN" branches-valid="NaN" complexity="NaN" line-rate="1" lines-covered="2" lines-valid="2" timestamp="1633603455.3823" version="">
 
   <sources>
     <source>/home/runner/work/TFGRaul/TFGRaul/test/</source>
