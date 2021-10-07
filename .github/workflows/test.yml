@@ -18,4 +18,5 @@ jobs:
           test-results-pdf: test-results/results.pdf
       - name: Change directory to results
         run: cd /home/runner/work/TFGRaul/TFGRaul/test-results
+      - name: Show results
         run: cat results.xml
