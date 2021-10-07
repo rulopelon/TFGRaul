@@ -15,8 +15,7 @@ jobs:
           test-results-junit: test-results/results.xml
           code-coverage-cobertura: code-coverage/coverage.xml
           source-folder: test
-          test-results-pdf: test-results/results.pdf
       - name: Change directory to results
         run: cd /home/runner/work/TFGRaul/TFGRaul/test-results
       - name: Show results
-        run: cat results.xml
+        run: ls
