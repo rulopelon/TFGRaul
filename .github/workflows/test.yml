@@ -17,5 +17,8 @@ jobs:
           source-folder: test
       - name: Change directory to results
         run: cd /home/runner/work/TFGRaul/TFGRaul/test-results/test-results
-      - name: Show results
-        run: ls
+      - name: commit changes
+      - uses: EndBug/add-and-commit@v7
+        with:
+          default_author: github_actions
+          message: Test results
