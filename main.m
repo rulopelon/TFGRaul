@@ -8,11 +8,21 @@ NUMBER_ITERATIONS = 100;   % Initial aproach AJUST VALUE
 %Constraints related to the OFDM signal
 
 BITS = 2;                 % Number of bits used to cuantify the sended signal
-NFFT = 128;
+NFFT = 8192;
+L = 1;  % Interpolation on the DAC 
+
 %Object to plot all the elements in the 
 tp = theaterPlot('XLim',[-90,90],'YLim',[-90,90],'ZLim',[0,40]);
 %Frecuency at which the stream of data is modulated
-FC = 1e9;
+Fc = 36e6;
+%Bandwith of each OFDM carrier
+Fs = 8e6;
+% Indexes of carriers used in Madrid, each carrier has a bandwith of 8Mhz
+k =[22,25,26,32,33,34,38,48];
+%Number of total carriers
+num_carriers = length(k);
+
+
 %Defining the emitter and the reciever, UNITS ARE IN KM
 % the origin is at [0,0,0]
 EMITTER_POSITION = [0,0,0]; % The origin of coordinates is the emitter 
@@ -36,9 +46,7 @@ TARGETS_VELOCITIES = [TARGET1_VELOCITY];
 [signal_loaded,fs] = audioread('signal/song.mp3');
 
 % The signal is cuantized with uniform PCM and 8 bits
-[snr,cuan,code] = uniform_pcm(signal_loaded,BITS);
-% The array is reshaped to a continuous stream of bits
-%bits_sended = reshape(code',[length(code)*3,1]);
+[snr,cuan,code] = uniform_pcm(signal_loaded(1:80000),BITS);
 
 disp("All variables loaded and declared")
 %% Elements added to 3d environment
@@ -56,7 +64,7 @@ disp("3D environment created")
 disp("The simulation starts")
 
 %OFDM signal is codificated
-[symbol,seq,freq,cont]=OFDMMod_raul(code,FC,NFFT);
+[seq,len_symbol]=OFDMMod_raul(code,Fc,Fs,NFFT,k,4,L);
 %The frequency of the carrier of the signal is changed
 fft1 =abs(fft(seq,length(seq)));
 
