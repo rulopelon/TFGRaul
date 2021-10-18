@@ -41,8 +41,16 @@ len_symbol = Nfft+Len_prefix;
 t = 0:1/Fs:(Nfft*(Nsym+Len_prefix)-1)/Fs;
 
 %Simulating DAC
+
 % Interpolation of the signal
-ofdmSymbolsSe = upsample(ofdmSymbolsSended,L);
+ofdmSymbolsSe = interpolacion(ofdmSymbolsSended,L);
+% The signal is filtered
+interpolation_filter = getFilter(L,Nfft);
+% To eliminate not wanted frequencies caused by the interpolation
+ofdmSymbolsSe_processed = fftshift(fft(ofdmSymbolsSe,Nfft)) .* interpolation_filter;
+ofdmSymbolsSe = ifft(ifftshift(ofdmSymbolsSe_processed));
+%Decimation
+ofdmSymbolsSe = ofdmSymbolsSe(1:M:length(ofdmSymbolsSe));
 
 % Vector of frecuencies for the dac
 f_dac = linspace(-0.5,0.5,Nfft);
