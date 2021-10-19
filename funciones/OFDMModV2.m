@@ -45,7 +45,7 @@ t = 0:1/Fs:(Nfft*(Nsym+Len_prefix)-1)/Fs;
 % Interpolation of the signal
 ofdmSymbolsSe = interpolacion(ofdmSymbolsSended,L);
 % The signal is filtered
-interpolation_filter = getFilter(L,Nfft);
+interpolation_filter = getFilter(M,L,Nfft);
 % To eliminate not wanted frequencies caused by the interpolation
 ofdmSymbolsSe_processed = fftshift(fft(ofdmSymbolsSe,Nfft)) .* interpolation_filter;
 ofdmSymbolsSe = ifft(ifftshift(ofdmSymbolsSe_processed));
