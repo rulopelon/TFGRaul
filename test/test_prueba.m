@@ -11,6 +11,14 @@ classdef test_prueba < matlab.unittest.TestCase
             end
             
         end
+        function pruebaGetfilter(testCase)
+            L = [10,12,14,16,18,20];
+            L = 2.^L;
+            for i = L 
+                x = getFilter(2,3,i);
+                testCase.verifyEqual(i,length(x));
+            end
+        end
         
     end
 end
