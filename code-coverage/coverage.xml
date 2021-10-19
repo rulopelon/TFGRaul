@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<coverage branch-rate="NaN" branches-covered="NaN" branches-valid="NaN" complexity="NaN" line-rate="0.18605" lines-covered="8" lines-valid="43" timestamp="1634632578.3562" version="">
+<coverage branch-rate="NaN" branches-covered="NaN" branches-valid="NaN" complexity="NaN" line-rate="0.25532" lines-covered="12" lines-valid="47" timestamp="1634649413.6215" version="">
   <sources>
     <source>/home/runner/work/TFGRaul/TFGRaul/funciones/</source>
   </sources>
   <packages>
-    <package branch-rate="NaN" complexity="NaN" line-rate="0.18605" name="">
+    <package branch-rate="NaN" complexity="NaN" line-rate="0.25532" name="">
       <classes>
         <class branch-rate="NaN" complexity="NaN" filename="OFDMModV2.m" line-rate="0" name="OFDMModV2">
           <methods/>
@@ -37,6 +37,15 @@
             <line hits="0" number="66"/>
             <line hits="0" number="67"/>
             <line hits="0" number="68"/>
+          </lines>
+        </class>
+        <class branch-rate="NaN" complexity="NaN" filename="getFilter.m" line-rate="1" name="getFilter">
+          <methods/>
+          <lines>
+            <line hits="6" number="3"/>
+            <line hits="6" number="6"/>
+            <line hits="6" number="7"/>
+            <line hits="6" number="8"/>
           </lines>
         </class>
         <class branch-rate="NaN" complexity="NaN" filename="interpolacion.m" line-rate="1" name="interpolacion">
