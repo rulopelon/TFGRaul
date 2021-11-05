@@ -1,4 +1,4 @@
-function [ofdmSymbolsSe,len_symbol]=OFDMModV2(fc,prefix,L)
+function [ofdmSymbolsSe,len_symbol]=OFDMModV2(fc,prefix)
 % MODIFIED BY RAUL GONZALEZ TO CHANGE THE FRECUENCY
 
 %% Parameters defined by the standard
@@ -34,11 +34,10 @@ ofdmSymbolsSended = zeros(dim(1)+Len_prefix,dim(2));
 ofdmSymbolsSended(:,1) = [ofdmSymbolsPa(end-Len_prefix+1:end,1);ofdmSymbolsPa(:,1)];
 
 
-len_symbol = Nfft+Len_prefix;
 
 
 %The signal is multiplied by a carrier to move the frecuency to the desired
-t = 0:1/Fs:(Nfft*(Nsym+Len_prefix)-1)/Fs;
+t = 0:1/Fs_achieved:(Nfft*(Nsym+Len_prefix)-1)/Fs_achieved;
 
 %Simulating DAC
 
@@ -56,7 +55,7 @@ ofdmSymbolsSe = ofdmSymbolsSe(1:M:length(ofdmSymbolsSe));
 f_dac = linspace(-0.5,0.5,Nfft);
 
 %Frecuency response for a non return to zero digital to analog convertion
-dac_response = 1/Fs.*sinc(1/Fs*f_dac);
+dac_response = 1/Fs_achieved.*sinc(1/Fs_achieved*f_dac);
 
 symbols_dac = fftshift(fft(ofdmSymbolsSe,Nfft)).*dac_response;
 
@@ -66,6 +65,8 @@ symbols_dac = fftshift(fft(ofdmSymbolsSe,Nfft)).*dac_response;
 imaginary_part = imag(ofdmSymbolsSe).*cos(2*pi*fc*t);
 real_part = real(ofdmSymbolsSe).*sin(2*pi*fc*t);
 ofdmSymbolsSe = real_part+imaginary_part;
+
+len_symbol = Nfft+Len_prefix;
 
 
 

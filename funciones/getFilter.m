@@ -5,7 +5,7 @@ function filter_created = getFilter(M,L,Nfft)
     
     index = (1/(2*M))*(1/deltafd);
     filter_created =zeros(Nfft,1);
-    filter_created((Nfft/2)-index:(Nfft/2)+index) = L;
+    filter_created(floor((Nfft/2))-index:(floor(Nfft/2))+index) = L;
     
     
 end
