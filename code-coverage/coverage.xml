@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<coverage branch-rate="NaN" branches-covered="NaN" branches-valid="NaN" complexity="NaN" line-rate="0.4127" lines-covered="26" lines-valid="63" timestamp="1636141962.6028" version="">
+<coverage branch-rate="NaN" branches-covered="NaN" branches-valid="NaN" complexity="NaN" line-rate="0.31746" lines-covered="20" lines-valid="63" timestamp="1636143753.3698" version="">
   <sources>
     <source>/home/runner/work/TFGRaul/TFGRaul/funciones/</source>
   </sources>
   <packages>
-    <package branch-rate="NaN" complexity="NaN" line-rate="0.4127" name="">
+    <package branch-rate="NaN" complexity="NaN" line-rate="0.31746" name="">
       <classes>
-        <class branch-rate="NaN" complexity="NaN" filename="CAFAnalysis.m" line-rate="1" name="CAFAnalysis">
+        <class branch-rate="NaN" complexity="NaN" filename="CAFAnalysis.m" line-rate="0.57143" name="CAFAnalysis">
           <methods/>
           <lines>
             <line hits="1" number="5"/>
@@ -17,12 +17,12 @@
             <line hits="1000" number="11"/>
             <line hits="1000" number="12"/>
             <line hits="1" number="16"/>
-            <line hits="1" number="18"/>
-            <line hits="1" number="19"/>
-            <line hits="1" number="20"/>
-            <line hits="1" number="21"/>
-            <line hits="1" number="22"/>
-            <line hits="1" number="23"/>
+            <line hits="0" number="18"/>
+            <line hits="0" number="19"/>
+            <line hits="0" number="20"/>
+            <line hits="0" number="21"/>
+            <line hits="0" number="22"/>
+            <line hits="0" number="23"/>
           </lines>
         </class>
         <class branch-rate="NaN" complexity="NaN" filename="OFDMModV2.m" line-rate="0" name="OFDMModV2">
@@ -91,6 +91,10 @@
             <line hits="0" number="8"/>
             <line hits="0" number="10"/>
           </lines>
+        </class>
+        <class branch-rate="NaN" complexity="NaN" filename="receiver.m" line-rate="NaN" name="receiver">
+          <methods/>
+          <lines/>
         </class>
         <class branch-rate="NaN" complexity="NaN" filename="testCAF.m" line-rate="0" name="testCAF">
           <methods/>

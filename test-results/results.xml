@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
 <testsuites>
-  <testsuite errors="0" failures="0" name="testCAF" skipped="0" tests="1" time="15.906">
-    <testcase classname="testCAF" name="testCAF" time="15.906"/>
+  <testsuite errors="0" failures="0" name="testCAF" skipped="0" tests="1" time="15.192">
+    <testcase classname="testCAF" name="testCAF" time="15.192"/>
   </testsuite>
-  <testsuite errors="0" failures="0" name="test_prueba" skipped="0" tests="2" time="0.48229">
-    <testcase classname="test_prueba" name="pruebaInterpolacion" time="0.45126"/>
-    <testcase classname="test_prueba" name="pruebaGetfilter" time="0.031031"/>
+  <testsuite errors="0" failures="0" name="test_prueba" skipped="0" tests="2" time="0.51305">
+    <testcase classname="test_prueba" name="pruebaInterpolacion" time="0.48102"/>
+    <testcase classname="test_prueba" name="pruebaGetfilter" time="0.03203"/>
   </testsuite>
 </testsuites>
