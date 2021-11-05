@@ -2,7 +2,7 @@ function CAFAnalysis(signal,reference,n_samples)
 % function which calculates the correlation ambiguity function, in roder to
 % know the correlation of the introduced signal with a referenced signal
 % delayed n_samples number of samples and dopler shifted n_samples times
-PLOT = true;
+PLOT = false;
 correlation_matrix  = [];
 
 for k=1:1:n_samples
