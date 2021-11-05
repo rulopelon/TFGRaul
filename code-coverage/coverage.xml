@@ -1,11 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<coverage branch-rate="NaN" branches-covered="NaN" branches-valid="NaN" complexity="NaN" line-rate="0.25532" lines-covered="12" lines-valid="47" timestamp="1634649592.2106" version="">
+<coverage branch-rate="NaN" branches-covered="NaN" branches-valid="NaN" complexity="NaN" line-rate="0.4127" lines-covered="26" lines-valid="63" timestamp="1636141962.6028" version="">
   <sources>
     <source>/home/runner/work/TFGRaul/TFGRaul/funciones/</source>
   </sources>
   <packages>
-    <package branch-rate="NaN" complexity="NaN" line-rate="0.25532" name="">
+    <package branch-rate="NaN" complexity="NaN" line-rate="0.4127" name="">
       <classes>
+        <class branch-rate="NaN" complexity="NaN" filename="CAFAnalysis.m" line-rate="1" name="CAFAnalysis">
+          <methods/>
+          <lines>
+            <line hits="1" number="5"/>
+            <line hits="1" number="6"/>
+            <line hits="1" number="8"/>
+            <line hits="1000" number="9"/>
+            <line hits="1000" number="10"/>
+            <line hits="1000" number="11"/>
+            <line hits="1000" number="12"/>
+            <line hits="1" number="16"/>
+            <line hits="1" number="18"/>
+            <line hits="1" number="19"/>
+            <line hits="1" number="20"/>
+            <line hits="1" number="21"/>
+            <line hits="1" number="22"/>
+            <line hits="1" number="23"/>
+          </lines>
+        </class>
         <class branch-rate="NaN" complexity="NaN" filename="OFDMModV2.m" line-rate="0" name="OFDMModV2">
           <methods/>
           <lines>
@@ -24,19 +43,19 @@
             <line hits="0" number="29"/>
             <line hits="0" number="30"/>
             <line hits="0" number="34"/>
-            <line hits="0" number="37"/>
-            <line hits="0" number="41"/>
-            <line hits="0" number="46"/>
-            <line hits="0" number="48"/>
+            <line hits="0" number="40"/>
+            <line hits="0" number="45"/>
+            <line hits="0" number="47"/>
+            <line hits="0" number="49"/>
             <line hits="0" number="50"/>
-            <line hits="0" number="51"/>
-            <line hits="0" number="53"/>
-            <line hits="0" number="56"/>
-            <line hits="0" number="59"/>
-            <line hits="0" number="61"/>
+            <line hits="0" number="52"/>
+            <line hits="0" number="55"/>
+            <line hits="0" number="58"/>
+            <line hits="0" number="60"/>
+            <line hits="0" number="65"/>
             <line hits="0" number="66"/>
             <line hits="0" number="67"/>
-            <line hits="0" number="68"/>
+            <line hits="0" number="69"/>
           </lines>
         </class>
         <class branch-rate="NaN" complexity="NaN" filename="getFilter.m" line-rate="1" name="getFilter">
@@ -71,6 +90,13 @@
             <line hits="0" number="7"/>
             <line hits="0" number="8"/>
             <line hits="0" number="10"/>
+          </lines>
+        </class>
+        <class branch-rate="NaN" complexity="NaN" filename="testCAF.m" line-rate="0" name="testCAF">
+          <methods/>
+          <lines>
+            <line hits="0" number="6"/>
+            <line hits="0" number="9"/>
           </lines>
         </class>
       </classes>
