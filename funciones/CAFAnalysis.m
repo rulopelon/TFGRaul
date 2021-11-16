@@ -6,7 +6,7 @@ PLOT = false;
 correlation_matrix  = [];
 
 for k=1:1:n_samples
-    dopler_shifted = reference.*exp(1i*(k*2*pi/n_samples));
+    dopler_shifted = reference.*exp(1i*k*2*pi/n_samples);
     [correlation,lags ]= xcorr(dopler_shifted,signal,n_samples);
     plot(real(correlation(n_samples+1:end,1)))
     correlation_matrix = [correlation_matrix,correlation(n_samples+1:end,1)];

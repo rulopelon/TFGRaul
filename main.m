@@ -29,7 +29,7 @@ TARGET1_POSITION = [5,5,10];
 TARGET1_VELOCITY = [-10,10,0];   %The reference point is the emitter
 
 %Time which is forwarded on each iteration
-delta_time = 0.1; %Units in seconds
+INTEGRATION_TIME = 250e-3; %Units in seconds 250ms
 
 %% Variables declaration
 i = 0;                    %Variable to iterate over the loops
@@ -54,13 +54,13 @@ disp("3D environment created")
 disp("The simulation starts")
 
 %OFDM signal is codificated
-[seq,len_symbol]=OFDMMod_raul(Fc,prefix);
+[seq,len_symbol]=OFDMModV2(Fc,prefix);
 %The frequency of the carrier of the signal is changed
-fft1 =abs(fft(seq,length(seq)));
-
-figure
-plot(fft1)
-title("Frecuency of the signal sended");
+% fft1 =abs(fft(seq,length(seq)));
+% 
+% figure
+% plot(fft1)
+% title("Frecuency of the signal sended");
 
 while i< NUMBER_ITERATIONS    
     %The emitter sends the signal
@@ -68,7 +68,7 @@ while i< NUMBER_ITERATIONS
     signal_sended = seq(NFFT*i+1:NFFT*i+NFFT);  
     
     %The positions os the targets are updated
-    TARGET1_POSITION = TARGET1_POSITION + TARGET1_VELOCITY.*delta_time*i;
+    TARGET1_POSITION = TARGET1_POSITION + TARGET1_VELOCITY.*INTEGRATION_TIME;
     
 
     %The signal is atenuated through the channel
