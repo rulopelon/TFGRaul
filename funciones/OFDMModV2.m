@@ -1,4 +1,4 @@
-function [ofdm_exit,len_symbol]=OFDMModV2(fc,prefix)
+function [ofdm_exit,len_symbol,Fs_achieved]=OFDMModV2(fc,prefix)
 % MODIFIED BY RAUL GONZALEZ TO CHANGE THE FRECUENCY
 
 %% Parameters defined by the standard
@@ -61,7 +61,7 @@ ofdmSymbolsSended(:,1) = [ofdmSymbolsPa(end-Len_prefix+1:end,1);ofdmSymbolsPa(:,
 
 %The signal is multiplied by a carrier to move the frecuency to the desired
 t = 0:1/Fs_achieved:((Nfft+Len_prefix)*L/M)/Fs_achieved;
-
+t = t(1:end-1);
 %Simulating DAC
 
 % Vector of frecuencies for the dac at 10Mhz
@@ -92,8 +92,8 @@ symbols_dac = ifft(ifftshift(symbols_dac));
 
 
 % The signal is moved to the carrier frequency
-imaginary_part = imag(symbols_dac).*cos(2*pi*fc*t);
-real_part = real(symbols_dac).*sin(2*pi*fc*t);
+imaginary_part = imag(symbols_dac).*cos(2*pi*fc*t');
+real_part = real(symbols_dac).*sin(2*pi*fc*t');
 ofdm_exit = real_part+imaginary_part;
 
 len_symbol = Nfft+Len_prefix;
