@@ -4,10 +4,6 @@ function correlation_matrix = blockProcessing(reference_batches,surveillance_bat
 % shift within a block of the signal is negligible. Becasuse of that the cross anmibguity function can
 % be calculated with the cross correlation of both signals and the fourier
 % transform of the result.
-global BATCH_SIZE
-global NFFT_BATCH_SIZE
-global delay_detected
-global doppler_detected
 
 % The input must be two vectors with the reference signal and the
 % surveillance signal
@@ -19,6 +15,7 @@ if size(refrerence_batches) ~= size(surveillance_batches)
 end
 
 correlation_matrix = [];
+PLOT = true;
 % The input array is reshaped to match the size of each batch analyzed
 surveillance_batches = reshape(surveillance_batches,BATCH_SIZE,[]);
 reference_batches = reshape(reference_batches,BATCH_SIZE,[]);
@@ -36,19 +33,16 @@ for batch = 1:1:BATCH_SIZE
     
 end
 % Calculating on the doppler domain
-correlation_matrix = fft(correlation_matrix,NFFT_BATCH_SIZE,2); 
+correlation_matrix = fft(correlation_matrix,NFFT,2); 
 
 
-for i = 1:1:BATCH_SIZE
-    % Indexing on the delay dimension 
-    for j = 1:1:NFFT_BATCH_SIZE
-        % Indexing on the doppler dimension
-        if correlation_matrix(i,j) >= threshold
-            %TODO: change the way of outputting the daly and doppler
-            %result
+for i = 1:1:x
+    % Indexing 
+    for j = 1:1:y
+        if correlation_matrix(x,y) >= threshold
             % A target has been detected
-            doppler_detected = j;
-            delay_detected = i;
+            detected = true;
+            distance_detected = x;
         end
     end
 end
@@ -56,8 +50,8 @@ if PLOT
    
     figure
     surf(real(correlation_matrix),'EdgeColor','none')
-    xlabel('Doppler')
-    ylabel('Delay')
+    xlabel('Range')
+    ylabel('Velocity')
     zlabel('Correlation')
     title("CAF representation")
 end

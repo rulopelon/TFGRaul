@@ -4,9 +4,10 @@
 %Environment is cleaned
 clc;close all force;clear;
 
+parameters;
+
 NUMBER_ITERATIONS = 100;   % Initial aproach AJUST VALUE
 %Constraints related to the OFDM signal
-
 NFFT = 8192;
 L = 1;  % Interpolation on the DAC 
 
