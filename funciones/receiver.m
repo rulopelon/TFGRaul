@@ -27,19 +27,20 @@ if length(signal_buffer) >= BATCH_SIZE*NUMBER_BATCHES
         surveillance_analyze = reference_buffer(1:(n_batches*BATCH_SIZE)+1,:); 
         
         % Buffers are updated
-        signal_buffer = signal_buffer((n_batches*BATCH_SIZE)+1):,1);
-        reference_buffer = reference_buffer((n_batches*BATCH_SIZE)+1):,1);
-        surveillance_buffer = surveillance_buffer((n_batches*BATCH_SIZE)+1):,1);
+        signal_buffer = signal_buffer((n_batches*BATCH_SIZE)+2:length(surveillance_buffer));
+        reference_buffer = reference_buffer((n_batches*BATCH_SIZE)+2:length(surveillance_buffer));
+        surveillance_buffer = surveillance_buffer((n_batches*BATCH_SIZE)+2:length(surveillance_buffer),1);
     else
         reference_analyse = reference_buffer;
         surveillance_analyze = surveillance_buffer;
+        %Buffers are emptied
         signal_buffer = [];
         reference_buffer = [];
         surveillance_buffer = [];
     end 
     % The signal is analysed and targets are detected
     blockProcessing(reference_analyse,surveillance_analyze);
-    % The signal recieved buffer is emptied
+    
     
 end
 end
