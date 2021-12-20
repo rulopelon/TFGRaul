@@ -3,7 +3,8 @@ function H = getFilter(M,L,Nfft,PLOT)
 %la señal, empleando el método de Parks-McClellan
 %Autor: Carlos García de la Cueva
 %Modificado: Raúl Gonzále Gómez
-    PLOT = true;
+    global PLOT
+    
     % Rizado de la banda de paso en dB
     Rp = 0.05;
     rp = 10^(Rp/20) - 1; 

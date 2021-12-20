@@ -3,36 +3,24 @@
 %% Constraints declared
 %Environment is cleaned
 clc;close all force;clear;
-
+%% Loading global parameters for the simulation
 parameters;
 
-NUMBER_ITERATIONS = 100;   % Initial aproach AJUST VALUE
-%Constraints related to the OFDM signal
-NFFT = 8192;
-L = 1;  % Interpolation on the DAC 
+global NUMBER_ITERATIONS
+global TIME_STEP %Time which is forwarded on each iteration
+global EMITTER_POSITION
+global TARGET1_POSITION
+global TARGET1_VELOCITY
+global RECIEVER_POSITION
+
+
+
+
+%% Variables declaration
 
 %Object to plot all the elements in the 
 tp = theaterPlot('XLim',[-90,90],'YLim',[-90,90],'ZLim',[0,40]);
-%Frecuency at which the stream of data is modulated
-Fc = 36e6;
-%Prefix of the OFDM modulation
-prefix = 1/32;
 
-
-%Defining the emitter and the reciever, UNITS ARE IN KM
-% the origin is at [0,0,0]
-EMITTER_POSITION = [0,0,0]; % The origin of coordinates is the emitter 
-RECIEVER_POSITION = [100,0,0]; % Defining reciever coordinates
-
-%Planes for simulation
-TARGET1_POSITION = [0,0,10];
-TARGET1_VELOCITY = [300,0,0];   %The reference point is the emitter
-
-%Time which is forwarded on each iteration
-%The time step is the integration time of the reciever
-TIME_STEP = 250e-3; %Units in seconds 250ms
-
-%% Variables declaration
 i = 0;                    %Variable to iterate over the loops
 signal_sended = [];       %Signal on the simulation enviroment  
 TARGETS_POSITIONS = [TARGET1_POSITION];
@@ -50,7 +38,6 @@ disp("All variables loaded and declared")
 %This environment is just to visualize data NOT FOR SIMULATION NOR EXTRACT
 %DATA
 
-
 %The emitter is plotted
 plotElement(tp,EMITTER_POSITION,[0,0,0],'Emisor')
 %The reciever is plotted
@@ -61,7 +48,7 @@ disp("3D environment created")
 disp("The simulation starts")
 
 %OFDM signal is codificated
-[Ofdm_signal,len_symbol,fs]=OFDMModV2(Fc,prefix);
+[Ofdm_signal,len_symbol,fs]=OFDMModV2();
 % Number of samples "moved" on each iteration
 N = fs*TIME_STEP;
 %Initial biestatic range to calculate the doppler shift
