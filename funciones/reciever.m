@@ -1,4 +1,4 @@
-function  receiver(data)
+function  reciever(data)
 
 global signal_buffer
 global reference_buffer
@@ -7,7 +7,9 @@ global BATCH_SIZE
 global NUMBER_BATCHES 
 
 signal_buffer = [signal_buffer,data];
-% The signal is divided on
+% The signal is divided on reference and surveillance
+reference_signal = [];
+surveillance_signal =[];
 %Frame synchronism
 %Equalization
 
