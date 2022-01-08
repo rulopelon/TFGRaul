@@ -54,8 +54,8 @@ disp("The simulation starts")
 Ofdm_signal = Ofdm_signal';
 
 % Number of samples "moved" on each iteration
-%N = fs*TIME_STEP;
-N = 20;
+N = fs*TIME_STEP;
+
 
 %Initial biestatic range to calculate the doppler shift
 %Initial_range = sqrt((TARGET1_POSITION(1)-EMITTER_POSITION(1))^2+(TARGET1_POSITION(2)-EMITTER_POSITION(2))^2)+ sqrt((TARGET1_POSITION(1)-RECIEVER_POSITION(1))^2+(TARGET1_POSITION(2)-RECIEVER_POSITION(2))^2); 

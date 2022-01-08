@@ -1,4 +1,4 @@
-function signal_upsampled = interpolacion(signal,L)
+function signal_upsampled = interpolation(signal,L)
     signal_upsampled = [];
     if L >1
         for i  =1:1:length(signal)

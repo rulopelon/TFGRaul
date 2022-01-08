@@ -1,15 +1,13 @@
 %% Parameters for the batch processing algorithm
 global BATCH_SIZE
-global NFFT_BATCH_SIZE
 global delay_detected
 global doppler_detected
 global PLOT
 
 BATCH_SIZE = 300;
-NFFT_BATCH_SIZE = 300;
 delay_detected = 0;
 doppler_detected = 0;
-PLOT = false;    
+PLOT = true;    
 
 %% Parameters and variables used on the reciever
 global signal_buffer
@@ -51,13 +49,17 @@ global Nsym     % Number of symbols generated each time OFDMModv2 is called
 global pilot_cells  % Defined by the standard
 global Fs_used 
 global M    % Decimating factor
+global nAM % Indicates the modulation used for the generation of the OFDM signal, must be power of two
+global pilot_amplitude
 
+pilot_amplitude = 4/3; % There is no need to multiply this value as all the symbols are normalized
+nAM = 64; % As the modulation used is a 64 QAM
 NFFT = 8192;
 PREFIX = 1/32;
 Fc = 36e6;
 CARRIERS = 6816;
 Nsym = 100;
-Fs_used = 10e6;
+Fs_used = 9.14e6;
 L = 64;     
 M = 70;     
 pilot_cells = [0 48 54 87 141 156 192 201 255 279 282 333 432 450 ...

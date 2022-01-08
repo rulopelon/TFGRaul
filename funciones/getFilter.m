@@ -1,9 +1,11 @@
-function H = getFilter(M,L,Nfft,PLOT)
+function h = getFilter(M,L)
 %Función para la creación de un filtro de para la interpolación correcta de
 %la señal, empleando el método de Parks-McClellan
 %Autor: Carlos García de la Cueva
 %Modificado: Raúl Gonzále Gómez
     global PLOT
+    global NFFT
+    global CARRIERS
     
     % Rizado de la banda de paso en dB
     Rp = 0.05;
@@ -14,7 +16,9 @@ function H = getFilter(M,L,Nfft,PLOT)
     % Frecuencia de corte del filtro (caida a -3 dB)
     fc = 1/(2*M);
     % Banda de Transición
-    Df = 0.1;
+    delta_f = ((NFFT-CARRIERS)/2);  % Se escoge delta para
+    Df = (delta_f/NFFT)/M;
+    
     Nmin = (-10*log10(rp*att)-13)/(14.6*Df) + 1;
     amp = [1 1 0 0];
     % Eje de frecuencias
@@ -22,9 +26,10 @@ function H = getFilter(M,L,Nfft,PLOT)
     % Diseño del filtro 
     h = firpm(ceil(Nmin),freq*2,amp,[att/rp, 1]); % L frecuencia se multiplica por 2 porque hay que introducirlo respecto a pi
     % Cálculo de la respuesta en frecuencia del filtro
-    H = fftshift(fft(h,Nfft));
+    H = fftshift(fft(h,NFFT));
     H = H.*L;
-    h = ifftshift(ifft(H));
+    h = ifft(ifftshift(H));
+
     if PLOT
         % Visualización gráfica de la respuesta en módulo
         figure;
