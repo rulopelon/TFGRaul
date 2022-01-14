@@ -15,6 +15,7 @@ function h = getFilter(M,L)
     att = 10^(-Att/20);
     % Frecuencia de corte del filtro (caida a -3 dB)
     fc = 1/(2*M);
+    
     % Banda de Transición
     delta_f = ((NFFT-CARRIERS)/2);  % Se escoge delta para
     Df = (delta_f/NFFT)/M;

@@ -1,24 +1,13 @@
-%% Parameters for the batch processing algorithm
-global BATCH_SIZE
-global delay_detected
-global doppler_detected
-global PLOT
 
-BATCH_SIZE = 300;
-delay_detected = 0;
-doppler_detected = 0;
-PLOT = true;    
 
 %% Parameters and variables used on the reciever
 global signal_buffer
 global reference_buffer
 global surveillance_buffer 
-global NUMBER_BATCHES % Number of batches to analyse
 
 signal_buffer = [];
 reference_buffer = [];
 surveillance_buffer = [];
-NUMBER_BATCHES = 40;
 
 %% Parameters used for the simulation environment
 global NUMBER_ITERATIONS
@@ -30,7 +19,8 @@ global RECIEVER_POSITION
 
 NUMBER_ITERATIONS = 100;   % Initial aproach AJUST VALUE
 %The time step is the integration time of the reciever
-TIME_STEP = 250e-3; %Units in seconds 250ms
+TIME_STEP = 100e-3; %Units in seconds 250ms
+
 %UNITS ARE IN KM the origin is at [0,0,0]
 EMITTER_POSITION = [0,0,0]; % The origin of coordinates is the emitter 
 RECIEVER_POSITION = [100,0,0]; % Defining reciever coordinates
@@ -39,29 +29,37 @@ RECIEVER_POSITION = [100,0,0]; % Defining reciever coordinates
 TARGET1_POSITION = [0,0,10];
 TARGET1_VELOCITY = [300,0,0];   %The reference point is the emitter
 
+
+
 %% Constraints related to the OFDM signal parameters defined by the standard
 global NFFT
 global L % % Interpolating factor
 global PREFIX %Prefix of the OFDM modulation
 global Fc %Frecuency at which the stream of data is modulated
 global CARRIERS % Number of non-silent carriers 
-global Nsym     % Number of symbols generated each time OFDMModv2 is called
 global pilot_cells  % Defined by the standard
 global Fs_used 
 global M    % Decimating factor
 global nAM % Indicates the modulation used for the generation of the OFDM signal, must be power of two
 global pilot_amplitude
+global Fs 
+global reconstruction_filter
+global symbol_length
 
 pilot_amplitude = 4/3; % There is no need to multiply this value as all the symbols are normalized
+Fs = 10e6;
 nAM = 64; % As the modulation used is a 64 QAM
 NFFT = 8192;
 PREFIX = 1/32;
 Fc = 36e6;
 CARRIERS = 6816;
-Nsym = 100;
 Fs_used = 9.14e6;
 L = 64;     
-M = 70;     
+M = 70;  
+symbol_length =(PREFIX*NFFT+NFFT)*M/L;
+% Reconstruction filter
+reconstruction_filter = getFilter(L,M);
+
 pilot_cells = [0 48 54 87 141 156 192 201 255 279 282 333 432 450 ...
 483 525 531 618 636 714 759 765 780 804 873 888 ...
 918 939 942 969 984 1050 1101 1107 1110 1137 1140 ...
@@ -81,3 +79,30 @@ pilot_cells = [0 48 54 87 141 156 192 201 255 279 282 333 432 450 ...
 5892 5916 5985 6000 6030 6051 6054 6081 6096 ...
 6162 6213 6219 6222 6249 6252 6258 6318 6381 ...
 6435 6489 6603 6795 6816];    
+%% Parameters for the batch processing algorithm
+global BATCH_SIZE
+global delay_detected
+global doppler_detected
+global PLOT
+global Number_batches
+global Samples_iteration
+global Nsym
+global T_batch
+
+delay_detected = 0;
+doppler_detected = 0;
+PLOT = false;    
+% Time of each OFDM symbol
+T_symbol= symbol_length/Fs;
+% Samples that are analysed on each iteration
+Samples_iteration = TIME_STEP*Fs;
+% Number of OFDM symbols produced on each iteration
+Nsym = ceil(Samples_iteration/symbol_length);
+Vmax = 3e8/Samples_iteration;
+T_batch= 1/(2*Vmax);
+% Number of batches that are "moved" on each iteration
+Number_batches = TIME_STEP/T_batch;
+%Size of the batch analyzed
+BATCH_SIZE = Samples_iteration/Number_batches; 
+
+

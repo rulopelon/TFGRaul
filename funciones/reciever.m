@@ -4,16 +4,75 @@ global signal_buffer
 global reference_buffer
 global surveillance_buffer 
 global BATCH_SIZE
-global NUMBER_BATCHES
+global PREFIX
+global NFFT
+global CARRIERS
+global symbol_length
+global M
+global L
 
-signal_buffer = [signal_buffer,data];
+% Data is resampled to match Fs = 9.14 Mhz
+data_interpolated = interpolation(data,L);
+% The signal is filtered
+reconstruction_filter_reciever = getFilter(M,L);
+% Filtering the signal to eliminate not wanted frequencies caused by the interpolation
+data_filtered = conv(data_interpolated,reconstruction_filter_reciever,'same');
+%Decimation
+data_resampled = data_filtered(1:M:length(data_filtered));
+
+signal_buffer = [data_resampled,signal_buffer];
 % The signal is divided on reference and surveillance
 reference_signal = [];
 surveillance_signal =[];
-
-% The signal is demodulated to baseband
-
+prefix_length = PREFIX*NFFT;
 %Frame synchronism
+[correlation,~] = xcorr(reference_signal,reference_signal);
+% Only positive lags are used
+correlation = correlation(ceil((length(correlation)/2))+1:end);
+% Getting the maximun value of the correlation
+[~,index_max] = max(correlation);
+% Previous values of the signal are deleted
+signal_correlated = reference_signal(index_max+1:end);
+
+% The prefix is eliminated
+% Number of symbols recieved
+N_symbols = length(signal_correlated)/symbol_length;
+
+frame_synchronized = [];
+for i = 1:1:N_symbols
+    
+    signal_append = signal_correlated(prefix_length+(prefix_length+NFFT)*(i-1)+1:symbol_length+(symbol_length)*(i-1));
+    frame_synchronized = [frame_synchronized,signal_append];
+end
+% Frequency synchronization
+fft_frame_synchronized = fftshift(fft(frame_synchronized)); 
+
+frequency_reference = zeros(NFFT,1);
+[indexes, pilot_values]=getContinuousPilots();
+for i = indexes
+    frequency_reference(i+(NFFT-CARRIERS)/2,1) = pilot_values(i+1);
+end
+
+% Frequency deviation is calculated
+[frequency_correlation,~] = xcorr(fft_frame_synchronized,frequency_reference);
+% Only positive lags are used
+frequency_correlation = frequency_correlation(ceil((length(correlation)/2))+1:end);
+% Getting the maximun value of the correlation
+[~,index_max_freq] = max(frequency_correlation);
+% Translating discrete indexes to frequency
+deltaF = 1/NFFT;
+frequency_deviation = deltaF *index_mad_freq;
+% The signal is corrected in frequency
+% Vector for the multiplication with the exponential
+f = 1:Fs:length(fft_frame_synchronized);
+fft_frame_synchronized = fft_frame_synchronized.*exp(-1i*f*index_max_freq);
+% Prefix is added to the signal
+signal_synchronized = [];
+
+for i = 1:1:length(fft_frame_synchronized)/NFFT
+    fft_frame
+end
+
 %Equalization
 
 %Data is appended to the stream
