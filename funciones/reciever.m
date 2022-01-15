@@ -59,18 +59,22 @@ end
 frequency_correlation = frequency_correlation(ceil((length(correlation)/2))+1:end);
 % Getting the maximun value of the correlation
 [~,index_max_freq] = max(frequency_correlation);
+
 % Translating discrete indexes to frequency
 deltaF = 1/NFFT;
 frequency_deviation = deltaF *index_mad_freq;
 % The signal is corrected in frequency
 % Vector for the multiplication with the exponential
-f = 1:Fs:length(fft_frame_synchronized);
+f = 1:Fs_used:length(fft_frame_synchronized);
 fft_frame_synchronized = fft_frame_synchronized.*exp(-1i*f*index_max_freq);
+
 % Prefix is added to the signal
 signal_synchronized = [];
-
+Len_prefix = NFFT+PREFIX;
 for i = 1:1:length(fft_frame_synchronized)/NFFT
-    fft_frame
+    symbol = fft_frame_synchronized(1+NFFT*i:NFFT*(i+1));
+    signal_append =[symbol(end-Len_prefix+1:end,1),symbol];
+    signal_synchronized = [signal_append,signal_synchronized];
 end
 
 %Equalization

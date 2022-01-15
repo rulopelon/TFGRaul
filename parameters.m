@@ -44,6 +44,7 @@ global nAM % Indicates the modulation used for the generation of the OFDM signal
 global pilot_amplitude
 global Fs 
 global reconstruction_filter
+global symbol_length_emitter
 global symbol_length
 
 pilot_amplitude = 4/3; % There is no need to multiply this value as all the symbols are normalized
@@ -56,7 +57,10 @@ CARRIERS = 6816;
 Fs_used = 9.14e6;
 L = 64;     
 M = 70;  
-symbol_length =(PREFIX*NFFT+NFFT)*M/L;
+% Symbol length whitout performing the samples frequency change
+symbol_length = (PREFIX*NFFT+NFFT);
+% Symbol_length after the interpolation and decimation
+symbol_length_emitter =(PREFIX*NFFT+NFFT)*M/L;
 % Reconstruction filter
 reconstruction_filter = getFilter(L,M);
 

@@ -12,8 +12,6 @@ global EMITTER_POSITION
 global TARGET1_POSITION
 global TARGET1_VELOCITY
 global RECIEVER_POSITION
-global NFFT
-global PREFIX
 global BATCH_SIZE
 global Fs
 global Number_batches
@@ -142,7 +140,8 @@ while i< NUMBER_ITERATIONS
     % The bounced signal is filled with zeros to match the samples analyzed
     % If there is no bounce, the channel is filled with zeros
     signal_bounced =[zeros(Samples_iteration-bounced_samples,1),signal_bounced];
-    
+    signal_emitter_reciever_delayed =[zeros(1,Samples_iteration-length(signal_emitter_reciever_delayed)),signal_emitter_reciever_delayed];
+
     
     %The signal bounces off the plane
     distance_target_reciever = sqrt((TARGET1_POSITION(1)-RECIEVER_POSITION(1))^2+(TARGET1_POSITION(2)-RECIEVER_POSITION(2))^2 ...
