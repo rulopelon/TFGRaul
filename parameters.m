@@ -1,5 +1,3 @@
-
-
 %% Parameters and variables used on the reciever
 global signal_buffer
 global reference_buffer
@@ -52,7 +50,7 @@ Fs = 10e6;
 nAM = 64; % As the modulation used is a 64 QAM
 NFFT = 8192;
 PREFIX = 1/32;
-Fc = 36e6;
+Fc = 306e6;
 CARRIERS = 6816;
 Fs_used = 9.14e6;
 L = 64;     
@@ -92,6 +90,7 @@ global Number_batches
 global Samples_iteration
 global Nsym
 global T_batch
+global Doppler_max 
 
 delay_detected = 0;
 doppler_detected = 0;
@@ -100,13 +99,17 @@ PLOT = false;
 T_symbol= symbol_length/Fs;
 % Samples that are analysed on each iteration
 Samples_iteration = TIME_STEP*Fs;
-% Number of OFDM symbols produced on each iteration
-Nsym = ceil(Samples_iteration/symbol_length);
 Vmax = 3e8/Samples_iteration;
 T_batch= 1/(2*Vmax);
+Doppler_max  = (Vmax/3e8)*Fc;
 % Number of batches that are "moved" on each iteration
 Number_batches = TIME_STEP/T_batch;
 %Size of the batch analyzed
-BATCH_SIZE = Samples_iteration/Number_batches; 
+BATCH_SIZE = ceil(Samples_iteration/Number_batches); 
+Samples_iteration = Number_batches*BATCH_SIZE;
+BATCH_SIZE = int64(BATCH_SIZE);
+% Number of OFDM symbols produced on each iteration
+Nsym = ceil(Samples_iteration/symbol_length);
+
 
 
