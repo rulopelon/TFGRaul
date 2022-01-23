@@ -64,7 +64,7 @@ for iteration = 1:1:Nsym
     
 
 
-    ofdm_exit = [ofdm_exit,ofdmSymbolsSe];
+    ofdm_exit = [ofdm_exit,ofdmSymbolsSe'];
 end
 
 

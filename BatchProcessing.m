@@ -8,7 +8,8 @@ global BATCH_SIZE
 global delay_detected
 global doppler_detected
 global PLOT
-global Doppler_max
+global Vmax
+global Fs_used
 
 % The input must be two vectors with the reference signal and the
 % surveillance signal
@@ -52,7 +53,7 @@ for batch = 1:1:columns
     [cross_correlation,lags] = xcorr(surveillance_batches(:,batch),reference_batches(:,batch),BATCH_SIZE); 
     % There is no need to compute negative correlation, as there cannot be negative ranges, 
     % so half of the values are dropped
-    cross_correlation = cross_correlation(ceil(length(cross_correlation)/2)+1:end,1);
+    cross_correlation = cross_correlation(ceil(length(cross_correlation)/2):end,1);
     correlation_matrix = [correlation_matrix,cross_correlation];
 end
 if PLOT
@@ -81,15 +82,16 @@ correlation_matrix = fftshift(abs(fft(correlation_matrix,[],2)),2);
 %         end
 %     end
 % end
-if PLOT
+
     figure
+   
     surf(abs(correlation_matrix),'EdgeColor','none')
     xlabel('Doppler')
     ylabel('Delay')
     zlabel('Correlation')
     title("CAF representation")
-%     xlim([-Doppler_max Doppler_max]);
-%     xticks([-Doppler_max:1/60:Doppler_max]);
-end
+%     xlim([-Vmax Vmax]);
+%     xticks([-Vmax:1/60:Vmax]);
+
 end
 

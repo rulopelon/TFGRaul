@@ -3,19 +3,16 @@
 clear, clc, close all force;
 parameters;
 % Forcing the function to plot the results
-PLOT = true;
-% A random array of samples is generated
-samples = (randi(sqrt(nAM)*2,Samples_iteration,1)-sqrt(nAM)-1/2) +1i*(randi(sqrt(nAM)*2,Samples_iteration,1)-sqrt(nAM)-1/2);
+PLOT = false;
 
 Fs = 1e6;       % just for quicker testing
 t = 0:1/Fs:(1000020-1)/Fs;
-samples = cos(2*pi*t);
 
 samples = OFDMModV2(Nsym);
-samples = samples(1:Samples_iteration);
-%% Samples are shifted on frequency 
-shift = (1/length(samples))*5000;
 n = 0:1:length(samples)-1;
+%% Samples are shifted on frequency 
+shift = (1/length(samples))*0;
+
 shifted = samples.*exp(-1i*2*pi*shift*n);
 % Samples are analyzed
 correlation_matrix_doppler= BatchProcessing(samples,shifted);
@@ -64,8 +61,8 @@ plot(delayed)
 title("Delayed")
 
 %% Shifting on time and frequency
-shift = (1/length(samples))*1000;
-delay_filter = zeros(2,1);
+shift = (1/length(samples))*50;
+delay_filter = zeros(1,1);
 delay_filter(end) = 1;
 delayed_filtered = filter(delay_filter,1,samples);
 delayed_filtered = delayed_filtered.*exp(-1i*2*pi*shift*n);

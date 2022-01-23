@@ -1,3 +1,5 @@
+clear
+
 %% Parameters and variables used on the reciever
 global signal_buffer
 global reference_buffer
@@ -14,6 +16,7 @@ global EMITTER_POSITION
 global TARGET1_POSITION
 global TARGET1_VELOCITY
 global RECIEVER_POSITION
+global PROPAGATION_VELOCITY
 
 NUMBER_ITERATIONS = 100;   % Initial aproach AJUST VALUE
 %The time step is the integration time of the reciever
@@ -27,7 +30,7 @@ RECIEVER_POSITION = [100,0,0]; % Defining reciever coordinates
 TARGET1_POSITION = [0,0,10];
 TARGET1_VELOCITY = [300,0,0];   %The reference point is the emitter
 
-
+PROPAGATION_VELOCITY = 3e8;
 
 %% Constraints related to the OFDM signal parameters defined by the standard
 global NFFT
@@ -90,7 +93,7 @@ global Number_batches
 global Samples_iteration
 global Nsym
 global T_batch
-global Doppler_max 
+global Vmax
 
 delay_detected = 0;
 doppler_detected = 0;
@@ -99,11 +102,11 @@ PLOT = false;
 T_symbol= symbol_length/Fs;
 % Samples that are analysed on each iteration
 Samples_iteration = TIME_STEP*Fs;
-Vmax = 3e8/Samples_iteration;
-T_batch= 1/(2*Vmax);
-Doppler_max  = (Vmax/3e8)*Fc;
+T_batch= 924e-6;
+Vmax = 1/(2*T_batch);
+
 % Number of batches that are "moved" on each iteration
-Number_batches = TIME_STEP/T_batch;
+Number_batches = ceil(TIME_STEP/T_batch);
 %Size of the batch analyzed
 BATCH_SIZE = ceil(Samples_iteration/Number_batches); 
 Samples_iteration = Number_batches*BATCH_SIZE;
