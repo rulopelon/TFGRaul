@@ -25,7 +25,7 @@ ofdm_exit = [];
 for iteration = 1:1:Nsym
     % The symbols are generated randomly
     % Symbols is the vector that will be transformed with the ifft   
-    symbols = (randi(sqrt(nAM)*2,NFFT,1)-sqrt(nAM)-1/2)+1i*(randi(sqrt(nAM)*2,NFFT,1)-sqrt(nAM)-1/2);
+    symbols = (randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2)+1i*(randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2);
 
        % Normalizing the symbols
     symbols = symbols/max(abs(symbols));
