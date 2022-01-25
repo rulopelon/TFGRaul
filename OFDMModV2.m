@@ -31,12 +31,12 @@ for iteration = 1:1:Nsym
     symbols = symbols/max(abs(symbols));
     
     % Eliminating CARRIERS not used
-    symbols(end-(NFFT-CARRIERS)/2 +1:end,:) = 0;
-    symbols(1:(NFFT-CARRIERS)/2) =0;
+    symbols(end-(NFFT-CARRIERS-1)/2 +1:end,:) = 0;
+    symbols(1:(NFFT-CARRIERS-1)/2) =0;
     
     
     for i = indexes
-        symbols(i+(NFFT-CARRIERS)/2,1) = pilot_values(i+1);
+        symbols(i+(NFFT-CARRIERS-1)/2,1) = pilot_values(i+1);
     end
 
     % Frequency symbols are transformed to time ofdm symbols

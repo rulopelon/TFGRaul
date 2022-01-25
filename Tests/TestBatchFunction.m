@@ -3,7 +3,7 @@
 clear, clc, close all force;
 parameters;
 % Forcing the function to plot the results
-PLOT = false;
+PLOT = true;
 
 Fs = 1e6;       % just for quicker testing
 t = 0:1/Fs:(1000020-1)/Fs;
