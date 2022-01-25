@@ -32,9 +32,10 @@ function h = getFilter(M,L)
     % Diseño del filtro 
     h = firpm(ceil(Nmin),freq*2,amp,[att/rp, 1]); % L frecuencia se multiplica por 2 porque hay que introducirlo respecto a pi
     % Cálculo de la respuesta en frecuencia del filtro
+    h = h/sum(h);
+    h = h*L;
     H = fftshift(fft(h,NFFT));
-    H = H.*L;
-    h = ifft(ifftshift(H));
+
 
     if PLOT
         % Visualización gráfica de la respuesta en módulo
