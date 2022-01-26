@@ -106,7 +106,7 @@ while i< NUMBER_ITERATIONS
     channel_coeficients(1:end-1) = 0;
     
    
-    signal_emitter_target_delayed = filter(channel_coeficients,1,signal_emitter_sended);   
+    signal_emitter_target_delayed = conv(channel_coeficients,signal_emitter_sended);   
      
     signal_bounced = [];
     
@@ -162,7 +162,7 @@ while i< NUMBER_ITERATIONS
     signal_sended_target = [signal_bounced_shifted, signal_sended_target];
   
     % The signal is retarded
-    signal_target_reciever_delayed = filter(channel_coeficients_reciever,1,signal_sended_target);
+    signal_target_reciever_delayed = conv(channel_coeficients_reciever,signal_sended_target);
     % Deleting the used samples
     signal_sended_target= signal_sended_target(1:end-Samples_iteration);
     
