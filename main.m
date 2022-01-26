@@ -73,8 +73,8 @@ signal_emitter = [];
 
 while i< NUMBER_ITERATIONS    
     %OFDM signal is generated
-    %Ofdm_signal = OFDMModV2(Nsym);
-    load("OFDMSignal.mat")
+    Ofdm_signal = OFDMModV2(Nsym);
+    %load("OFDMSignal.mat")
     
     %One time step is sended
     signal_emitter = [Ofdm_signal,signal_emitter];  
@@ -87,7 +87,7 @@ while i< NUMBER_ITERATIONS
     signal_emitter_reciever_sended = signal_emitter_reciever(end-Samples_iteration+1:end);
        
     % The signal is delayed 
-    signal_emitter_reciever_delayed = filter(coeficients_emitter_reciever,1,signal_emitter_reciever_sended);  
+    signal_emitter_reciever_delayed = conv(coeficients_emitter_reciever,signal_emitter_reciever_sended);  
    
     %The positions of the targets are updated
     TARGET1_POSITION = TARGET1_POSITION + TARGET1_VELOCITY.*TIME_STEP;
@@ -135,6 +135,7 @@ while i< NUMBER_ITERATIONS
         ((TARGET1_POSITION(1)-RECIEVER_POSITION(1))*TARGET1_VELOCITY(1)+(TARGET1_POSITION(2)-RECIEVER_POSITION(2))*TARGET1_VELOCITY(2)...
            +(TARGET1_POSITION(3)-RECIEVER_POSITION(3))*TARGET1_VELOCITY(3))/sqrt((TARGET1_POSITION(1)-RECIEVER_POSITION(1))^2+(TARGET1_POSITION(2)-RECIEVER_POSITION(2))^2 ...
         +(TARGET1_POSITION(3)-RECIEVER_POSITION(3))^2);
+        doppler_shift
         %Initial_range = Post_range;
 
         %The doppler shift is applied to the signal

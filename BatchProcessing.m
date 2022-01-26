@@ -22,7 +22,7 @@ end
 
 correlation_matrix = [];
 % The input array is reshaped to match the size of each batch analyzed
-surveillance_batches = reshape(surveillance_batches,BATCH_SIZE,[]);
+surveillance_batches = reshape(surveillance_batches,int64(BATCH_SIZE),[]);
 reference_batches = reshape(reference_batches,BATCH_SIZE,[]);
 
 % Each column of the surveillance_batches array represents a delay in time

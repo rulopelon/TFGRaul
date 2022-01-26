@@ -101,18 +101,17 @@ PLOT = false;
 % Time of each OFDM symbol
 T_symbol= symbol_length/Fs;
 % Samples that are analysed on each iteration
-Samples_iteration = TIME_STEP*Fs;
 T_batch= 924e-6;
 Vmax = 1/(2*T_batch);
 
 % Number of batches that are "moved" on each iteration
 Number_batches = ceil(TIME_STEP/T_batch);
 %Size of the batch analyzed
-BATCH_SIZE = ceil(Samples_iteration/Number_batches); 
+BATCH_SIZE = ceil(T_batch*Fs_used); 
 Samples_iteration = Number_batches*BATCH_SIZE;
-BATCH_SIZE = int64(BATCH_SIZE);
+%BATCH_SIZE = int64(BATCH_SIZE);
 % Number of OFDM symbols produced on each iteration
-Nsym = ceil(Samples_iteration/symbol_length);
+Nsym = ceil(Samples_iteration/symbol_length_emitter);
 
 
 
