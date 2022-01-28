@@ -2,6 +2,10 @@
 % The environment is reseted
 clc, clear;
 parameters;
+global pilot_amplitude
+global NFFT
+global CARRIERS
+
 f_vector = zeros(NFFT,1);
 correct_f_vector = zeros(NFFT,1);
 
@@ -10,7 +14,7 @@ correct_f_vector = zeros(NFFT,1);
 for i = indexes
     f_vector(i+(NFFT-CARRIERS-1)/2,1) = pilot_values(i+1);
 end
-correct_pilots = correctPilots(CARRIERS);
+correct_pilots = correctPilots(CARRIERS)*pilot_amplitude;
 
 for i = indexes
     correct_f_vector(i+(NFFT-CARRIERS-1)/2,1) = correct_pilots(i+1);
