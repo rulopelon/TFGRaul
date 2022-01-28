@@ -1,5 +1,4 @@
 function  Simple_reciever(data)
-% Reciever without symbol reconstruction
 
 global signal_buffer
 global reference_buffer
@@ -84,5 +83,7 @@ end
 reference_buffer = [reference_buffer,reference_signal];
 surveillance_buffer = [surveillance_buffer,surveillance_signal];
 
+% if length(signal_buffer) >= BATCH_SIZE*NUMBER_BATCHES
+% 
 end
 
