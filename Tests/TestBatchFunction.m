@@ -5,7 +5,7 @@ parameters;
 global M
 global L
 global Samples_iteration
-% Forcing the function to plot the results
+% Forcing the f-unction to plot the results
 PLOT = true;
 
 Fs = 1e6;       % just for quicker testing

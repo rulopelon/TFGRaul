@@ -11,6 +11,8 @@ global PLOT
 global Vmax
 global Fs_used
 
+Fs_analysis = Fs_used*BATCH_SIZE;
+
 % The input must be two vectors with the reference signal and the
 % surveillance signal
 if size(reference_batches) ~= size(surveillance_batches)
@@ -27,24 +29,6 @@ reference_batches = reshape(reference_batches,BATCH_SIZE,[]);
 
 % Each column of the surveillance_batches array represents a delay in time
 [~,columns] = size(reference_batches);
-if PLOT
-   
-    figure
-    surf(abs(reference_batches),'EdgeColor','none')
-    xlabel('Delay')
-    ylabel('Doppler')
-    zlabel('Correlation')
-    title("Reference batches")
-end
-if PLOT
-   
-    figure
-    surf(abs(surveillance_batches),'EdgeColor','none')
-    xlabel('Delay')
-    ylabel('Doppler')
-    zlabel('Correlation')
-    title("Surveillance batches")
-end
 
 for batch = 1:1:columns
     % Correlation of the reference signal and the surveillance signal
@@ -56,15 +40,7 @@ for batch = 1:1:columns
     cross_correlation = cross_correlation(ceil(length(cross_correlation)/2):end,1);
     correlation_matrix = [correlation_matrix,cross_correlation];
 end
-if PLOT
-   
-    figure
-    surf(abs(correlation_matrix),'EdgeColor','none')
-    xlabel('Delay')
-    ylabel('Doppler')
-    zlabel('Correlation')
-    title("CAF representation whitout FFT")
-end
+
 % Calculating on the doppler domain
 correlation_matrix = fftshift(abs(fft(correlation_matrix,[],2)),2); 
 
@@ -82,9 +58,8 @@ correlation_matrix = fftshift(abs(fft(correlation_matrix,[],2)),2);
 %         end
 %     end
 % end
-
+if PLOT
     figure
-   
     surf(abs(correlation_matrix),'EdgeColor','none')
     xlabel('Doppler')
     ylabel('Delay')
@@ -92,6 +67,6 @@ correlation_matrix = fftshift(abs(fft(correlation_matrix,[],2)),2);
     title("CAF representation")
 %     xlim([-Vmax Vmax]);
 %     xticks([-Vmax:1/60:Vmax]);
-
+end
 end
 
