@@ -1,4 +1,4 @@
-% Code to test the BlockProcessing function
+%% Code to test the BlockProcessing function
 % Inizialization
 clear, clc, close all force;
 parameters;

@@ -1,5 +1,5 @@
 function  Reciever(data)
-
+% Reciever with channel equalization
 global signal_buffer
 global reference_buffer
 global surveillance_buffer 
@@ -68,6 +68,18 @@ frequency_deviation = deltaF *index_mad_freq;
 n = 0:1:length(fft_frame_synchronized)-1;
 fft_frame_synchronized = fft_frame_synchronized.*exp(-1i*2*pi*n*frequency_deviation);
 
+% Now that the symbol is synchronized, equelization is performed to
+% eliminate the efect of the channel
+% The fft_frame_synchronized is compared with reference pilot
+attenuation_values = zeros(length(indexes));
+j = 1;
+for i = indexes
+    attenuation_values(j) = fft_frame_synchronized(i+(NFFT-CARRIERS)/2,1)/frequency_reference(i+(NFFT-CARRIERS)/2,1);
+    j = j+1;
+end
+attenuation = mean(attenuation_values);
+fft_frame_synchronized = fft_frame_synchronized.*(1/attenuation);
+
 % Prefix is added to the signal
 signal_synchronized = [];
 Len_prefix = NFFT+PREFIX;
@@ -83,33 +95,6 @@ end
 reference_buffer = [reference_buffer,reference_signal];
 surveillance_buffer = [surveillance_buffer,surveillance_signal];
 
-% if length(signal_buffer) >= BATCH_SIZE*NUMBER_BATCHES
-%     % Forcing the numerb of samples to be a multiplier of the number of
-%     % batches
-%     surveillance_analyze =[];
-%     reference_analyse = [];
-%     
-%     if mod(length(signal_buffer),BATCH_SIZE) ~=0
-%         n_batches = fix(length(signal_buffer),BATCH_SIZE); % The number of full batches (integer) to use
-%         reference_analyse = reference_buffer(1:(n_batches*BATCH_SIZE)+1,:);
-%         surveillance_analyze = reference_buffer(1:(n_batches*BATCH_SIZE)+1,:); 
-%         
-%         % Buffers are updated
-%         signal_buffer = signal_buffer((n_batches*BATCH_SIZE)+2:length(surveillance_buffer));
-%         reference_buffer = reference_buffer((n_batches*BATCH_SIZE)+2:length(surveillance_buffer));
-%         surveillance_buffer = surveillance_buffer((n_batches*BATCH_SIZE)+2:length(surveillance_buffer),1);
-%     else
-%         reference_analyse = reference_buffer;
-%         surveillance_analyze = surveillance_buffer;
-%         %Buffers are emptied
-%         signal_buffer = [];
-%         reference_buffer = [];
-%         surveillance_buffer = [];
-%     end 
-%     % The signal is analysed and targets are detected
-%     BatchProcessing(reference_analyse,surveillance_analyze);
-%     
-%     
-% end
+
 end
 
