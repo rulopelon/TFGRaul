@@ -6,14 +6,12 @@ function [indexes,values] = getContinuousPilots()
 % X11 + X2 + 1 (see figure 1
 %
 global pilot_cells
-global pilot_amplitude
 global CARRIERS
 
 indexes = pilot_cells;
 %To storage the values obtained in the sequence
 values = zeros(1,CARRIERS);
-% To get the result
-result = zeros(1,CARRIERS);
+
 % Sequence to generate the pseudorandom numbers
 sequence = ones(1,11);
 
@@ -21,7 +19,9 @@ for i = 1:1:CARRIERS
     values(i) = sequence(end);
     sequence = [xor(sequence(end),sequence(end-2)),sequence(1:end-1)];
 end
-values = values*pilot_amplitude;
+for i =1:1:length(values)
+    values(i) = 4/3*2*(1/2-values(i));
+end
 
 end
 
