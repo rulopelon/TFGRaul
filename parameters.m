@@ -20,7 +20,7 @@ global PROPAGATION_VELOCITY
 
 NUMBER_ITERATIONS = 100;   % Initial aproach AJUST VALUE
 %The time step is the integration time of the reciever
-TIME_STEP = 100e-3; %Units in seconds 250ms
+TIME_STEP = 250e-3; %Units in seconds 250ms
 
 %UNITS ARE IN KM the origin is at [0,0,0]
 EMITTER_POSITION = [0,0,0]; % The origin of coordinates is the emitter 
