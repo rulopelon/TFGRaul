@@ -1,4 +1,4 @@
-function [ofdm_exit]=OFDMModV2(Nsym)
+function [ofdm_exit,ofdm_exit_2]=OFDMModV2(Nsym)
 % MODIFIED BY RAUL GONZALEZ TO CHANGE THE FRECUENCY
 % load parameters and constants
 global NFFT
@@ -9,7 +9,7 @@ global M
 global Fs_used
 global nAM
 global reconstruction_filter
-
+global symbol_length_emitter
 Len_prefix = NFFT*PREFIX;
 
 % The sample frequency is  going to be achieved like in a real environment
@@ -17,7 +17,8 @@ Len_prefix = NFFT*PREFIX;
 Fs_achieved = Fs_used*(M/L); %9.14e6
 
 %%
-ofdm_exit = [];
+alocation = zeros(symbol_length_emitter,Nsym);
+ofdm_exit_2 = [];
 
 %Continuous pilots are added to the OFDM signal
 [indexes, pilot_values]=getContinuousPilots();
@@ -28,7 +29,7 @@ for iteration = 1:1:Nsym
     symbols = (randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2)+1i*(randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2);
 
        % Normalizing the symbols
-    symbols = symbols/max(abs(symbols));
+    symbols = symbols/abs(15.5+15.5i);
     
     % Eliminating CARRIERS not used
     symbols(end-(NFFT-CARRIERS-1)/2 +1:end,:) = 0;
@@ -64,9 +65,10 @@ for iteration = 1:1:Nsym
     
 
 
-    ofdm_exit = [ofdm_exit,ofdmSymbolsSe'];
+    alocation(:,iteration) = ofdmSymbolsSe;
+    ofdm_exit_2= [ofdm_exit_2,ofdmSymbolsSended.'];
 end
-
+ofdm_exit = alocation(:);
 
 
 
