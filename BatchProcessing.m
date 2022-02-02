@@ -5,13 +5,12 @@ function correlation_matrix = BatchProcessing(reference_batches,surveillance_bat
 % be calculated with the cross correlation of both signals and the fourier
 % transform of the result.
 global BATCH_SIZE
-global delay_detected
-global doppler_detected
 global PLOT
 global Vmax
 global Fs_used
+global PROPAGATION_VELOCITY
+global TIME_STEP
 
-Fs_analysis = Fs_used*BATCH_SIZE;
 
 % The input must be two vectors with the reference signal and the
 % surveillance signal
@@ -37,32 +36,25 @@ for batch = 1:1:columns
     [cross_correlation,lags] = xcorr(surveillance_batches(:,batch),reference_batches(:,batch),BATCH_SIZE); 
     % There is no need to compute negative correlation, as there cannot be negative ranges, 
     % so half of the values are dropped
-    cross_correlation = cross_correlation(ceil(length(cross_correlation)/2):end,1);
+    cross_correlation = cross_correlation(ceil(length(cross_correlation)/2)+1:end,1);
     correlation_matrix = [correlation_matrix,cross_correlation];
 end
 
+
 % Calculating on the doppler domain
-correlation_matrix = fftshift(abs(fft(correlation_matrix,[],2)),2); 
+correlation_matrix = fftshift(abs(fft(correlation_matrix,512,2)),2); 
 
 
-% for i = 1:1:BATCH_SIZE
-%     % Indexing on the delay dimension 
-%     for j = 1:1:columns
-%         % Indexing on the doppler dimension
-%         if correlation_matrix(i,j) >= 1
-%             %TODO: change the way of outputting the daly and doppler
-%             %result
-%             % A target has been detected
-%             doppler_detected = j;
-%             delay_detected = i;
-%         end
-%     end
-% end
 if PLOT
+    Fs_analysis = Fs_used/BATCH_SIZE;
+    range_max = PROPAGATION_VELOCITY*TIME_STEP;
+    doppler_axis = linspace(-0.5*Fs_analysis,0.5*Fs_analysis,512);
+    range_axis= linspace(1,range_max,BATCH_SIZE);
+    [X,Y] = meshgrid(range_axis,doppler_axis);
     figure
-    surf(abs(correlation_matrix),'EdgeColor','none')
-    xlabel('Doppler')
-    ylabel('Delay')
+    surf(X,Y,abs(correlation_matrix.'),'EdgeColor','none')
+    xlabel('Delay')
+    ylabel('Doppler')
     zlabel('Correlation')
     title("CAF representation")
 %     xlim([-Vmax Vmax]);
