@@ -33,7 +33,7 @@ for batch = 1:1:columns
     % Correlation of the reference signal and the surveillance signal
     % leading to the correlation 
     
-    [cross_correlation,~] = xcorr(surveillance_batches(:,batch),reference_batches(:,batch),BATCH_SIZE); 
+    [cross_correlation,lags] = xcorr(surveillance_batches(:,batch),reference_batches(:,batch),BATCH_SIZE); 
     % There is no need to compute negative correlation, as there cannot be negative ranges, 
     % so half of the values are dropped
     cross_correlation = cross_correlation(ceil(length(cross_correlation)/2)+1:end,1);
@@ -50,7 +50,7 @@ if PLOT
     doppler_axis = linspace(-0.5*Fs_analysis,0.5*Fs_analysis,512);
     range_axis= 1:1:BATCH_SIZE;
     [X,Y] = meshgrid(range_axis,doppler_axis);
-    f = figure;
+    figure
     surf(X,Y,abs(correlation_matrix.'),'EdgeColor','none')
     xlabel('Delay')
     ylabel('Doppler')
@@ -58,8 +58,7 @@ if PLOT
     ax = gca;
     ax.Color = 'white';
     title("CAF representation")
-    nombre = inpput("Introduzca el nombre de la figura");
-    guardaFiguraPaper(nombre,f,ax,'-djpeg',0)
+    guardaFiguraPaper("Prueba",figure,ax,'-djpeg',0)
 end
 end
 
