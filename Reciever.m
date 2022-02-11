@@ -20,27 +20,21 @@ data_filtered = conv(data_interpolated,reconstruction_filter_reciever,'same');
 %Decimation
 data_resampled = data_filtered(1:M:length(data_filtered));
 
-signal_buffer = [data_resampled,signal_buffer];
-% The signal is divided on reference and surveillance
-reference_signal = [];
-surveillance_signal =[];
+
 prefix_length = PREFIX*NFFT;
 %Frame synchronism
-[correlation,~] = xcorr(reference_signal,reference_signal);
-% Only positive lags are used
-correlation = correlation(ceil((length(correlation)/2))+1:end);
-% Getting the maximun value of the correlation
-[~,index_max] = max(correlation);
-% Previous values of the signal are deleted
-signal_correlated = reference_signal(index_max+1:end);
+index = symbolSynchronization(data_resampled);
 
-% The prefix is eliminated
+% Previous values of the signal are deleted
+signal_correlated = data_resampled(index-symbol_length+1:end);
 % Number of symbols recieved
-N_symbols = length(signal_correlated)/symbol_length;
+N_symbols = floor(length(signal_correlated)/symbol_length);
+
+% The post values not used are eliminated
+signal_correlated = signal_correlated(1:N_symbols*symbol_length);
 
 frame_synchronized = [];
 for i = 1:1:N_symbols
-    
     signal_append = signal_correlated(prefix_length+(prefix_length+NFFT)*(i-1)+1:symbol_length+(symbol_length)*(i-1));
     frame_synchronized = [frame_synchronized,signal_append];
 end

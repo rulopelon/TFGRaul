@@ -58,13 +58,15 @@ disp("The simulation starts")
 %Initial_range = sqrt((TARGET1_POSITION(1)-EMITTER_POSITION(1))^2+(TARGET1_POSITION(2)-EMITTER_POSITION(2))^2)+ sqrt((TARGET1_POSITION(1)-RECIEVER_POSITION(1))^2+(TARGET1_POSITION(2)-RECIEVER_POSITION(2))^2); 
 % Initializing the channel of emitter-reciever values
 
-distance_emitter_target = sqrt(sum((RECIEVER_POSITION-EMITTER_POSITION).^2));
+distance_emitter_reciever = sqrt(sum((RECIEVER_POSITION-EMITTER_POSITION).^2));
+% Calculus of the losses
+losses_emitter_receiver = ((4*pi*distance_emitter_reciever*1000)/(PROPAGATION_VELOCITY/Fc))^2;
 
 % The coeficients of the emitter and the recievier are only calculated
 % once, as the distance is constants constant
-coeficients_emitter_reciever = 0:1/Fs:distance_emitter_target/PROPAGATION_VELOCITY;
+coeficients_emitter_reciever = 0:1/Fs:distance_emitter_reciever/PROPAGATION_VELOCITY;
 coeficients_emitter_reciever(1:end-1) = 0;
-coeficients_emitter_reciever(end) = 1;
+coeficients_emitter_reciever(end) = 1/losses_emitter_receiver;
 
 % The signal between the emitter and the reciever starts empty, with all
 % zeros
@@ -99,10 +101,12 @@ while i< NUMBER_ITERATIONS
     %Units on Km
     distance_emitter_target = sqrt((TARGET1_POSITION(1)-EMITTER_POSITION(1))^2+(TARGET1_POSITION(2)-EMITTER_POSITION(2))^2 ...
     +(TARGET1_POSITION(3)-EMITTER_POSITION(3))^2);
-    
+    % Calculus of the losses
+    losses_emitter_target = ((4*pi*distance_emitter_target*1000)/(PROPAGATION_VELOCITY/Fc))^2;
+
     % Calculus of the channel between the emitter and the target
     channel_coeficients = 0:1/Fs:distance_emitter_target/PROPAGATION_VELOCITY;
-    channel_coeficients(end) = 1;
+    channel_coeficients(end) = 1/losses_emitter_target;
     channel_coeficients(1:end-1) = 0;
     
    
@@ -153,10 +157,13 @@ while i< NUMBER_ITERATIONS
     distance_target_reciever = sqrt((TARGET1_POSITION(1)-RECIEVER_POSITION(1))^2+(TARGET1_POSITION(2)-RECIEVER_POSITION(2))^2 ...
     +(TARGET1_POSITION(3)-RECIEVER_POSITION(3))^2);
     
+    % Calculus of the losses
+    losses_target_reciever = ((4*pi*distance_target_reciever*1000)/(PROPAGATION_VELOCITY/Fc))^2;
+    
     % Calculus of the channel between the emitter and the target
     channel_coeficients_reciever = 0:1/Fs:distance_target_reciever/PROPAGATION_VELOCITY;
     channel_coeficients_reciever(1:end-1) = 0;
-    channel_coeficients_reciever(end) = 1;
+    channel_coeficients_reciever(end) = 1/losses_target_reciever;
     
     % Appending the signal to the target channel buffer
     signal_sended_target = [signal_bounced_shifted, signal_sended_target];

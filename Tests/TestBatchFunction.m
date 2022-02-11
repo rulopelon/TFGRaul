@@ -10,7 +10,7 @@ PLOT = true;
 
 Fs = 1e6;       % just for quicker testing
 
-samples = OFDMModV2(Nsym);
+[samples,~] = OFDMModV2(Nsym);
 
 
 % Data is resampled to match Fs = 9.14 Mhz
@@ -27,6 +27,7 @@ delay_filter(end) = 1;
 
 samples = samples(end-int64(Samples_iteration)+1:end);
 n = 0:1:length(samples)-1;
+n = n';
 shift = (1/length(samples))*50;
 
 %% Samples are shifted on frequency 

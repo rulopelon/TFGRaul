@@ -24,7 +24,7 @@ TIME_STEP = 250e-3; %Units in seconds 250ms
 
 %UNITS ARE IN KM the origin is at [0,0,0]
 EMITTER_POSITION = [0,0,0]; % The origin of coordinates is the emitter 
-RECIEVER_POSITION = [100,0,0]; % Defining reciever coordinates
+RECIEVER_POSITION = [100,100,0]; % Defining reciever coordinates
 
 %Targets for simulation
 TARGET1_POSITION = [0,0,10];
@@ -83,7 +83,9 @@ pilot_cells = [0 48 54 87 141 156 192 201 255 279 282 333 432 450 ...
 5562 5595 5637 5643 5730 5748 5826 5871 5877 ...
 5892 5916 5985 6000 6030 6051 6054 6081 6096 ...
 6162 6213 6219 6222 6249 6252 6258 6318 6381 ...
-6435 6489 6603 6795 6816];    
+6435 6489 6603 6795 6816];  
+
+
 %% Parameters for the batch processing algorithm
 global BATCH_SIZE
 global delay_detected
