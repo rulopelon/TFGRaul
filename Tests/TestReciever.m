@@ -1,8 +1,8 @@
 %% Code to test the reciever
 % Inizialization
 clear, clc, close all force;
-parameters;
-global Fs_used
+load("variables.mat","Fs_used")
+
 % An OFDM signal is generated with random symbols
 [~,signal] = OFDMModV2(3);
 %Eliminating prefix cyclic

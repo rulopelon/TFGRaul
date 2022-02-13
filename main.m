@@ -4,22 +4,11 @@
 %Environment is cleaned
 clc;close all force;clear;
 %% Loading global parameters for the simulation
-parameters;
+load("variables.mat","NUMBER_ITERATIONS","TIME_STEP","EMITTER_POSITION", ...
+    "TARGET1_POSITION","TARGET1_VELOCITY","RECIEVER_POSITION","BATCH_SIZE", ...
+    "Fs","Number_batches","Samples_iteration","Nsym","T_batch","PROPAGATION_VELOCITY", ...
+    "Fc")
 
-global NUMBER_ITERATIONS
-global TIME_STEP %Time which is forwarded on each iteration
-global EMITTER_POSITION
-global TARGET1_POSITION
-global TARGET1_VELOCITY
-global RECIEVER_POSITION
-global BATCH_SIZE
-global Fs
-global Number_batches
-global Samples_iteration 
-global Nsym
-global T_batch
-global PROPAGATION_VELOCITY
-global Fc
 %% Variables declaration
 
 %Object to plot all the elements in the 

@@ -1,15 +1,8 @@
 function [ofdm_exit,ofdm_exit_2]=OFDMModV2(Nsym)
 % MODIFIED BY RAUL GONZALEZ TO CHANGE THE FRECUENCY
 % load parameters and constants
-global NFFT
-global L % Interpolation on the DAC 
-global PREFIX %Prefix of the OFDM modulation
-global CARRIERS % Number of non-silent carriers 
-global M
-global Fs_used
-global nAM
-global reconstruction_filter
-global symbol_length_emitter
+load("variables.mat","NFFT","L","PREFIX","CARRIERS","M","Fs_used","nAM","reconstruction_filter","symbol_length_emitter")
+
 Len_prefix = NFFT*PREFIX;
 
 % The sample frequency is  going to be achieved like in a real environment

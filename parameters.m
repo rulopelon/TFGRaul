@@ -1,22 +1,12 @@
 clear
 
 %% Parameters and variables used on the reciever
-global signal_buffer
-global reference_buffer
-global surveillance_buffer 
 
 signal_buffer = [];
 reference_buffer = [];
 surveillance_buffer = [];
 
 %% Parameters used for the simulation environment
-global NUMBER_ITERATIONS
-global TIME_STEP %Time which is forwarded on each iteration
-global EMITTER_POSITION
-global TARGET1_POSITION
-global TARGET1_VELOCITY
-global RECIEVER_POSITION
-global PROPAGATION_VELOCITY
 
 NUMBER_ITERATIONS = 100;   % Initial aproach AJUST VALUE
 %The time step is the integration time of the reciever
@@ -33,21 +23,6 @@ TARGET1_VELOCITY = [290,10,0];   %The reference point is the emitter
 PROPAGATION_VELOCITY = 3e8;
 
 %% Constraints related to the OFDM signal parameters defined by the standard
-global NFFT
-global L % % Interpolating factor
-global PREFIX %Prefix of the OFDM modulation
-global Fc %Frecuency at which the stream of data is modulated
-global CARRIERS % Number of non-silent carriers 
-global pilot_cells  % Defined by the standard
-global Fs_used 
-global M    % Decimating factor
-global nAM % Indicates the modulation used for the generation of the OFDM signal, must be power of two
-global pilot_amplitude
-global Fs 
-global reconstruction_filter
-global symbol_length_emitter
-global symbol_length
-
 pilot_amplitude = 4/3; % There is no need to multiply this value as all the symbols are normalized
 Fs = 10e6;
 nAM = 64; % As the modulation used is a 64 QAM
@@ -87,16 +62,6 @@ pilot_cells = [0 48 54 87 141 156 192 201 255 279 282 333 432 450 ...
 
 
 %% Parameters for the batch processing algorithm
-global BATCH_SIZE
-global delay_detected
-global doppler_detected
-global PLOT
-global Number_batches
-global Samples_iteration
-global Nsym
-global T_batch
-global Vmax
-
 delay_detected = 0;
 doppler_detected = 0;
 PLOT = false;    
@@ -115,5 +80,5 @@ Samples_iteration = Number_batches*BATCH_SIZE;
 % Number of OFDM symbols produced on each iteration
 Nsym = ceil(Samples_iteration/symbol_length_emitter);
 
-
+save("variables.mat")
 

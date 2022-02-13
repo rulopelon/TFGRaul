@@ -1,6 +1,6 @@
 function index = symbolSynchronization(data_input)
-    global symbol_length
-    
+    load("variables.mat","symbol_length")
+
     [indexes, pilots] = getContinuousPilots();
     m = zeros(8192,1);
     

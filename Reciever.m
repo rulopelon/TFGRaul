@@ -1,15 +1,7 @@
 function  Reciever(data)
 % Reciever with channel equalization
-global signal_buffer
-global reference_buffer
-global surveillance_buffer 
-global BATCH_SIZE
-global PREFIX
-global NFFT
-global CARRIERS
-global symbol_length
-global M
-global L
+load("variables.mat","signal_buffer","reference_buffer","BATCH_SIZE", ...
+    "PREFIX","NFFT","CARRIERS","symbol_length","L","M")
 
 % Data is resampled to match Fs = 9.14 Mhz
 data_interpolated = interpolation(data,L);

@@ -1,9 +1,6 @@
 clear,clc,close all force;
-parameters
-global PREFIX
-global symbol_length
-global CARRIERS 
-global NFFT
+load("variables.mat","symbol_length","CARRIERS","NFFT","PREFIX")
+
 
 [a,b] = OFDMModV2(10);
 

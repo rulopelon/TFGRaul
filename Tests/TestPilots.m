@@ -1,10 +1,7 @@
 %% Code to test if the getContinuousPilots function works properly
 % The environment is reseted
 clc, clear;
-parameters;
-global pilot_amplitude
-global NFFT
-global CARRIERS
+load("variables.mat","CARRIERS","NFFT","pilot_amplitude")
 
 f_vector = zeros(NFFT,1);
 correct_f_vector = zeros(NFFT,1);

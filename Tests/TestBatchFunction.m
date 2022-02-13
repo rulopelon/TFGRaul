@@ -1,10 +1,8 @@
 %% Code to test the BlockProcessing function
 % Inizialization
 clear, clc, close all force;
-parameters;
-global M
-global L
-global Samples_iteration
+load("variables.mat","L","M","Samples_iteration","Nsym")
+
 % Forcing the f-unction to plot the results
 PLOT = true;
 

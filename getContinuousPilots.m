@@ -5,8 +5,7 @@ function [indexes,values] = getContinuousPilots()
 % this case with the following polynomial
 % X11 + X2 + 1 (see figure 1
 %
-global pilot_cells
-global CARRIERS
+load("variables.mat","CARRIERS","pilot_cells")
 
 indexes = pilot_cells;
 %To storage the values obtained in the sequence

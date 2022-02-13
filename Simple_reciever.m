@@ -1,12 +1,7 @@
 function signal_synchronized =  Simple_reciever(data)
 % Reciever without symbol reconstruction, it recieves an OFDM signal and
 % outputs the synchronized version of the signal
-
-
-global PREFIX
-global NFFT
-global CARRIERS
-global symbol_length
+load("variables.mat","PREFIX","NFFT","CARRIERS","symbol_length")
 
 % % Data is resampled to match Fs = 9.14 Mhz
 % data_interpolated = interpolation(data,L);
