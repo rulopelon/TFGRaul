@@ -24,13 +24,12 @@ for i = indexes
 end        
 pilots = ifft(ifftshift(m));
 
-
 z_2 = zeros(length(b)+length(pilots),1);
 duration = length(b)-length(pilots);
 
 for delay = 0:1:duration
-     y  = conj(b(delay+1:delay+length(pilots))).*pilots;
-     z_2(delay+1) = sum(y);
+    y  = conj(b(delay+1:delay+length(pilots))).*pilots;
+    z_2(delay+1) = sum(y);
 end
 figure
 plot(abs(z_2))
@@ -48,7 +47,7 @@ r_2 = [b;zeros(8192,1)];
 b_2 = conj(r).*r_2;
 
 z_3 = zeros(length(r)+length(pilots),1);
-duration = length(b)-length(pilots);
+duration = length(b)-length(pilots)-1;
 
 for delay = 0:1:duration
      y  = conj(r(delay+1:delay+length(pilots))).*pilots;
