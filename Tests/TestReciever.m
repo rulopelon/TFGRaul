@@ -24,8 +24,6 @@ i_frequency_reference = ifft(ifftshift(frequency_reference));
 frequency_reference = fftshift(fft(i_frequency_reference,length(signal_noise_shift)));
 %%
 % Frequency deviation is calculated
-
-
 [frequency_correlation,lags_freq] = xcorr(fftshift(fft(signal_noise_shift.')),frequency_reference);
 
 figure

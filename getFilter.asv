@@ -1,7 +1,8 @@
 function h = getFilter(M,L)
-%Function to calculate filter using Parks-McClellan method
-%Author: Carlos García de la Cueva
-%Modified: Raúl Gonzále Gómez
+%Función para la creación de un filtro de para la interpolación correcta de
+%la señal, empleando el método de Parks-McClellan
+%Autor: Carlos García de la Cueva
+%Modificado: Raúl Gonzále Gómez
     global PLOT
     global NFFT
     global CARRIERS
@@ -29,15 +30,15 @@ function h = getFilter(M,L)
     % Frequency axis
     freq = [0 fc fc+Df 0.5];
     % Filter design 
-    h = firpm(ceil(Nmin),freq*2,amp,[att/rp, 1]); 
-    % Calculating frequency response
+    h = firpm(ceil(Nmin),freq*2,amp,[att/rp, 1]); % L frecuencia se multiplica por 2 porque hay que introducirlo respecto a pi
+    % Cálculo de la respuesta en frecuencia del filtro
     h = h/sum(h);
     h = h*L;
     H = fftshift(fft(h,NFFT));
 
 
     if PLOT
-        % Visualizing frequency response
+        % Visualización gráfica de la respuesta en módulo
         figure;
         a1 = axes;
         plot(a1,linspace(-0.5,0.5,length(H)),20*log10(abs(H)))
