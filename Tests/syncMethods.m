@@ -3,9 +3,7 @@ load("variables.mat","symbol_length","CARRIERS","NFFT","PREFIX")
 
 
 [a,b] = OFDMModV2(10);
-
 b = b.';
-%[correlation] = conv(fliplr(conj(b(1:(ceil(symbol_length*3))))),b(1:symbol_length*3));
 y = [b; zeros(8192,1)].*conj([zeros(8192,1); b]);
 % Suma
 z = conv(y.',ones(256,1));
@@ -28,6 +26,7 @@ for delay = 0:1:duration
     y  = conj(b(delay+1:delay+length(pilots))).*pilots;
     z_2(delay+1) = sum(y);
 end
+
 figure
 plot(abs(z_2))
 %% 4.4.2
@@ -46,10 +45,12 @@ b_2 = conj(r).*r_2;
 z_3 = zeros(length(r)+length(pilots),1);
 duration = length(b)-length(pilots)-1;
 
-for delay = 0:1:duration
-     y  = conj(r(delay+1:delay+length(pilots))).*pilots;
-     z_3(delay+1) = sum(y);
-end
+% for delay = 0:1:duration
+%      y  = conj(r(delay+1:delay+length(pilots))).*pilots;
+%      z_3(delay+1) = sum(y);
+% end
+
+z_3 = conv(r,[zeros(length(pilots),1);pilots]);
 
 figure
 plot(abs(z_3))

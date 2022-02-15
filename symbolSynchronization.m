@@ -1,5 +1,5 @@
 function index = symbolSynchronization(data_input)
-    load("variables.mat","symbol_length")
+    load("variables.mat","symbol_length","NFFT","CARRIERS")
 
     [indexes, pilots] = getContinuousPilots();
     m = zeros(8192,1);
@@ -14,7 +14,7 @@ function index = symbolSynchronization(data_input)
     b_2 = conj(r).*r_2;
     
     z_3 = zeros(length(r)+length(pilots),1);
-    duration = length(b)-length(pilots)-1;
+    duration = length(b_2)-length(pilots)-1;
     
     for delay = 0:1:duration
          y  = conj(r(delay+1:delay+length(pilots))).*pilots;
@@ -23,8 +23,8 @@ function index = symbolSynchronization(data_input)
     
     % The max values is only searched on the 
     index_finish = symbol_length*1.5;
-    z(index_finish+1:end) = 0;
-    [~,index] = max(z);
+    z_3(index_finish+1:end) = 0;
+    [~,index] = max(z_3);
 
 
  

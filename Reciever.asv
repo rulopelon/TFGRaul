@@ -1,4 +1,4 @@
-function  Reciever(data)
+function  signal_synchronized = Reciever(data)
 % Reciever with channel equalization
 load("variables.mat", ...
     "PREFIX","NFFT","CARRIERS","symbol_length","L","M")
@@ -87,10 +87,6 @@ for i = 1:1:symbols
     interpolated(1:(NFFT-CARRIERS-1)/2) =0;
 
     i_interpolated = ifft(ifftshift(interpolated));
-    % The symbol is equalized
-    symbol_equalized = conv(symbol_equalize,i_interpolated);
-
-    symbols_equalization(:,i) = symbol_equalized;
 %     figure
 %     plot(abs(frequency_response_plot),'*')
 %     hold on
@@ -102,8 +98,8 @@ end
 % Prefix is added to the signal
 signal_synchronized = zeros(N_symbols,(NFFT+prefix_length));
 
-for i = 1:1:symbols
-    symbol = symbols_equalization(:,i);
+for i = 1:1:N_symbols-1
+    symbol = frame_synchronized(1+NFFT*i:NFFT*(i+1));
     signal_append =[symbol(end-prefix_length+1:end);symbol];
     signal_synchronized(i,:) = signal_append;
 end

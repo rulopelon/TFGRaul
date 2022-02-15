@@ -4,7 +4,7 @@ clear, clc, close all force;
 load("variables.mat","Fs_used")
 
 % An OFDM signal is generated with random symbols
-[~,signal] = OFDMModV2(3);
+[signal,~] = OFDMModV2(3);
 %Eliminating prefix cyclic
 %signal = signal(256:end);
 
@@ -13,7 +13,7 @@ n = 0:1:length(signal)-1;
 shift =5000/length(signal);
 disp("Shift: "+shift*Fs_used)
 signal_noise_shift = signal.*exp(-1i*shift*n);
-processed_signal = Simple_reciever(signal_noise_shift);
+processed_signal = Reciever(signal_noise_shift);
 
 frequency_reference = zeros(NFFT,1);
 [indexes, pilot_values]=getContinuousPilots();
