@@ -68,7 +68,7 @@ for i = 1:1:symbols
     symbol_equalize = symbols_equalization(:,i);
     symbol_equalize_fft = fftshift(fft(symbol_equalize));
     frequency_response = zeros(length(indexes),1);
-    frequency_response_plot = zeros(NFFT,1);
+    frequency_response_plot = nan(NFFT,1);
     j = 0;
     for index = indexes
         frequency_response(j+1) = frequency_reference(index+(NFFT-CARRIERS-1)/2)/symbol_equalize_fft(index+(NFFT-CARRIERS-1)/2);
@@ -77,32 +77,34 @@ for i = 1:1:symbols
         xq(index+1) = [];
     end
     %Query points for the interpolation
-    interpolated = interp1(indexes+1,frequency_response,xq,'nearest');
-    
+    interpolated = interp1(indexes+1,frequency_response,xq,'linear');
+
+    interpolated2 = fillmissing(frequency_response_plot,'linear');
     j = 0;
     for index = indexes
        interpolated = [interpolated(1:index-1+(NFFT-CARRIERS-1)/2),frequency_response(j+1),interpolated(index+(NFFT-CARRIERS-1)/2:end)];
         j = j+1;
     end
-    interpolated(end-(NFFT-CARRIERS-1)/2 +1:end) = 0;
-    interpolated(1:(NFFT-CARRIERS-1)/2) =0;
+    interpolated2(end-(NFFT-CARRIERS-1)/2 +1:end) = 0;
+    interpolated2(1:(NFFT-CARRIERS-1)/2) =0;
 
-    i_interpolated = ifft(ifftshift(interpolated));
+    interpolated = fillmissing(interpolated,'linear');
+    i_interpolated = ifft(ifftshift(interpolated2));
     % The symbol is equalized
-    symbol_equalized = conv(symbol_equalize,i_interpolated);
-
+    symbol_equalized = conv(symbol_equalize,i_interpolated,'same');
+    symbol_equalized_fft = fftshift(fft(symbol_equalized));
     symbols_equalization(:,i) = symbol_equalized;
 
     figure
     plot(abs(symbol_equalize_fft))
     hold on 
-    plot(fftshift(fft(abs(symbol_equalized))))
+    plot(abs(fftshift(fft(symbol_equalized))),'o')
     legend("Original","Ecualizado")
     
     figure
     plot(abs(frequency_response_plot),'*')
     hold on
-    plot(abs(interpolated),'o')
+    plot(abs(interpolated2),'o')
     legend('original','interpolated')
     %Frequency response is interpolated
     

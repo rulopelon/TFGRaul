@@ -78,32 +78,33 @@ for i = 1:1:symbols
     end
     %Query points for the interpolation
     interpolated = interp1(indexes+1,frequency_response,xq,'linear');
+
     interpolated2 = fillmissing(frequency_response_plot,'linear');
     j = 0;
     for index = indexes
        interpolated = [interpolated(1:index-1+(NFFT-CARRIERS-1)/2),frequency_response(j+1),interpolated(index+(NFFT-CARRIERS-1)/2:end)];
         j = j+1;
     end
-    interpolated(end-(NFFT-CARRIERS-1)/2 +1:end) = 0;
-    interpolated(1:(NFFT-CARRIERS-1)/2) =0;
-    
-    interpolated = fillmissing(interpolated,'linear');
-    i_interpolated = ifft(ifftshift(interpolated));
-    % The symbol is equalized
-    symbol_equalized = conv(symbol_equalize,i_interpolated);
+    interpolated2(end-(NFFT-CARRIERS-1)/2 +1:end) = 0;
+    interpolated2(1:(NFFT-CARRIERS-1)/2) =0;
 
+    interpolated = fillmissing(interpolated,'linear');
+    i_interpolated = ifft(ifftshift(interpolated2));
+    % The symbol is equalized
+    symbol_equalized = conv(symbol_equalize,i_interpolated,'same');
+    symbol_equalized_fft = fftshift(fft(symbol_equalized));
     symbols_equalization(:,i) = symbol_equalized;
 
     figure
     plot(abs(symbol_equalize_fft))
     hold on 
-    plot(fftshift(fft(abs(symbol_equalized))),'o')
+    plot(abs(fftshift(fft(symbol_equalized))),'o')
     legend("Original","Ecualizado")
     
     figure
     plot(abs(frequency_response_plot),'*')
     hold on
-    plot(abs(interpolated),'o')
+    plot(abs(interpolated2),'o')
     legend('original','interpolated')
     %Frequency response is interpolated
     
