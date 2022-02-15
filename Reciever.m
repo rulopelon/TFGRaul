@@ -92,20 +92,19 @@ for i = 1:1:symbols
     i_interpolated = ifft(ifftshift(interpolated2));
     % The symbol is equalized
     symbol_equalized = conv(symbol_equalize,i_interpolated,'same');
-    symbol_equalized_fft = fftshift(fft(symbol_equalized));
     symbols_equalization(:,i) = symbol_equalized;
 
-    figure
-    plot(abs(symbol_equalize_fft))
-    hold on 
-    plot(abs(fftshift(fft(symbol_equalized))),'o')
-    legend("Original","Ecualizado")
-    
-    figure
-    plot(abs(frequency_response_plot),'*')
-    hold on
-    plot(abs(interpolated2),'o')
-    legend('original','interpolated')
+%     figure
+%     plot(abs(symbol_equalize_fft))
+%     hold on 
+%     plot(abs(fftshift(fft(symbol_equalized))),'o')
+%     legend("Original","Ecualizado")
+%     
+%     figure
+%     plot(abs(frequency_response_plot),'*')
+%     hold on
+%     plot(abs(interpolated2),'o')
+%     legend('original','interpolated')
     %Frequency response is interpolated
     
 end
