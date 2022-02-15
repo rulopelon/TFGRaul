@@ -34,7 +34,7 @@ index_max_freq = lags_freq(index_max_freq);
 f = linspace(-0.5,0.5,length(signal))*Fs_used;
 
 figure
-sgtitle("Signals")
+sgtitle("signal_reals")
 subplot(2,1,1)
 stem(abs(frequency_reference))
 hold on 

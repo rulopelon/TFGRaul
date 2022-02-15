@@ -1,4 +1,4 @@
-function  Reciever(data)
+function  signal_synchronized = Reciever(data)
 % Reciever with channel equalization
 load("variables.mat", ...
     "PREFIX","NFFT","CARRIERS","symbol_length","L","M")
@@ -66,12 +66,13 @@ xq = 1:1:NFFT;
 
 for i = 1:1:symbols
     symbol_equalize = symbols_equalization(:,i);
+    symbol_equalize_fft = fftshift(fft(symbol_equalize));
     frequency_response = zeros(length(indexes),1);
     frequency_response_plot = zeros(NFFT,1);
     j = 0;
     for index = indexes
-        frequency_response(j+1) = frequency_reference(index+(NFFT-CARRIERS-1)/2)/symbol_equalize(index+(NFFT-CARRIERS-1)/2);
-        frequency_response_plot(index+(NFFT-CARRIERS-1)/2) =frequency_reference(index+(NFFT-CARRIERS-1)/2)/symbol_equalize(index+(NFFT-CARRIERS-1)/2) ;
+        frequency_response(j+1) = frequency_reference(index+(NFFT-CARRIERS-1)/2)/symbol_equalize_fft(index+(NFFT-CARRIERS-1)/2);
+        frequency_response_plot(index+(NFFT-CARRIERS-1)/2) =frequency_reference(index+(NFFT-CARRIERS-1)/2)/symbol_equalize_fft(index+(NFFT-CARRIERS-1)/2);
         j = j+1;
         xq(index+1) = [];
     end
@@ -91,11 +92,18 @@ for i = 1:1:symbols
     symbol_equalized = conv(symbol_equalize,i_interpolated);
 
     symbols_equalization(:,i) = symbol_equalized;
-%     figure
-%     plot(abs(frequency_response_plot),'*')
-%     hold on
-%     plot(abs(interpolated),'o')
-%     legend('original','interpolated')
+
+    figure
+    plot(abs(symbol_equalize_fft))
+    hold on 
+    plot(fftshift(fft(abs(symbol_equalized))))
+    legend("Original","Ecualizado")
+    
+    figure
+    plot(abs(frequency_response_plot),'*')
+    hold on
+    plot(abs(interpolated),'o')
+    legend('original','interpolated')
     %Frequency response is interpolated
     
 end

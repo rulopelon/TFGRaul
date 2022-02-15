@@ -22,7 +22,7 @@ for iteration = 1:1:Nsym
     symbols = (randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2)+1i*(randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2);
 
        % Normalizing the symbols
-    symbols = symbols/abs(15.5+15.5i);
+    %symbols = symbols/abs(15.5+15.5i);
     
     % Eliminating CARRIERS not used
     symbols(end-(NFFT-CARRIERS-1)/2 +1:end,:) = 0;
