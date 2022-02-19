@@ -22,6 +22,7 @@ TARGET1_VELOCITY = [290,10,0];   %The reference point is the emitter
 
 PROPAGATION_VELOCITY = 3e8;
 
+SNR  = 20; % Value in db
 %% Constraints related to the OFDM signal parameters defined by the standard
 pilot_amplitude = 4/3; % There is no need to multiply this value as all the symbols are normalized
 Fs = 10e6;

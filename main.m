@@ -7,7 +7,7 @@ clc;close all force;clear;
 load("variables.mat","NUMBER_ITERATIONS","TIME_STEP","EMITTER_POSITION", ...
     "TARGET1_POSITION","TARGET1_VELOCITY","RECIEVER_POSITION","BATCH_SIZE", ...
     "Fs","Number_batches","Samples_iteration","Nsym","T_batch","PROPAGATION_VELOCITY", ...
-    "Fc")
+    "Fc","SNR")
 
 %% Variables declaration
 
@@ -80,7 +80,8 @@ while i< NUMBER_ITERATIONS
        
     % The signal is delayed 
     signal_emitter_reciever_delayed = conv(coeficients_emitter_reciever,signal_emitter_reciever_sended);  
-   
+    % Noise is added
+    signal_emitter_reciever_delayed = awgn(signal_emitter_reciever_delayed,SNR);
     %The positions of the targets are updated
     TARGET1_POSITION = TARGET1_POSITION + TARGET1_VELOCITY.*TIME_STEP;
     
@@ -98,9 +99,10 @@ while i< NUMBER_ITERATIONS
     channel_coeficients(end) = 1/losses_emitter_target;
     channel_coeficients(1:end-1) = 0;
     
-   
+    % Signal is delayed
     signal_emitter_target_delayed = conv(channel_coeficients,signal_emitter_sended);   
-     
+    %Noise is added
+    signal_emitter_target_delayed = awgn(signal_emitter_target_delayed,SNR);
     signal_bounced = [];
     
     bounced_samples =0;
@@ -159,6 +161,9 @@ while i< NUMBER_ITERATIONS
   
     % The signal is retarded
     signal_target_reciever_delayed = conv(channel_coeficients_reciever,signal_sended_target);
+    % Noise is added
+    signal_target_reciever_delayed = awgn(signal_target_reciever_delayed,SNR);
+
     % Deleting the used samples
     signal_sended_target= signal_sended_target(1:end-Samples_iteration);
     
