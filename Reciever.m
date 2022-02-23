@@ -63,8 +63,6 @@ for i = 1:1:symbols
  
 end
 % Prefix is added to the signal
-signal_synchronized = zeros(N_symbols,(NFFT+prefix_length));
-
 signal_synchronized = [symbols_equalization(end-prefix_length+1:end,:);symbols_equalization(:,:)];
 signal_synchronized =signal_synchronized(:);
 

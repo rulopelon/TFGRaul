@@ -4,7 +4,7 @@ clear, clc, close all force;
 load("variables.mat","Fs_used","M","L")
 
 % An OFDM signal is generated with random symbols
-[signal,signal_reference] = OFDMModV2(10);
+[signal,signal_reference] = OFDMModV2(258);
 
 % The signal is shifted in frequency
 n = 0:1:length(signal)-1;

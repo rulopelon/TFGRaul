@@ -3,7 +3,6 @@ function h = getFilter(M,L)
 %Author: Carlos García de la Cueva
 %Modified: Raúl Gonzále Gómez
 load("variables.mat","PLOT","CARRIERS","NFFT")    
-PLOT = true;
 % Passband ripple
 Rp = 0.05;
 rp = 10^(Rp/20) - 1; 
