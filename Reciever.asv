@@ -1,5 +1,4 @@
 function  signal_synchronized = Reciever(data)
-hola = data;
 % Reciever with channel equalization
 load("variables.mat", ...
     "PREFIX","NFFT","CARRIERS","symbol_length","L","M")
@@ -12,18 +11,22 @@ reconstruction_filter_reciever = getFilter(M,L);
 data_filtered = conv(data_interpolated,reconstruction_filter_reciever,'same');
 %Decimation
 data_resampled = data_filtered(1:M:length(data_filtered));
-data_resampled = hola;
 prefix_length = PREFIX*NFFT;
-%Frame synchronism
-index = symbolSynchronization(hola);
-index = 8548;
-% Previous values of the signal are deleted
-% Number of symbols recieved
-N_symbols = floor(length(data_resampled)/symbol_length);
-data_resampled = data_resampled(index+1-symbol_length:end);
 
-frame_synchronized = reshape(data_resampled,NFFT+prefix_length,[]);
-frame_synchronized = frame_synchronized(prefix_length+1:end,:);
+
+%Frame synchronism
+% Getting the indexes with the start of each symbol
+indexes_synchro = symbolSynchronization(data_resampled);
+% Number of symbols recieved
+N_symbols = length(indexes_synchro);
+frame_synchronized = zeros(NFFT,N_symbols);
+
+i = 1;
+for index= indexes_synchro
+    frame_synchronized(:,i) = data_resampled(index-NFFT+1:index).';
+    i = i+1;
+end
+% Frequency correction
 frequencySynchronization(frame_synchronized);
 
 % Symbol equalization
@@ -57,31 +60,17 @@ for i = 1:1:symbols
     % The symbol is equalized
     symbol_equalized = conv(symbol_equalize,i_interpolated,'same');
     symbols_equalization(:,i) = symbol_equalized;
-
-%     figure
-%     plot(abs(symbol_equalize_fft))
-%     hold on 
-%     plot(abs(fftshift(fft(symbol_equalized))),'o')
-%     legend("Original","Ecualizado")
-%     
-%     figure
-%     plot(abs(frequency_response_plot),'*')
-%     hold on
-%     plot(abs(interpolated),'o')
-%     legend('original','interpolated')
-    %Frequency response is interpolated
-    
+ 
 end
 % Prefix is added to the signal
 signal_synchronized = zeros(N_symbols,(NFFT+prefix_length));
 
-for i = 1:1:symbols
-    symbol = symbols_equalization(:,i);
-    signal_append =[symbol(end-prefix_length+1:end);symbol];
-    signal_synchronized(i,:) = signal_append;
-end
+signal_synchronized = [symbols;];
 signal_synchronized =signal_synchronized(:);
 
+% Calculation of the range and doppler of the signal is performed
+
+caf_matrix = BatchProcessing(signal_synchronized,data_resampled);
 
 
 end

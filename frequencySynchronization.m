@@ -22,7 +22,7 @@ for symbol = 1:1:symbols
     % Frequency correction
     n = 0:1:length(frame_synchronize)-1;
     deviation = lags(index)/length(frame_synchronize);
-    frame_synchronize = frame_synchronize.*exp(-1i*deviation*n');
+    frame_synchronize = frame_synchronize.*exp(-1i*2*pi*deviation*n');
     frame_corrected(:,symbol) =frame_synchronize; 
 
 end

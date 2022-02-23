@@ -19,7 +19,7 @@ function indexes = symbolSynchronization(data_input)
         % Searching for the value that starts the step
         j = 0;
         while found == false && j+index_search<= length(indexes_search)
-            if indexes_search(j+index_search) > estimation(j+1)+10
+            if indexes_search(j+index_search) > estimation(j+1)
                 found = true;
                 last_index = j+first_index-1;
                 index_search = j+index_search;
@@ -30,17 +30,15 @@ function indexes = symbolSynchronization(data_input)
         step = z(first_index:last_index);
         [~,index] = max(step);
         indexes = [indexes,index+first_index-1];
-       
+
         if j+index_search>= length(indexes_search)
-            step = z(first_index:end);
-            [~,index] = max(step);
-             indexes = [indexes,index+first_index-1];
             break;
         end
         
         
     end
    
+    a = 1;
   
     
 end

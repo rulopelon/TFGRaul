@@ -4,7 +4,7 @@ function correlation_matrix = BatchProcessing(reference_batches,surveillance_bat
 % shift within a block of the signal is negligible. Becasuse of that the cross anmibguity function can
 % be calculated with the cross correlation of both signals and the fourier
 % transform of the result.
-load("variables.mat","PLOT","Vmax","PROPAGATION_VELOCITY","TIME_STEP","BATCH_SIZE")
+load("variables.mat","PLOT","BATCH_SIZE")
 
 % The input must be two vectors with the reference signal and the
 % surveillance signal

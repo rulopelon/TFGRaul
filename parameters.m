@@ -5,6 +5,8 @@ clear
 signal_buffer = [];
 reference_buffer = [];
 surveillance_buffer = [];
+threshold = 0.15; 
+
 
 %% Parameters used for the simulation environment
 
@@ -76,7 +78,8 @@ Vmax = 1/(2*T_batch);
 Number_batches = ceil(TIME_STEP/T_batch);
 %Size of the batch analyzed
 BATCH_SIZE = ceil(T_batch*Fs_used); 
-Samples_iteration = Number_batches*BATCH_SIZE;
+% Muliplied by M and divided by L to get the number of samples at 10 Mhz
+Samples_iteration = Number_batches*BATCH_SIZE*M/L;
 %BATCH_SIZE = int64(BATCH_SIZE);
 % Number of OFDM symbols produced on each iteration
 Nsym = ceil(Samples_iteration/symbol_length_emitter);
