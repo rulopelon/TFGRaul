@@ -22,8 +22,8 @@ data_resampled = data_filtered(1:M:length(data_filtered));
 
 delay_filter = zeros(4000,1);
 delay_filter(end) = 1;
-
-samples = samples(end-int64(Samples_iteration)+1:end);
+samples = data_resampled;
+%samples = samples(end-int64(Samples_iteration)+1:end);
 n = 0:1:length(samples)-1;
 n = n';
 shift = (1/length(samples))*50;
