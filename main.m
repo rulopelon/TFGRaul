@@ -59,7 +59,7 @@ coeficients_emitter_reciever(end) = 1/losses_emitter_receiver;
 
 % The signal between the emitter and the reciever starts empty, with all
 % zeros
-signal_emitter_reciever = zeros(1,Number_batches);
+signal_emitter_reciever = zeros(Number_batches,1);
 signal_emitter = [];
 %% Iterations
 
@@ -73,7 +73,7 @@ while i< NUMBER_ITERATIONS
     signal_emitter_sended = signal_emitter(end-Samples_iteration+1:end);
     
     % The signal is sended to the reciever via the bistatic line
-    signal_emitter_reciever = [Ofdm_signal,signal_emitter_reciever];
+    signal_emitter_reciever = [Ofdm_signal;signal_emitter_reciever];
      % The first indexes of the signal are deleted as the reciever has
     % already used them
     signal_emitter_reciever_sended = signal_emitter_reciever(end-Samples_iteration+1:end);
@@ -81,7 +81,7 @@ while i< NUMBER_ITERATIONS
     % The signal is delayed 
     signal_emitter_reciever_delayed = conv(coeficients_emitter_reciever,signal_emitter_reciever_sended);  
     % Noise is added
-    signal_emitter_reciever_delayed = awgn(signal_emitter_reciever_delayed,SNR);
+    %signal_emitter_reciever_delayed = awgn(signal_emitter_reciever_delayed,90);
     %The positions of the targets are updated
     TARGET1_POSITION = TARGET1_POSITION + TARGET1_VELOCITY.*TIME_STEP;
     
@@ -102,7 +102,7 @@ while i< NUMBER_ITERATIONS
     % Signal is delayed
     signal_emitter_target_delayed = conv(channel_coeficients,signal_emitter_sended);   
     %Noise is added
-    signal_emitter_target_delayed = awgn(signal_emitter_target_delayed,SNR);
+    %signal_emitter_target_delayed = awgn(signal_emitter_target_delayed,SNR);
     signal_bounced = [];
     
     bounced_samples =0;
@@ -131,16 +131,16 @@ while i< NUMBER_ITERATIONS
          if TARGET1_POSITION(1)> RECIEVER_POSITION(1)
             projected_velocity = -1*projected_velocity;
         end
-        doppler_shift_ = (Fc*(1-PROPAGATION_VELOCITY/(PROPAGATION_VELOCITY-projected_velocity)));
+        doppler_shift = (Fc*(1-PROPAGATION_VELOCITY/(PROPAGATION_VELOCITY-projected_velocity)));
        
         %The doppler shift is applied to the signal
         signal_vector = 0:1:bounced_samples-1;
         doppler_shift = double(doppler_shift/bounced_samples);
-        signal_bounced_shifted = signal_bounced.*exp(1i*2*pi*doppler_shift*double(signal_vector));
+        signal_bounced_shifted = signal_bounced.*exp(1i*2*pi*doppler_shift*double(signal_vector).');
     end
     % The bounced signal is filled with zeros to match the samples analyzed
     % If there is no bounce, the channel is filled with zeros
-    signal_bounced_shifted =[zeros(Samples_iteration-bounced_samples,1),signal_bounced_shifted];
+    signal_bounced_shifted =[zeros(Samples_iteration-bounced_samples,1);signal_bounced_shifted];
     signal_emitter_reciever_delayed =[zeros(1,Samples_iteration-length(signal_emitter_reciever_delayed)),signal_emitter_reciever_delayed];
 
     
@@ -162,16 +162,16 @@ while i< NUMBER_ITERATIONS
     % The signal is retarded
     signal_target_reciever_delayed = conv(channel_coeficients_reciever,signal_sended_target);
     % Noise is added
-    signal_target_reciever_delayed = awgn(signal_target_reciever_delayed,SNR);
+    %signal_target_reciever_delayed = awgn(signal_target_reciever_delayed,SNR);
 
     % Deleting the used samples
     signal_sended_target= signal_sended_target(1:end-Samples_iteration);
     
     % The signal to analyze is the sum of the bistatic line signal and the
     % bounced signal from the plane
-    signal_analyze = signal_target_reciever_delayed(end-Samples_iteration+1:end)+signal_emitter_reciever_delayed; 
+    signal_analyze = signal_target_reciever_delayed(end-Samples_iteration+1:end)+signal_emitter_reciever_delayed(end-Samples_iteration+1:end); 
     
-    reciever(signal_analyze)
+    Reciever(signal_analyze)
     plotElement(tp,TARGET1_POSITION,TARGET1_VELOCITY,'Avion')
     % Adding one iteration to the simulation
     i= i+1;

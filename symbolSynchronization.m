@@ -2,6 +2,7 @@ function indexes = symbolSynchronization(data_input)
     indexes = [];
 
     load("variables.mat","symbol_length","threshold")
+    threshold = 1e-26;
     % Frequency correction is performed before 
     y = [data_input; zeros(8192,1)].*conj([zeros(8192,1); data_input]);
     % Suma

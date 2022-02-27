@@ -80,7 +80,7 @@ Number_batches = ceil(TIME_STEP/T_batch);
 BATCH_SIZE = ceil(T_batch*Fs_used); 
 % Muliplied by M and divided by L to get the number of samples at 10 Mhz
 Samples_iteration_simulation = Number_batches*BATCH_SIZE*M/L;
-Samples_iteration = Number_batches*BATCH_SIZE;
+Samples_iteration = int64(Number_batches*BATCH_SIZE);
 %BATCH_SIZE = int64(BATCH_SIZE);
 % Number of OFDM symbols produced on each iteration
 Nsym = ceil(Samples_iteration/symbol_length);
