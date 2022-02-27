@@ -57,8 +57,8 @@ function correlation_matrix = BatchProcessing(reference_batches,surveillance_bat
         ax = gca;
         ax.Color = 'white';
         title("CAF representation")
-        nombre = input("Introduzca el nombre de la figura");
-        guardaFiguraPaper(nombre,f,ax,'-djpeg',0)
+%         nombre = input("Introduzca el nombre de la figura");
+%         guardaFiguraPaper(nombre,f,ax,'-djpeg',0)
     end
 end
 

@@ -5,7 +5,7 @@ load("variables.mat","Nsym","Fs_used")
 
 
 % An OFDM signal is generated with random symbols
-[signal,signal_reference] = OFDMModV2(Nsym);
+[signal,signal_reference] = OFDMModV2(10);
 
 % The signal is shifted in frequency
 n = 0:1:length(signal)-1;

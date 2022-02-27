@@ -20,7 +20,7 @@ indexes_synchro = symbolSynchronization(data_resampled);
 initial_index = indexes_synchro(1);
 N_symbols = length(indexes_synchro);
 
-artificial_indexes = zeros(1,N_symbols);
+artificial_indexes = zeros(N_symbols,1);
 for i =0:1:N_symbols-1
     artificial_indexes(i+1) =(NFFT+prefix_length)*i+initial_index;
 end
