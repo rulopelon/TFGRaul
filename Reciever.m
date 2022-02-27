@@ -19,6 +19,7 @@ prefix_length = PREFIX*NFFT;
 indexes_synchro = symbolSynchronization(data_resampled);
 % Number of symbols recieved
 N_symbols = length(indexes_synchro);
+disp(N_symbols)
 frame_synchronized = zeros(NFFT,N_symbols);
 
 i = 1;
@@ -27,12 +28,12 @@ for index= indexes_synchro
     i = i+1;
 end
 % Frequency correction
-frequencySynchronization(frame_synchronized);
+ frame_synchronized= frequencySynchronization(frame_synchronized);
 
 % Symbol equalization
 % Symbols are equalized independently
-symbols_equalization = reshape(frame_synchronized,NFFT,[]);
-[~,symbols] = size(symbols_equalization);
+%symbols_equalization = reshape(frame_synchronized,NFFT,[]);
+[~,symbols] = size(frame_synchronized);
 
 
 frequency_reference = zeros(NFFT,1);
@@ -43,7 +44,7 @@ for i = indexes
 end
 
 for i = 1:1:symbols
-    symbol_equalize = symbols_equalization(:,i);
+    symbol_equalize = frame_synchronized(:,i);
     symbol_equalize_fft = fftshift(fft(symbol_equalize));
     frequency_response_plot = nan(NFFT,1);
     for index = indexes
@@ -58,8 +59,9 @@ for i = 1:1:symbols
 
     i_interpolated = ifft(ifftshift(interpolated));
     % The symbol is equalized
-    symbol_equalized = conv(symbol_equalize,i_interpolated,'same');
-    symbols_equalization(:,i) = symbol_equalized;
+    symbol_equalized = conv(i_interpolated,symbol_equalize);
+    symbol_equalized = fftshift(fft(symbol_equalize)).*interpolated;
+    symbols_equalization(:,i) = ifft(ifftshift(symbol_equalized));
  
 end
 % Prefix is added to the signal
