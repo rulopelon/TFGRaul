@@ -69,7 +69,7 @@ while i< NUMBER_ITERATIONS
     %load("OFDMSignal.mat")
     
     %One time step is sended
-    signal_emitter = [Ofdm_signal,signal_emitter];  
+    signal_emitter = [Ofdm_signal;signal_emitter];  
     signal_emitter_sended = signal_emitter(end-Samples_iteration+1:end);
     
     % The signal is sended to the reciever via the bistatic line
@@ -132,7 +132,7 @@ while i< NUMBER_ITERATIONS
             projected_velocity = -1*projected_velocity;
         end
         doppler_shift = (Fc*(1-PROPAGATION_VELOCITY/(PROPAGATION_VELOCITY-projected_velocity)));
-       
+        doppler_shift = 0;
         %The doppler shift is applied to the signal
         signal_vector = 0:1:bounced_samples-1;
         doppler_shift = double(doppler_shift/bounced_samples);
@@ -171,7 +171,7 @@ while i< NUMBER_ITERATIONS
     % bounced signal from the plane
     signal_analyze = signal_target_reciever_delayed(end-Samples_iteration+1:end)+signal_emitter_reciever_delayed(end-Samples_iteration+1:end); 
     
-    Reciever(signal_analyze)
+    Reciever(signal_analyze);
     plotElement(tp,TARGET1_POSITION,TARGET1_VELOCITY,'Avion')
     % Adding one iteration to the simulation
     i= i+1;
