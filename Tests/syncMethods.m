@@ -10,7 +10,7 @@ shift =30/length(b);
 b = b.*exp(1i*shift*n);
 
 b = b.';
-b = [zeros(5000,1);b];
+b = [zeros(1000,1);b];
 disp("Expected maximum at 14216 (9216+5000)")
 
 y = [b; zeros(NFFT,1)].*conj([zeros(NFFT,1); b]);

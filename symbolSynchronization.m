@@ -1,7 +1,7 @@
 function indexes = symbolSynchronization(data_input)
     indexes = [];
 
-    load("variables.mat","symbol_length","prefix_length")
+    load("variables.mat","symbol_length","prefix_length","NFFT")
     %threshold = 1e-26;
     % Frequency correction is performed before 
     y = [data_input; zeros(NFFT,1)].*conj([zeros(NFFT,1); data_input]);
