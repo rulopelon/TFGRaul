@@ -1,16 +1,17 @@
 function indexes = symbolSynchronization(data_input)
     indexes = [];
 
-    load("variables.mat","symbol_length","threshold")
-    threshold = 1e-26;
+    load("variables.mat","symbol_length","prefix_length")
+    %threshold = 1e-26;
     % Frequency correction is performed before 
-    y = [data_input; zeros(8192,1)].*conj([zeros(8192,1); data_input]);
+    y = [data_input; zeros(NFFT,1)].*conj([zeros(NFFT,1); data_input]);
     % Suma
-    z = conv(y.',ones(256,1));
-    % The max values is only searched on the
+    z = conv(y.',ones(prefix_length,1));
+    threshold = max(z)*0.5;
     indexes_search = find(abs(z)>threshold);
     % Indexes are divided on "steps"
     i = 1;
+    %indexes = [indexes,8448];
     index_search = 1;
     while i<= length(indexes_search)
         first_index = indexes_search(i);
