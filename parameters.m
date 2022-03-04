@@ -31,6 +31,7 @@ Fs = 10e6;
 nAM = 64; % As the modulation used is a 64 QAM
 NFFT = 8192;
 PREFIX = 1/8;
+prefix_length = PREFIX*NFFT;
 Fc = 306e6;
 CARRIERS = 6817;
 Fs_used = 9.14e6;
