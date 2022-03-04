@@ -1,13 +1,12 @@
 function [ofdm_exit,ofdm_exit_2]=OFDMModV2(Nsym)
 % MODIFIED BY RAUL GONZALEZ TO CHANGE THE FRECUENCY
 % load parameters and constants
-load("variables.mat","NFFT","L","PREFIX","CARRIERS","M","Fs_used","nAM","reconstruction_filter","symbol_length_emitter")
+load("variables.mat","NFFT","L","PREFIX","CARRIERS","M","nAM","reconstruction_filter","symbol_length_emitter")
 
 Len_prefix = NFFT*PREFIX;
 
 % The sample frequency is  going to be achieved like in a real environment
 % using a 10Mhz, and then interpolating filtering and decimating the signal
-Fs_achieved = Fs_used*(M/L); %9.14e6
 
 %%
 alocation = zeros(symbol_length_emitter,Nsym);
@@ -21,10 +20,7 @@ for iteration = 1:1:Nsym
     % Symbols is the vector that will be transformed with the ifft   
     symbols = (randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2)+1i*(randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2);
 
-       % Normalizing the symbols
-    %symbols = symbols/abs(15.5+15.5i);
-    
-    % Eliminating CARRIERS not used
+    % Deleting CARRIERS not used
     symbols(end-(NFFT-CARRIERS-1)/2 +1:end,:) = 0;
     symbols(1:(NFFT-CARRIERS-1)/2) =0;
     
