@@ -1,4 +1,4 @@
-function  signal_synchronized = Reciever(data)
+function  Reciever(data)
 % Reciever with channel equalization
 load("variables.mat", ...
     "PREFIX","NFFT","CARRIERS","symbol_length","L","M")
@@ -12,7 +12,8 @@ data_filtered = conv(data_interpolated,reconstruction_filter_reciever,'same');
 %Decimation
 data_resampled = data_filtered(1:M:length(data_filtered));
 prefix_length = PREFIX*NFFT;
-
+% Coarse frequency synchronization
+%coarse_corrected_signal = coarseFrequencySynchronization(data_resampled);
 
 %Frame synchronism
 % Getting the indexes with the start of each symbol
@@ -36,14 +37,18 @@ end
 
 frame_synchronized = frame_synchronized(prefix_length+1:end,:);
 % Frequency correction
- %frame_synchronized= frequencySynchronization(frame_synchronized);
+frame_synchronized= fineFrequencySynchronization(frame_synchronized);
 
 % Symbol equalization
 % Symbols are equalized independently
-%symbols_equalization = reshape(frame_synchronized,NFFT,[]);
 [~,symbols] = size(frame_synchronized);
 
+%Signal for the reference channnel
+symbols_equalization = zeros(NFFT,symbols);
+%Signal for the surveillance channel
+filtered_signal = zeros(NFFT,symbols);
 
+%Signal for equalization
 frequency_reference = zeros(NFFT,1);
 [indexes, pilot_values]=getContinuousPilots();
 
@@ -54,31 +59,42 @@ end
 for i = 1:1:symbols
     symbol_equalize = frame_synchronized(:,i);
     symbol_equalize_fft = fftshift(fft(symbol_equalize));
-    frequency_response_plot = nan(NFFT,1);
+    channel_estimation = nan(NFFT,1);
     for index = indexes
-        frequency_response_plot(index+(NFFT-CARRIERS-1)/2) =frequency_reference(index+(NFFT-CARRIERS-1)/2)/symbol_equalize_fft(index+(NFFT-CARRIERS-1)/2);
+        channel_estimation(index+(NFFT-CARRIERS-1)/2) =symbol_equalize_fft(index+(NFFT-CARRIERS-1)/2)/frequency_reference(index+(NFFT-CARRIERS-1)/2);
     end
     %Query points for the interpolation
 
-    interpolated = fillmissing(frequency_response_plot,'linear');
+    channel_estimation_interpolated = fillmissing(channel_estimation,'linear');
    
-    interpolated(end-(NFFT-CARRIERS-1)/2 +1:end) = 0;
-    interpolated(1:(NFFT-CARRIERS-1)/2) =0;
-
-    i_interpolated = ifft(ifftshift(interpolated));
+    channel_estimation_interpolated(end-(NFFT-CARRIERS-1)/2 +1:end) = 0;
+    channel_estimation_interpolated(1:(NFFT-CARRIERS-1)/2) =0;
+    
+    %i_interpolated = ifft(ifftshift(frequency_response));
     % The symbol is equalized
-    symbol_equalized = conv(i_interpolated,symbol_equalize);
-    symbol_equalized = fftshift(fft(symbol_equalize)).*interpolated;
+    symbol_equalized = fftshift(fft(symbol_equalize)).*channel_estimation_interpolated;
+    
+    
+    %Processing to get two signals
+    symbol_equalized =QAMDetection(symbol_equalized); 
+    %Deleting clutter
+    signal_substracted = symbol_equalize_fft -channel_estimation_interpolated(:,1).*symbol_equalized(:,1);
+
+    filtered_signal(:,i) =  ifft(ifftshift(signal_substracted));
     symbols_equalization(:,i) = ifft(ifftshift(symbol_equalized));
- 
+    
 end
 % Prefix is added to the signal
-signal_synchronized = [symbols_equalization(end-prefix_length+1:end,:);symbols_equalization(:,:)];
-signal_synchronized =signal_synchronized(:);
+reference_signal = [symbols_equalization(end-prefix_length+1:end,:);symbols_equalization(:,:)];
+% Rearranging
+reference_signal = reference_signal(:);
+%Prefix is added to the signal
+surveillance_signal = [filtered_signal(end-prefix_length+1:end,:);filtered_signal(:,:)];
+surveillance_signal = surveillance_signal(:);
 
 % Calculation of the range and doppler of the signal is performed
 
-caf_matrix = BatchProcessing(signal_synchronized,data_resampled);
+caf_matrix = BatchProcessing(reference_signal,surveillance_signal);
 [doppler_columns,time_indexes] = max(caf_matrix);
 [~,doppler_index]= max(doppler_columns);
 time_index = time_indexes(doppler_index);

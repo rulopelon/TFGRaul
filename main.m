@@ -132,7 +132,6 @@ while i< NUMBER_ITERATIONS
             projected_velocity = -1*projected_velocity;
         end
         doppler_shift = (Fc*(1-PROPAGATION_VELOCITY/(PROPAGATION_VELOCITY-projected_velocity)));
-        doppler_shift = 0;
         %The doppler shift is applied to the signal
         signal_vector = 0:1:bounced_samples-1;
         doppler_shift = double(doppler_shift/bounced_samples);

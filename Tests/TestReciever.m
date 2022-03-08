@@ -9,12 +9,8 @@ load("variables.mat","Nsym","Fs_used")
 
 % The signal is shifted in frequency
 n = 0:1:length(signal)-1;
-shift =0/length(signal);    
+shift =20/length(signal);    
 signal_noise_shift = signal.*exp(-1i*2*pi*shift*n');
 
 signal_noise_shift = [zeros(1000,1);signal_noise_shift];
-processed_signal = Reciever(signal_noise_shift);
-
-
-
-
+Reciever(signal_noise_shift);
