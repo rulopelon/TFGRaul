@@ -1,5 +1,5 @@
 %% Code to test the QAMDetection function
-%clear, clc, close all force;
+clear, clc, close all force;
 load("variables.mat","prefix_length")
 % An OFDM signal is generated 
 [signal,signal_reference] = OFDMModV2(1);
