@@ -69,10 +69,15 @@ for i = 1:1:symbols
    
     channel_estimation_interpolated(end-(NFFT-CARRIERS-1)/2 +1:end) = 0;
     channel_estimation_interpolated(1:(NFFT-CARRIERS-1)/2) =0;
-    
+    % Calculating the correction
+    frequency_correction = 1./channel_estimation_interpolated;
+    %Substituting inf values with zeros
+    frequency_correction(end-(NFFT-CARRIERS-1)/2 +1:end) = 0;
+    frequency_correction(1:(NFFT-CARRIERS-1)/2) =0;
+
     %i_interpolated = ifft(ifftshift(frequency_response));
     % The symbol is equalized
-    symbol_equalized = fftshift(fft(symbol_equalize)).*channel_estimation_interpolated;
+    symbol_equalized = fftshift(fft(symbol_equalize)).*frequency_correction;
     
     
     %Processing to get two signals
