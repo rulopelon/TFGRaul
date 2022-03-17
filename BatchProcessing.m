@@ -1,4 +1,4 @@
-function correlation_matrix = BatchProcessing(reference_batches,surveillance_batches)
+function [correlation_matrix,doppler_axis] = BatchProcessing(reference_batches,surveillance_batches)
     % Function to calculate the CAF based on the batch processing algorithm
     % this algorithm splits the reference and surveillance signals and assumes that the doppler frequency 
     % shift within a block of the signal is negligible. Becasuse of that the cross anmibguity function can
@@ -42,7 +42,9 @@ function correlation_matrix = BatchProcessing(reference_batches,surveillance_bat
     
     % Calculating on the doppler domain
     correlation_matrix = abs(fftshift(fft(correlation_matrix,512,2),2)); 
-    
+    Fs_analysis = Fs_used/BATCH_SIZE;
+    doppler_axis = linspace(-0.5*Fs_analysis,0.5*Fs_analysis,512);
+
     
     if PLOT
         Fs_analysis = Fs_used/BATCH_SIZE;

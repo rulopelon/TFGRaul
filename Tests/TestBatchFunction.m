@@ -33,16 +33,16 @@ shift = (1/length(samples))*50;
 
 shifted = samples.*exp(-1i*2*pi*shift*n);
 % Samples are analyzed
-correlation_matrix_doppler= BatchProcessing(samples,shifted);
+[correlation_matrix_doppler,~]= BatchProcessing(samples,shifted);
 
 %% Samples are shifted on time
 
 delayed = filter(delay_filter,1,samples);
-correlation_matrix_delay = BatchProcessing(samples,delayed);
+[correlation_matrix_delay,~] = BatchProcessing(samples,delayed);
 
 %% Shifting on time and frequency
 
 delayed_filtered = filter(delay_filter,1,samples);
 delayed_filtered = delayed_filtered.*exp(-1i*2*pi*shift*n);
-correlation_matrix_delay_shift = BatchProcessing(samples,delayed_filtered);
+[correlation_matrix_delay_shift,~] = BatchProcessing(samples,delayed_filtered);
 
