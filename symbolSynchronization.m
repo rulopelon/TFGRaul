@@ -1,5 +1,5 @@
-function indexes = symbolSynchronization(data_input)
-    load("variables.mat","prefix_length","NFFT","CARRIERS")
+function frame_synchronized  = symbolSynchronization(data_input)
+    load("variables.mat","prefix_length","NFFT","CARRIERS","symbol_length","T_symbol")
     %% Time synchronization
     indexes = [];
     [indexes_pilots, pilots] = getContinuousPilots();
@@ -14,13 +14,13 @@ function indexes = symbolSynchronization(data_input)
     %Calculating alfa cp
     y = [data_input; zeros(NFFT,1)].*conj([zeros(NFFT,1); data_input]);
     % Add
-    z = abs(conv(y.',ones(prefix_length,1)));
+    z = conv(y.',ones(prefix_length,1));
     
     y_2 = abs([data_input; zeros(NFFT,1)]).^2+ abs([zeros(NFFT,1); data_input]).^2;
     % Second function
     z_2 = conv(y_2.',ones(prefix_length,1));
     %Alfa_cp
-    alpha_cp =z+(ro/2)*z_2;
+    alpha_cp =abs(z)+(ro/2)*z_2;
     
     %Calculating alpha ro
     %Third function
@@ -38,9 +38,72 @@ function indexes = symbolSynchronization(data_input)
     % Calculating the estimator
     estimator = ro.*alpha_cp(1:length(z_3))+(1-ro).*alpha_ro.';
     
-    [~,time_index] = max(estimator);
+    threshold = max(estimator)*0.5;
+    indexes_search = find(abs(estimator)>threshold);
+    % Indexes are divided on "steps"
+    i = 1;
+    index_search = 1;
+    while i<= length(indexes_search)
+        first_index = indexes_search(i);
+        % A line with slope one is created
+        estimation = first_index:1:symbol_length+first_index;
+        found = false;
+        % Searching for the value that starts the step
+        j = 0;
+        while found == false && j+index_search<= length(indexes_search)
+            if indexes_search(j+index_search) > estimation(j+1)+10
+                found = true;
+                last_index = j+first_index-1;
+                index_search = j+index_search;
+            end
+            j =j+1;
+        end
+        i = index_search;
+        step = estimator(first_index:last_index);
+        [~,index] = max(step);
+        indexes = [indexes,index+first_index-1];
+       
+        if j+index_search>= length(indexes_search)
+            step = estimator(first_index:end);
+            [~,index] = max(step);
+             indexes = [indexes,index+first_index-1];
+            break;
+        end
+    end
 
+    
     %% Frequency synchronization
+    frequency_estimator =-(1/(2*pi*T_symbol)).*angle(z);
+    %% Symbol splitting
+    initial_index = indexes(1);
+    N_symbols = length(indexes);
+    
+    artificial_indexes = zeros(1,N_symbols);
+    for i =0:1:N_symbols-1
+        artificial_indexes(i+1) =(NFFT+prefix_length)*i+initial_index;
+    end
+    % Number of symbols recieved
+    disp(N_symbols)
+    frame_synchronized = zeros(NFFT+prefix_length,N_symbols);
+    
+    i = 1;
+    for index= artificial_indexes
+        if index-NFFT-prefix_length+1<=length(data_input)-NFFT-prefix_length
+            frame_synchronized(:,i) = data_input(index-NFFT-prefix_length+1:index).';
+            i = i+1;
+        end
+    end
+    frame_synchronized = frame_synchronized(:,1:i);
+    % Deleting the prefix
+    frame_synchronized = frame_synchronized(prefix_length+1:end,:);
+
+    figure
+    plot(estimator)
+    title("Estimator")
+    figure
+    plot(frequency_estimator)
+    title("Frequency estimator")
+    a = 1;
 
 
 
@@ -55,42 +118,6 @@ function indexes = symbolSynchronization(data_input)
 
 
 
-
-%     threshold = max(z)*0.5;
-%     indexes_search = find(abs(z)>threshold);
-%     % Indexes are divided on "steps"
-%     i = 1;
-%     %indexes = [indexes,8448];
-%     index_search = 1;
-%     while i<= length(indexes_search)
-%         first_index = indexes_search(i);
-%         % A line with slope one is created
-%         estimation = first_index:1:symbol_length+first_index;
-%         found = false;
-%         % Searching for the value that starts the step
-%         j = 0;
-%         while found == false && j+index_search<= length(indexes_search)
-%             if indexes_search(j+index_search) > estimation(j+1)+10
-%                 found = true;
-%                 last_index = j+first_index-1;
-%                 index_search = j+index_search;
-%             end
-%             j =j+1;
-%         end
-%         i = index_search;
-%         step = z(first_index:last_index);
-%         [~,index] = max(step);
-%         indexes = [indexes,index+first_index-1];
-%        
-%         if j+index_search>= length(indexes_search)
-%             step = z(first_index:end);
-%             [~,index] = max(step);
-%              indexes = [indexes,index+first_index-1];
-%             break;
-%         end
-%         
-%         
-%     end
    
   
     
