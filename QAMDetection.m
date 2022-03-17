@@ -33,7 +33,6 @@ function [symbol_estimated] = QAMDetection(data)
         end
 
     end
-    disp(i)
     symbol_estimated = data;
 end
 
