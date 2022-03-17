@@ -1,16 +1,27 @@
 %% Code to test the reciever
 % Inizialization
-clear, clc, close all force;
-load("variables.mat","Nsym","Fs_used")
+clear,clc,close all force;
+load("variables.mat","PROPAGATION_VELOCITY","Fs")
+[signal,signal_reference] = OFDMModV2(20);
 
+signal = signal.';
+% The surveillance signal is retarded
 
-% An OFDM signal is generated with random symbols
-[signal,signal_reference] = OFDMModV2(Nsym);
+coeficients_retard = 0:1/Fs:10e3/PROPAGATION_VELOCITY;
+coeficients_retard(1:end-1) = 0;
+coeficients_retard(end) = 1;
+signal_surveillance = conv(coeficients_retard,signal);  
 
+%Simulating the bounce
 % The signal is shifted in frequency
-n = 0:1:length(signal)-1;
-shift =20/length(signal);    
-signal_noise_shift = signal.*exp(-1i*2*pi*shift*n');
+n = 0:1:length(signal_surveillance)-1;
+shift =0/length(signal_surveillance);    
+signal_surveillance = signal_surveillance.*exp(-1i*2*pi*shift*n);
+signal_surveillance = conv(coeficients_retard,signal_surveillance);
 
-signal_noise_shift = [zeros(1000,1);signal_noise_shift];
-Reciever(signal_noise_shift);
+%Direct signal calculation
+direct_signal = conv(coeficients_retard,signal);
+% Adding two signals
+signal_surveillance = signal_surveillance(1:length(signal))+direct_signal(1:length(signal));
+% Synchronization
+Reciever(signal_surveillance.');
