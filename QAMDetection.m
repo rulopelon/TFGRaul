@@ -12,7 +12,7 @@ function [symbol_estimated] = QAMDetection(data)
     indexes= indexes+(NFFT-CARRIERS-1)/2;
     for index = 1:1:length(data)
         % Check that it is not a pilot
-        if ismember(index,indexes)==0 && index>=(NFFT-CARRIERS-1)/2 &&index<(NFFT-CARRIERS-1)/2+CARRIERS
+        if ismember(index,indexes)==0 && index>=(NFFT-CARRIERS-1)/2 &&index<(NFFT-CARRIERS)/2+CARRIERS+1
             i = i+1;
             % Real and complex parts are compared
             value = data(index);

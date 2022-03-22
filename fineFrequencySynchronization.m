@@ -1,4 +1,4 @@
-function  frame_corrected = frequencySynchronization(frame)
+function  frame_corrected = fineFrequencySynchronization(frame)
 load("variables.mat","NFFT","CARRIERS")
 
 
@@ -24,6 +24,7 @@ for symbol = 1:1:symbols
     deviation = lags(index)/length(frame_synchronize);
     frame_synchronize = frame_synchronize.*exp(-1i*2*pi*deviation*n');
     frame_corrected(:,symbol) =frame_synchronize; 
+
 
 end
 
