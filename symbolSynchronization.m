@@ -37,9 +37,10 @@ function frame_synchronized  = symbolSynchronization(data_input)
     
     % Calculating the estimator
     estimator = ro.*alpha_cp(1:length(z_3))+(1-ro).*alpha_ro.';
-    
+    % Array used for the analysis of the estimator
+    estimator_analysis = estimator;
 
-    threshold = max(estimator)*0.8;
+    threshold = max(estimator)*0.7;
     %DELETE
     reference = 1:1:length(estimator);
     reference(:)= threshold;
@@ -56,10 +57,11 @@ function frame_synchronized  = symbolSynchronization(data_input)
         % Searching for the value that starts the step
         j = 0;
         while found == false && j+index_search<= length(indexes_search)
-            if indexes_search(j+index_search) > estimation(j+1)+10
+            if indexes_search(j+index_search) > estimation(j+1)+80
                 found = true;
                 last_index = j+first_index-1;
                 index_search = j+index_search;
+                
             end
             j =j+1;
         end
@@ -78,15 +80,16 @@ function frame_synchronized  = symbolSynchronization(data_input)
 
     
     %% Frequency synchronization
-    frequency_estimator =-(1/(2*pi*T_symbol)).*angle(z);
+    frequency_estimator =-(1/(2*pi)).*angle(z);
     %% Symbol splitting
     initial_index = indexes(1);
     disp(initial_index)
-    N_symbols = length(indexes);
+    N_symbols = ceil(length(data_input)/symbol_length);
     
     artificial_indexes = zeros(1,N_symbols);
     for i =0:1:N_symbols-1
         artificial_indexes(i+1) =(NFFT+prefix_length)*i+initial_index;
+        
     end
     % Number of symbols recieved
     

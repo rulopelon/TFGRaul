@@ -24,8 +24,11 @@ signal_target_reciever = [];
 signal_sended_emitter=[];
 signal_sended_target = [];
 
-% The channel between emitter and reciever
-signal_emitter_reciever =[];
+% The signal between the emitter and the reciever starts empty, with all
+% zeros
+signal_emitter_reciever = [];
+signal_emitter = [];
+
 
 
 
@@ -53,15 +56,11 @@ losses_emitter_receiver = ((4*pi*distance_emitter_reciever*1000)/(PROPAGATION_VE
 
 % The coeficients of the emitter and the recievier are only calculated
 % once, as the distance is constants constant
-coeficients_emitter_reciever = 0:1/Fs:(distance_emitter_reciever*1000)/PROPAGATION_VELOCITY;
-coeficients_emitter_reciever(1:end-1) = 0;
+channel_coeficients_emitter_reciever = 0:1/Fs:(distance_emitter_reciever*1000)/PROPAGATION_VELOCITY;
+channel_coeficients_emitter_reciever(1:end-1) = 0;
 %coeficients_emitter_reciever(end) = (GAIN_EMITTER*GAIN_RECIEVER)/losses_emitter_receiver;
-coeficients_emitter_reciever(end) = 1;
+channel_coeficients_emitter_reciever(end) = 1;
 
-% The signal between the emitter and the reciever starts empty, with all
-% zeros
-signal_emitter_reciever = [];
-signal_emitter = [];
 
 %% Iterations
  %OFDM signal is generated
@@ -81,7 +80,7 @@ while i< NUMBER_ITERATIONS
     signal_emitter_reciever_sended = signal_emitter_reciever(1:Samples_iteration);
        
     % The signal is delayed 
-    signal_emitter_reciever_delayed = conv(coeficients_emitter_reciever,signal_emitter_reciever_sended);  
+    signal_emitter_reciever_delayed = conv(channel_coeficients_emitter_reciever,signal_emitter_reciever_sended);  
     % Noise is added
     %signal_emitter_reciever_delayed = awgn(signal_emitter_reciever_delayed,SNR);
     %The positions of the targets are updated
@@ -97,13 +96,13 @@ while i< NUMBER_ITERATIONS
     losses_emitter_target = ((4*pi*distance_emitter_target*1000)/(PROPAGATION_VELOCITY/Fc))^2;
 
     % Calculus of the channel between the emitter and the target
-    channel_coeficients = 0:1/Fs:(distance_emitter_target*1000)/PROPAGATION_VELOCITY;
+    channel_coeficients_emitter_target = 0:1/Fs:(distance_emitter_target*1000)/PROPAGATION_VELOCITY;
     %channel_coeficients(end) = GAIN_EMITTER/losses_emitter_target;
-    channel_coeficients(end) = 1;
-    channel_coeficients(1:end-1) = 0;
+    channel_coeficients_emitter_target(end) = 1;
+    channel_coeficients_emitter_target(1:end-1) = 0;
     
     % Signal is delayed
-    signal_emitter_target_delayed = conv(channel_coeficients,signal_emitter_sended);   
+    signal_emitter_target_delayed = conv(channel_coeficients_emitter_target,signal_emitter_sended);   
     %Noise is added
     %signal_emitter_target_delayed = awgn(signal_emitter_target_delayed,SNR);
     signal_bounced_shifted = [];
@@ -135,7 +134,6 @@ while i< NUMBER_ITERATIONS
         end
         doppler_shift = (Fc*(1-PROPAGATION_VELOCITY/(PROPAGATION_VELOCITY-projected_velocity)));
         doppler_shift = 0;
-        doppler_shift = doppler_shift*Fs;
         %The doppler shift is applied to the signal
         signal_vector = 0:1:bounced_samples-1;
         doppler_shift = doppler_shift/bounced_samples;
@@ -169,7 +167,7 @@ while i< NUMBER_ITERATIONS
 
     % Deleting the used samples
     signal_sended_target= signal_sended_target(Samples_iteration+1:end);
-    
+    signal_emitter_reciever = signal_emitter_reciever(Samples_iteration+1:end);
     % The signal to analyze is the sum of the bistatic line signal and the
     % bounced signal from the plane
     signal_analyze =signal_emitter_reciever_delayed(1:Samples_iteration)+signal_target_reciever_delayed(1:Samples_iteration); 
