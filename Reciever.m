@@ -92,6 +92,7 @@ surveillance_signal = surveillance_signal(:);
 [~,doppler_index]= max(doppler_columns);
     
 time_index = time_indexes(doppler_index);
+disp(time_index)
 doppler_frequency = doppler_axis(doppler_index);
 
 a = 1;

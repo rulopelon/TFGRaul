@@ -38,7 +38,12 @@ function frame_synchronized  = symbolSynchronization(data_input)
     % Calculating the estimator
     estimator = ro.*alpha_cp(1:length(z_3))+(1-ro).*alpha_ro.';
     
-    threshold = max(estimator)*0.5;
+
+    threshold = max(estimator)*0.8;
+    %DELETE
+    reference = 1:1:length(estimator);
+    reference(:)= threshold;
+
     indexes_search = find(abs(estimator)>threshold);
     % Indexes are divided on "steps"
     i = 1;
@@ -77,7 +82,6 @@ function frame_synchronized  = symbolSynchronization(data_input)
     %% Symbol splitting
     initial_index = indexes(1);
     disp(initial_index)
-    %initial_index = 9247;
     N_symbols = length(indexes);
     
     artificial_indexes = zeros(1,N_symbols);
@@ -94,6 +98,7 @@ function frame_synchronized  = symbolSynchronization(data_input)
             frame = data_input(index-NFFT-prefix_length+1:index,1);
             %Frequency deviation estimation
             frequency_deviation = frequency_estimator(index)/length(frame);
+            %frequency_deviation = 0;
             %Frequency deviation correction
             n =0:1:length(frame)-1;
             frame = frame.*exp(-1i*2*pi*frequency_deviation*n.');
@@ -101,15 +106,19 @@ function frame_synchronized  = symbolSynchronization(data_input)
             i = i+1;
         end
     end
-    frame_synchronized = frame_synchronized(:,1:i);
+    
+    [~,final_symbols] =size(frame_synchronized);
+    if i<final_symbols
+        frame_synchronized = frame_synchronized(:,1:i);
+    end
     % Deleting the prefix
     frame_synchronized = frame_synchronized(prefix_length+1:end,:);
 
-    figure
-    plot(estimator)
-    title("Estimator")
-    figure
-    plot(frequency_estimator)
-    title("Frequency estimator")
+%     figure
+%     plot(estimator)
+%     title("Estimator")
+%     figure
+%     plot(frequency_estimator)
+%     title("Frequency estimator")
    
 end

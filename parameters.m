@@ -16,15 +16,18 @@ TIME_STEP = 250e-3; %Units in seconds 250ms
 
 %UNITS ARE IN KM the origin is at [0,0,0]
 EMITTER_POSITION = [0,0,0]; % The origin of coordinates is the emitter 
-RECIEVER_POSITION = [100,100,0]; % Defining reciever coordinates
+RECIEVER_POSITION = [5,0,0]; % Defining reciever coordinates
 
 %Targets for simulation
-TARGET1_POSITION = [0,0,10];
+TARGET1_POSITION = [10,10,10];
 TARGET1_VELOCITY = [290,10,0];   %The reference point is the emitter
 
 PROPAGATION_VELOCITY = 3e8;
 
-SNR  = 20; % Value in db
+SNR  = 50; % Value in db
+
+GAIN_EMITTER = 1.3e11; %In watts
+GAIN_RECIEVER = 1.3e11; %In watts
 %% Constraints related to the OFDM signal parameters defined by the standard
 pilot_amplitude = 4/3; % There is no need to multiply this value as all the symbols are normalized
 Fs = 10e6;
