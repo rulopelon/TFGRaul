@@ -174,6 +174,8 @@ while i< NUMBER_ITERATIONS
     
     Reciever(signal_analyze);
     plotElement(tp,TARGET1_POSITION,TARGET1_VELOCITY,'Avion')
+    signal_emitter_reciever = signal_emitter_reciever(Samples_iteration+1:end);
+    signal_emitter = signal_emitter(Samples_iteration+1:end);
     % Adding one iteration to the simulation
     i= i+1;
 end
