@@ -88,6 +88,6 @@ Samples_iteration = int64(Number_batches*BATCH_SIZE);
 %BATCH_SIZE = int64(BATCH_SIZE);
 % Number of OFDM symbols produced on each iteration
 Nsym = ceil(Samples_iteration/symbol_length);
-
+Nsym_simulation = ceil(Samples_iteration_simulation/symbol_length_emitter);
 save("variables.mat")
 
