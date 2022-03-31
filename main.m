@@ -83,8 +83,7 @@ while i< NUMBER_ITERATIONS
     signal_emitter_reciever_delayed = conv(channel_coeficients_emitter_reciever,signal_emitter_reciever_sended);  
     % Noise is added
     signal_emitter_reciever_delayed = awgn(signal_emitter_reciever_delayed,SNR);
-    %The positions of the targets are updated
-    TARGET1_POSITION = TARGET1_POSITION + TARGET1_VELOCITY.*TIME_STEP;
+ 
     
 
     %The signal is retarded until it reaches the plane
@@ -121,7 +120,6 @@ while i< NUMBER_ITERATIONS
         bounced_samples = bounced_batches*BATCH_SIZE;
         
         signal_bounced = signal_emitter_target_delayed(1:bounced_samples);
-        signal_emitter = signal_emitter(bounced_samples+1:end);   
         %The signal bounces of the plane
         % Calculating the doppler shift with the projected velocity on the bistatic vector    
         velocity_vector = [TARGET1_VELOCITY(1),TARGET1_VELOCITY(2)];
@@ -172,10 +170,17 @@ while i< NUMBER_ITERATIONS
     % bounced signal from the plane
     signal_analyze =signal_emitter_reciever_delayed(1:Samples_iteration)+signal_target_reciever_delayed(1:Samples_iteration); 
     
+    %Signal is sended to the reciever
     Reciever(signal_analyze);
+    %Adding the plane to the environment
     plotElement(tp,TARGET1_POSITION,TARGET1_VELOCITY,'Avion')
-    signal_emitter_reciever = signal_emitter_reciever(Samples_iteration+1:end);
-    signal_emitter = signal_emitter(Samples_iteration+1:end);
+    
+    %The positions of the targets are updated
+    TARGET1_POSITION = TARGET1_POSITION + TARGET1_VELOCITY.*TIME_STEP;
+
+    %Removing used samples
+    signal_emitter_reciever = [];
+    signal_emitter = [];
     % Adding one iteration to the simulation
     i= i+1;
 end
