@@ -20,7 +20,7 @@ RECIEVER_POSITION = [5,0,0]; % Defining reciever coordinates
 
 %Targets for simulation
 TARGET1_POSITION = [10,10,10];
-TARGET1_VELOCITY = [0,0,0];   %The reference point is the emitter
+TARGET1_VELOCITY = [50,0,0];   %The reference point is the emitter
 
 PROPAGATION_VELOCITY = 3e8;
 
