@@ -37,8 +37,8 @@ function frame_synchronized  = symbolSynchronization(data_input)
     
     % Calculating the estimator
     estimator = ro.*alpha_cp(1:length(z_3))+(1-ro).*alpha_ro.';
-    % Array used for the analysis of the estimator
-    estimator_analysis = estimator;
+    
+   
 
     threshold = max(estimator)*0.7;
     %DELETE

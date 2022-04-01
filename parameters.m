@@ -19,7 +19,7 @@ EMITTER_POSITION = [0,0,0]; % The origin of coordinates is the emitter
 RECIEVER_POSITION = [5,0,0]; % Defining reciever coordinates
 
 %Targets for simulation
-TARGET1_POSITION = [10,10,10];
+TARGET1_POSITION = [20,10,10];
 TARGET1_VELOCITY = [50,0,0];   %The reference point is the emitter
 
 PROPAGATION_VELOCITY = 3e8;
@@ -81,9 +81,11 @@ Vmax = 1/(2*T_batch);
 % Number of batches that are "moved" on each iteration
 Number_batches = ceil(TIME_STEP/T_batch);
 %Size of the batch analyzed
-BATCH_SIZE = ceil(T_batch*Fs_used); 
+BATCH_SIZE = ceil(T_batch*Fs_used);
+BATCH_SIZE_SIMULATION = BATCH_SIZE*M/L;
+
 % Muliplied by M and divided by L to get the number of samples at 10 Mhz
-Samples_iteration_simulation = Number_batches*BATCH_SIZE*M/L;
+Samples_iteration_simulation = Number_batches*BATCH_SIZE_SIMULATION;
 Samples_iteration = int64(Number_batches*BATCH_SIZE);
 %BATCH_SIZE = int64(BATCH_SIZE);
 % Number of OFDM symbols produced on each iteration
