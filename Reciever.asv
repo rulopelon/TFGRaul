@@ -126,13 +126,12 @@ axis equal
 title("2D Biestatic estimation")
 
 %Plotting on 3d
-[x,y,z] = ellipsoid(base_line/2,0,0,a,b,a);
+[x,y,z] = ellipsoid(0,0,0,a,b,a);
 z(1:length(z)/2,:) = 0;
 figure
 surf(x,y,z,'FaceAlpha',0.5)
 hold on
-plot3(x1,y1,0,'ko','MarkerSize',3,'MarkerFaceColor','yellow','MarkerEdgeColor','yellow')
-plot3(x2,y2,0,'ko','MarkerSize',3,'MarkerFaceColor','yellow','MarkerEdgeColor','yellow')
+plot3(x1,100000,0,'MarkerSize',300000,'MarkerFaceColor','yellow','MarkerEdgeColor','yellow')
 title("3D Biestatic estimation")
 end
 

@@ -1,4 +1,4 @@
-function [frame_synchronized,base_line]  = symbolSynchronization(data_input)
+function frame_synchronized,base_line  = symbolSynchronization(data_input)
     load("variables.mat","prefix_length","NFFT","CARRIERS","symbol_length")
     %% Time synchronization
     indexes = [];
@@ -118,7 +118,7 @@ function [frame_synchronized,base_line]  = symbolSynchronization(data_input)
     frame_synchronized = frame_synchronized(prefix_length+1:end,:);
     
     %Calculating the base line distance
-    base_line = initial_index-symbol_length;
+    base_line = 
 
    
 end
