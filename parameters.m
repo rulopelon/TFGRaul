@@ -16,7 +16,7 @@ TIME_STEP = 250e-3; %Units in seconds 250ms
 
 %UNITS ARE IN KM the origin is at [0,0,0]
 EMITTER_POSITION = [0,0,0]; % The origin of coordinates is the emitter 
-RECIEVER_POSITION = [5,0,0]; % Defining reciever coordinates
+RECIEVER_POSITION = [15,0,0]; % Defining reciever coordinates
 
 %Targets for simulation
 TARGET1_POSITION = [20,10,10];

@@ -1,7 +1,7 @@
 %% Code to test if symbol synchronization works properly
 clear,clc,close all force;
 load("variables.mat","PROPAGATION_VELOCITY","Fs","Nsym")
-[signal,signal_reference] = OFDMModV2(Nsym);
+[signal,signal_reference] = OFDMModV2(20);
 
 % The surveillance signal is retarded
 
