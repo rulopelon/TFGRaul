@@ -1,7 +1,0 @@
-%% Reciever for the Adalm Pluto SDR
-load('plutoVariables.mat')
-
-% The reciever object is created
-rxPluto = sdrrx('Pluto','CenterFrequency',centerFrequency,'BasebandSampleRate',baseBandFrequency);
-
-rxPluto.

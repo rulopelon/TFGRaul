@@ -128,7 +128,7 @@ if base_line < bistatic_range
     
     %Plotting on 3d
     [x,y,z] = ellipsoid(base_line/2,0,0,a,b,a);
-    z(1:floor(length(z))/2,:) = 0;
+    z(1:int64(floor(length(z)))/2,:) = 0;
     figure
     surf(x,y,z,'FaceAlpha',0.5)
     hold on
@@ -137,6 +137,7 @@ if base_line < bistatic_range
     title("3D Biestatic estimation")
 else
     disp("There is an error on the estimation")
+    input()
 end
 
 

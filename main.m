@@ -26,8 +26,9 @@ signal_sended_target = [];
 
 % The signal between the emitter and the reciever starts empty, with all
 % zeros
-signal_emitter_reciever = [];
-signal_emitter = [];
+ signal_emitter_reciever =[];
+ signal_emitter = [];
+ signal_sended_target = [];
 
 
 
@@ -135,7 +136,7 @@ while i< NUMBER_ITERATIONS
         doppler_shift = 60;
         %The doppler shift is applied to the signal
         signal_vector = 0:1:bounced_samples-1;
-        doppler_shift = doppler_shift/bounced_samples;
+        doppler_shift = doppler_shift/Fs;
         signal_bounced_shifted = signal_bounced.*exp(-1i*2*pi*doppler_shift*double(signal_vector).');
     end
     % The bounced signal is filled with zeros to match the samples analyzed
