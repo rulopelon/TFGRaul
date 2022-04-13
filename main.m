@@ -59,8 +59,8 @@ losses_emitter_receiver = ((4*pi*distance_emitter_reciever*1000)/(PROPAGATION_VE
 % once, as the distance is constants constant
 channel_coeficients_emitter_reciever = 0:1/Fs:(distance_emitter_reciever*1000)/PROPAGATION_VELOCITY;
 channel_coeficients_emitter_reciever(1:end-1) = 0;
-%coeficients_emitter_reciever(end) = (GAIN_EMITTER*GAIN_RECIEVER)/losses_emitter_receiver;
-channel_coeficients_emitter_reciever(end) = 1;
+channel_coeficients_emitter_reciever(end) = 1/losses_emitter_receiver;
+%channel_coeficients_emitter_reciever(end) = 1;
 
 
 %% Iterations
@@ -97,8 +97,8 @@ while i< NUMBER_ITERATIONS
 
     % Calculus of the channel between the emitter and the target
     channel_coeficients_emitter_target = 0:1/Fs:(distance_emitter_target*1000)/PROPAGATION_VELOCITY;
-    %channel_coeficients(end) = GAIN_EMITTER/losses_emitter_target;
-    channel_coeficients_emitter_target(end) = 1;
+    channel_coeficients_emitter_target(end) = 1/losses_emitter_target;
+    %channel_coeficients_emitter_target(end) = 1;
     channel_coeficients_emitter_target(1:end-1) = 0;
     
     % Signal is delayed
@@ -132,7 +132,6 @@ while i< NUMBER_ITERATIONS
             projected_velocity = -1*projected_velocity;
         end
         doppler_shift = (Fc*(1-PROPAGATION_VELOCITY/(PROPAGATION_VELOCITY-projected_velocity)));
-        %doppler_shift = doppler_shift/Fs;
         doppler_shift = 60;
         %The doppler shift is applied to the signal
         signal_vector = 0:1:bounced_samples-1;
@@ -154,7 +153,7 @@ while i< NUMBER_ITERATIONS
     % Calculus of the channel between the emitter and the target
     channel_coeficients_reciever = 0:1/Fs:(distance_target_reciever*1000)/PROPAGATION_VELOCITY;
     channel_coeficients_reciever(1:end-1) = 0;
-    %channel_coeficients_reciever(end) = GAIN_RECIEVER/losses_target_reciever;
+    channel_coeficients_reciever(end) = 1/losses_target_reciever;
     channel_coeficients_reciever(end) = 1;
 
     % Appending the signal to the target channel buffer

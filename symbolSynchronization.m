@@ -37,10 +37,11 @@ function [frame_synchronized,base_line]  = symbolSynchronization(data_input)
     
     % Calculating the estimator
     estimator = ro.*alpha_cp(1:length(z_3))+(1-ro).*alpha_ro.';
-    
+    %Deleting unwanted peaks
+    estimator(1:symbol_length-1) = 0;
    
 
-    threshold = max(estimator)*0.7;
+    threshold = max(estimator)*0.5;
     %DELETE
     reference = 1:1:length(estimator);
     reference(:)= threshold;

@@ -88,7 +88,7 @@ surveillance_signal = surveillance_signal(:);
 
 [caf_matrix,doppler_axis] = BatchProcessing(reference_signal,surveillance_signal);
 %Deleting random peaks at delay 0
-caf_matrix(1:4,:) = 0;
+
 %Calculating the maximum
 [doppler_columns,time_indexes] = max(caf_matrix);
 [~,doppler_index]= max(doppler_columns);

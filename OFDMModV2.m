@@ -19,7 +19,7 @@ for iteration = 1:1:Nsym
     % The symbols are generated randomly
     % Symbols is the vector that will be transformed with the ifft   
     symbols = (randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2)+1i*(randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2);
-
+    
     % Deleting CARRIERS not used
     symbols(end-(NFFT-CARRIERS-1)/2 +1:end,:) = 0;
     symbols(1:(NFFT-CARRIERS-1)/2) =0;
