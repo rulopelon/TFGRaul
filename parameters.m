@@ -24,10 +24,12 @@ TARGET1_VELOCITY = [20,0,0];   %The reference point is the emitter
 
 PROPAGATION_VELOCITY = 3e8;
 
-SNR  = 50; % Value in db
+SNR  = 20; % Value in db
 
 GAIN_EMITTER = 1.3e11; %In watts
 GAIN_RECIEVER = 1.3e11; %In watts
+
+RADAR_CROSS_SECTION  = 40;
 %% Constraints related to the OFDM signal parameters defined by the standard
 pilot_amplitude = 4/3; % There is no need to multiply this value as all the symbols are normalized
 Fs = 10e6;
@@ -69,8 +71,6 @@ pilot_cells = [0 48 54 87 141 156 192 201 255 279 282 333 432 450 ...
 
 
 %% Parameters for the batch processing algorithm
-delay_detected = 0;
-doppler_detected = 0;
 PLOT = false;    
 % Time of each OFDM symbol
 T_symbol= symbol_length/Fs;

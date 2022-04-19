@@ -7,7 +7,7 @@ clc;close all force;clear;
 load("variables.mat","NUMBER_ITERATIONS","TIME_STEP","EMITTER_POSITION", ...
     "TARGET1_POSITION","TARGET1_VELOCITY","RECIEVER_POSITION","BATCH_SIZE_SIMULATION", ...
     "Fs","Number_batches","Samples_iteration_simulation","Nsym","T_batch","PROPAGATION_VELOCITY", ...
-    "Fc","SNR","GAIN_EMITTER","GAIN_RECIEVER")
+    "Fc","SNR","GAIN_EMITTER","GAIN_RECIEVER","RADAR_CROSS_SECTION")
 
 %% Variables declaration
 
@@ -16,13 +16,11 @@ tp = theaterPlot('XLim',[-90,90],'YLim',[-90,90],'ZLim',[0,40]);
 
 i = 0;                    %Variable to iterate over the loops
 signal_sended = [];       %Signal on the simulation enviroment  
-TARGETS_POSITIONS = [TARGET1_POSITION];
-TARGETS_VELOCITIES = [TARGET1_VELOCITY];
+
 
 signal_emitter_target = [];
 signal_target_reciever = [];
 signal_sended_emitter=[];
-signal_sended_target = [];
 
 % The signal between the emitter and the reciever starts empty, with all
 % zeros
@@ -83,7 +81,7 @@ while i< NUMBER_ITERATIONS
     % The signal is delayed 
     signal_emitter_reciever_delayed = conv(channel_coeficients_emitter_reciever,signal_emitter_reciever_sended);  
     % Noise is added
-    %signal_emitter_reciever_delayed = awgn(signal_emitter_reciever_delayed,SNR);
+    signal_emitter_reciever_delayed = awgn(signal_emitter_reciever_delayed,SNR,'measured');
  
     
 
@@ -104,7 +102,7 @@ while i< NUMBER_ITERATIONS
     % Signal is delayed
     signal_emitter_target_delayed = conv(channel_coeficients_emitter_target,signal_emitter_sended);   
     %Noise is added
-    %signal_emitter_target_delayed = awgn(signal_emitter_target_delayed,SNR);
+    signal_emitter_target_delayed = awgn(signal_emitter_target_delayed,SNR,'measured');
     signal_bounced_shifted = [];
     
     bounced_samples =0;
@@ -132,7 +130,7 @@ while i< NUMBER_ITERATIONS
             projected_velocity = -1*projected_velocity;
         end
         doppler_shift = (Fc*(1-PROPAGATION_VELOCITY/(PROPAGATION_VELOCITY-projected_velocity)));
-        doppler_shift = 60;
+        %doppler_shift = 60;
         %The doppler shift is applied to the signal
         signal_vector = 0:1:bounced_samples-1;
         doppler_shift = doppler_shift/Fs;
@@ -153,7 +151,7 @@ while i< NUMBER_ITERATIONS
     % Calculus of the channel between the emitter and the target
     channel_coeficients_reciever = 0:1/Fs:(distance_target_reciever*1000)/PROPAGATION_VELOCITY;
     channel_coeficients_reciever(1:end-1) = 0;
-    channel_coeficients_reciever(end) = 1/losses_target_reciever;
+    channel_coeficients_reciever(end) = RADAR_CROSS_SECTION/losses_target_reciever;
     channel_coeficients_reciever(end) = 1;
 
     % Appending the signal to the target channel buffer
@@ -162,7 +160,7 @@ while i< NUMBER_ITERATIONS
     % The signal is retarded
     signal_target_reciever_delayed = conv(channel_coeficients_reciever,signal_sended_target);
     % Noise is added
-    %signal_target_reciever_delayed = awgn(signal_target_reciever_delayed,SNR);
+    signal_target_reciever_delayed = awgn(signal_target_reciever_delayed,SNR,'measured');
 
     % Deleting the used samples
     signal_sended_target= signal_sended_target(int64(Samples_iteration_simulation):end);
