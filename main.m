@@ -6,7 +6,7 @@ clc;close all force;clear;
 %% Loading global parameters for the simulation
 load("variables.mat","NUMBER_ITERATIONS","TIME_STEP","EMITTER_POSITION", ...
     "TARGET1_POSITION","TARGET1_VELOCITY","RECIEVER_POSITION","BATCH_SIZE_SIMULATION", ...
-    "Fs","Number_batches","Samples_iteration_simulation","Nsym","T_batch","PROPAGATION_VELOCITY", ...
+    "Fs","Number_batches","Samples_iteration_simulation","Nsym_simulation","T_batch","PROPAGATION_VELOCITY", ...
     "Fc","SNR","GAIN_EMITTER","GAIN_RECIEVER","RADAR_CROSS_SECTION")
 
 %% Variables declaration
@@ -63,11 +63,12 @@ channel_coeficients_emitter_reciever(end) = 1/losses_emitter_receiver;
 
 %% Iterations
  %OFDM signal is generated
-[Ofdm_signal ,~]= OFDMModV2(Nsym);
 while i< NUMBER_ITERATIONS    
     
-    load("OFDMSignal.mat")
-    %[Ofdm_signal ,~]= OFDMModV2(Nsym+1);
+    %load("OFDMSignal.mat")
+    [Ofdm_signal ,~]= OFDMModV2(Nsym_simulation);
+
+    
     %One time step is sended
     signal_emitter = [signal_emitter;Ofdm_signal];  
     signal_emitter_sended = signal_emitter(1:int64(Samples_iteration_simulation));
@@ -130,7 +131,6 @@ while i< NUMBER_ITERATIONS
             projected_velocity = -1*projected_velocity;
         end
         doppler_shift = (Fc*(1-PROPAGATION_VELOCITY/(PROPAGATION_VELOCITY-projected_velocity)));
-        %doppler_shift = 60;
         %The doppler shift is applied to the signal
         signal_vector = 0:1:bounced_samples-1;
         doppler_shift = doppler_shift/Fs;
