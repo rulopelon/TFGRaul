@@ -5,9 +5,9 @@
 clc;close all force;clear;
 %% Loading global parameters for the simulation
 load("variables.mat","NUMBER_ITERATIONS","TIME_STEP","EMITTER_POSITION", ...
-    "TARGET1_POSITION","TARGET1_VELOCITY","RECIEVER_POSITION","BATCH_SIZE", ...
-    "Fs","Number_batches","Samples_iteration","Nsym","T_batch","PROPAGATION_VELOCITY", ...
-    "Fc","SNR","GAIN_EMITTER","GAIN_RECIEVER")
+    "TARGET1_POSITION","TARGET1_VELOCITY","RECIEVER_POSITION","BATCH_SIZE_SIMULATION", ...
+    "Fs","Number_batches","Samples_iteration_simulation","Nsym","T_batch","PROPAGATION_VELOCITY", ...
+    "Fc","SNR","GAIN_EMITTER","GAIN_RECIEVER","RADAR_CROSS_SECTION")
 
 %% Variables declaration
 
@@ -16,18 +16,17 @@ tp = theaterPlot('XLim',[-90,90],'YLim',[-90,90],'ZLim',[0,40]);
 
 i = 0;                    %Variable to iterate over the loops
 signal_sended = [];       %Signal on the simulation enviroment  
-TARGETS_POSITIONS = [TARGET1_POSITION];
-TARGETS_VELOCITIES = [TARGET1_VELOCITY];
+
 
 signal_emitter_target = [];
 signal_target_reciever = [];
 signal_sended_emitter=[];
-signal_sended_target = [];
 
 % The signal between the emitter and the reciever starts empty, with all
 % zeros
-signal_emitter_reciever = [];
-signal_emitter = [];
+ signal_emitter_reciever =[];
+ signal_emitter = [];
+ signal_sended_target = [];
 
 
 
@@ -58,8 +57,8 @@ losses_emitter_receiver = ((4*pi*distance_emitter_reciever*1000)/(PROPAGATION_VE
 % once, as the distance is constants constant
 channel_coeficients_emitter_reciever = 0:1/Fs:(distance_emitter_reciever*1000)/PROPAGATION_VELOCITY;
 channel_coeficients_emitter_reciever(1:end-1) = 0;
-%coeficients_emitter_reciever(end) = (GAIN_EMITTER*GAIN_RECIEVER)/losses_emitter_receiver;
-channel_coeficients_emitter_reciever(end) = 1;
+channel_coeficients_emitter_reciever(end) = 1/losses_emitter_receiver;
+%channel_coeficients_emitter_reciever(end) = 1;
 
 
 %% Iterations
@@ -67,22 +66,22 @@ channel_coeficients_emitter_reciever(end) = 1;
 [Ofdm_signal ,~]= OFDMModV2(Nsym);
 while i< NUMBER_ITERATIONS    
     
-    %load("OFDMSignal.mat")
-    [Ofdm_signal ,~]= OFDMModV2(Nsym);
+    load("OFDMSignal.mat")
+    %[Ofdm_signal ,~]= OFDMModV2(Nsym+1);
     %One time step is sended
     signal_emitter = [signal_emitter;Ofdm_signal];  
-    signal_emitter_sended = signal_emitter(1:Samples_iteration);
+    signal_emitter_sended = signal_emitter(1:int64(Samples_iteration_simulation));
     
     % The signal is sended to the reciever via the bistatic line
     signal_emitter_reciever = [signal_emitter_reciever;Ofdm_signal];
      % The first indexes of the signal are deleted as the reciever has
     % already used them
-    signal_emitter_reciever_sended = signal_emitter_reciever(1:Samples_iteration);
+    signal_emitter_reciever_sended = signal_emitter_reciever(1:int64(Samples_iteration_simulation));
        
     % The signal is delayed 
     signal_emitter_reciever_delayed = conv(channel_coeficients_emitter_reciever,signal_emitter_reciever_sended);  
     % Noise is added
-    signal_emitter_reciever_delayed = awgn(signal_emitter_reciever_delayed,SNR);
+    signal_emitter_reciever_delayed = awgn(signal_emitter_reciever_delayed,SNR,'measured');
  
     
 
@@ -96,14 +95,14 @@ while i< NUMBER_ITERATIONS
 
     % Calculus of the channel between the emitter and the target
     channel_coeficients_emitter_target = 0:1/Fs:(distance_emitter_target*1000)/PROPAGATION_VELOCITY;
-    %channel_coeficients(end) = GAIN_EMITTER/losses_emitter_target;
-    channel_coeficients_emitter_target(end) = 1;
+    channel_coeficients_emitter_target(end) = 1/losses_emitter_target;
+    %channel_coeficients_emitter_target(end) = 1;
     channel_coeficients_emitter_target(1:end-1) = 0;
     
     % Signal is delayed
     signal_emitter_target_delayed = conv(channel_coeficients_emitter_target,signal_emitter_sended);   
     %Noise is added
-    signal_emitter_target_delayed = awgn(signal_emitter_target_delayed,SNR);
+    signal_emitter_target_delayed = awgn(signal_emitter_target_delayed,SNR,'measured');
     signal_bounced_shifted = [];
     
     bounced_samples =0;
@@ -117,9 +116,9 @@ while i< NUMBER_ITERATIONS
         if bounced_batches > Number_batches
             bounced_batches = Number_batches;
         end
-        bounced_samples = bounced_batches*BATCH_SIZE;
+        bounced_samples = bounced_batches*BATCH_SIZE_SIMULATION;
         
-        signal_bounced = signal_emitter_target_delayed(1:bounced_samples);
+        signal_bounced = signal_emitter_target_delayed(1:int64(bounced_samples));
         %The signal bounces of the plane
         % Calculating the doppler shift with the projected velocity on the bistatic vector    
         velocity_vector = [TARGET1_VELOCITY(1),TARGET1_VELOCITY(2)];
@@ -131,16 +130,16 @@ while i< NUMBER_ITERATIONS
             projected_velocity = -1*projected_velocity;
         end
         doppler_shift = (Fc*(1-PROPAGATION_VELOCITY/(PROPAGATION_VELOCITY-projected_velocity)));
-        doppler_shift = 0;
+        %doppler_shift = 60;
         %The doppler shift is applied to the signal
         signal_vector = 0:1:bounced_samples-1;
-        doppler_shift = doppler_shift/bounced_samples;
+        doppler_shift = doppler_shift/Fs;
         signal_bounced_shifted = signal_bounced.*exp(-1i*2*pi*doppler_shift*double(signal_vector).');
     end
     % The bounced signal is filled with zeros to match the samples analyzed
     % If there is no bounce, the channel is filled with zeros
-    signal_bounced_shifted =[signal_bounced_shifted;zeros(Samples_iteration-bounced_samples,1)];
-    signal_emitter_reciever_delayed =[signal_emitter_reciever_delayed,zeros(Samples_iteration-length(signal_emitter_reciever_delayed),1)];
+    signal_bounced_shifted =[signal_bounced_shifted;zeros(int64(Samples_iteration_simulation-bounced_samples),1)];
+    signal_emitter_reciever_delayed =[signal_emitter_reciever_delayed,zeros(Samples_iteration_simulation-length(signal_emitter_reciever_delayed),1)];
     
     %The signal bounces off the plane
     distance_target_reciever = sqrt((TARGET1_POSITION(1)-RECIEVER_POSITION(1))^2+(TARGET1_POSITION(2)-RECIEVER_POSITION(2))^2 ...
@@ -152,7 +151,7 @@ while i< NUMBER_ITERATIONS
     % Calculus of the channel between the emitter and the target
     channel_coeficients_reciever = 0:1/Fs:(distance_target_reciever*1000)/PROPAGATION_VELOCITY;
     channel_coeficients_reciever(1:end-1) = 0;
-    %channel_coeficients_reciever(end) = GAIN_RECIEVER/losses_target_reciever;
+    channel_coeficients_reciever(end) = RADAR_CROSS_SECTION/losses_target_reciever;
     channel_coeficients_reciever(end) = 1;
 
     % Appending the signal to the target channel buffer
@@ -161,14 +160,14 @@ while i< NUMBER_ITERATIONS
     % The signal is retarded
     signal_target_reciever_delayed = conv(channel_coeficients_reciever,signal_sended_target);
     % Noise is added
-    signal_target_reciever_delayed = awgn(signal_target_reciever_delayed,SNR);
+    signal_target_reciever_delayed = awgn(signal_target_reciever_delayed,SNR,'measured');
 
     % Deleting the used samples
-    signal_sended_target= signal_sended_target(Samples_iteration+1:end);
-    signal_emitter_reciever = signal_emitter_reciever(Samples_iteration+1:end);
+    signal_sended_target= signal_sended_target(int64(Samples_iteration_simulation):end);
+    signal_emitter_reciever = signal_emitter_reciever(int64(Samples_iteration_simulation):end);
     % The signal to analyze is the sum of the bistatic line signal and the
     % bounced signal from the plane
-    signal_analyze =signal_emitter_reciever_delayed(1:Samples_iteration)+signal_target_reciever_delayed(1:Samples_iteration); 
+    signal_analyze =signal_emitter_reciever_delayed(1:int64(Samples_iteration_simulation))+signal_target_reciever_delayed(1:int64(Samples_iteration_simulation)); 
     
     %Signal is sended to the reciever
     Reciever(signal_analyze);
@@ -179,8 +178,9 @@ while i< NUMBER_ITERATIONS
     TARGET1_POSITION = TARGET1_POSITION + TARGET1_VELOCITY.*TIME_STEP;
 
     %Removing used samples
-    signal_emitter_reciever = [];
+    signal_emitter_reciever =[];
     signal_emitter = [];
+    signal_sended_target = [];
     % Adding one iteration to the simulation
     i= i+1;
 end

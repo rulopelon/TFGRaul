@@ -12,12 +12,7 @@ function [correlation_matrix,doppler_axis] = BatchProcessing(reference_batches,s
     surveillance_batches = surveillance_batches(1:floor(length(surveillance_batches)/BATCH_SIZE)*BATCH_SIZE);
     reference_batches = reference_batches(1:floor(length(reference_batches)/BATCH_SIZE)*BATCH_SIZE);
 
-    % The input must be two vectors with the reference signal and the
-    % surveillance signal
-%     if size(reference_batches) ~= size(surveillance_batches)
-%         % The reference array may be smaller, so it is padded with zeros
-%         reference_batches = [reference_batches,zeros(length(surveillance_batches)-length(reference_batches),1)];
-%     end
+
     
     correlation_matrix = [];
     % The input array is reshaped to match the size of each batch analyzed

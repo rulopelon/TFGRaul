@@ -19,15 +19,17 @@ EMITTER_POSITION = [0,0,0]; % The origin of coordinates is the emitter
 RECIEVER_POSITION = [5,0,0]; % Defining reciever coordinates
 
 %Targets for simulation
-TARGET1_POSITION = [10,10,10];
-TARGET1_VELOCITY = [50,0,0];   %The reference point is the emitter
+TARGET1_POSITION = [5,5,10];
+TARGET1_VELOCITY = [20,0,0];   %The reference point is the emitter
 
 PROPAGATION_VELOCITY = 3e8;
 
-SNR  = 50; % Value in db
+SNR  = 20; % Value in db
 
 GAIN_EMITTER = 1.3e11; %In watts
 GAIN_RECIEVER = 1.3e11; %In watts
+
+RADAR_CROSS_SECTION  = 40;
 %% Constraints related to the OFDM signal parameters defined by the standard
 pilot_amplitude = 4/3; % There is no need to multiply this value as all the symbols are normalized
 Fs = 10e6;
@@ -69,8 +71,6 @@ pilot_cells = [0 48 54 87 141 156 192 201 255 279 282 333 432 450 ...
 
 
 %% Parameters for the batch processing algorithm
-delay_detected = 0;
-doppler_detected = 0;
 PLOT = false;    
 % Time of each OFDM symbol
 T_symbol= symbol_length/Fs;
@@ -81,9 +81,11 @@ Vmax = 1/(2*T_batch);
 % Number of batches that are "moved" on each iteration
 Number_batches = ceil(TIME_STEP/T_batch);
 %Size of the batch analyzed
-BATCH_SIZE = ceil(T_batch*Fs_used); 
+BATCH_SIZE = ceil(T_batch*Fs_used);
+BATCH_SIZE_SIMULATION = BATCH_SIZE*M/L;
+
 % Muliplied by M and divided by L to get the number of samples at 10 Mhz
-Samples_iteration_simulation = Number_batches*BATCH_SIZE*M/L;
+Samples_iteration_simulation = Number_batches*BATCH_SIZE_SIMULATION;
 Samples_iteration = int64(Number_batches*BATCH_SIZE);
 %BATCH_SIZE = int64(BATCH_SIZE);
 % Number of OFDM symbols produced on each iteration

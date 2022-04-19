@@ -1,5 +1,5 @@
-function frame_synchronized  = symbolSynchronization(data_input)
-    load("variables.mat","prefix_length","NFFT","CARRIERS","symbol_length","T_symbol")
+function [frame_synchronized,base_line]  = symbolSynchronization(data_input)
+    load("variables.mat","prefix_length","NFFT","CARRIERS","symbol_length")
     %% Time synchronization
     indexes = [];
     [indexes_pilots, pilots] = getContinuousPilots();
@@ -37,10 +37,11 @@ function frame_synchronized  = symbolSynchronization(data_input)
     
     % Calculating the estimator
     estimator = ro.*alpha_cp(1:length(z_3))+(1-ro).*alpha_ro.';
-    % Array used for the analysis of the estimator
-    estimator_analysis = estimator;
+    %Deleting unwanted peaks
+    estimator(1:symbol_length-1) = 0;
+   
 
-    threshold = max(estimator)*0.7;
+    threshold = max(estimator)*0.5;
     %DELETE
     reference = 1:1:length(estimator);
     reference(:)= threshold;
@@ -116,12 +117,9 @@ function frame_synchronized  = symbolSynchronization(data_input)
     end
     % Deleting the prefix
     frame_synchronized = frame_synchronized(prefix_length+1:end,:);
+    
+    %Calculating the base line distance
+    base_line = initial_index-symbol_length;
 
-%     figure
-%     plot(estimator)
-%     title("Estimator")
-%     figure
-%     plot(frequency_estimator)
-%     title("Frequency estimator")
    
 end
