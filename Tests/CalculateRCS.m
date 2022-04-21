@@ -2,10 +2,10 @@
 clc, clear,close all
 %%
 p = platform;
-p.FileName = 'sphere1.stl'; 
+p.FileName = 'avion6.stl'; 
 p.Units = 'mm';
-%figure
-%show(p)
+figure
+show(p)
 
 
 figure
