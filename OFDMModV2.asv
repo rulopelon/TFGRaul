@@ -1,6 +1,5 @@
 function [ofdm_exit,ofdm_exit_2]=OFDMModV2(Nsym)
-% MODIFIED BY RAUL GONZALEZ in order to adapt the code to the DVB-T
-% standard
+% MODIFIED BY RAUL GONZALEZ TO CHANGE THE FRECUENCY
 % load parameters and constants
 load("variables.mat","NFFT","L","PREFIX","CARRIERS","M","nAM","reconstruction_filter","symbol_length_emitter")
 

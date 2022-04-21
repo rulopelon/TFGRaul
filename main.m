@@ -46,7 +46,6 @@ disp("3D environment created")
 disp("The simulation starts")
 
 %Initial biestatic range to calculate the doppler shift
-%Initial_range =    ((TARGET1_POSITION(1)-EMITTER_POSITION(1))^2+(TARGET1_POSITION(2)-EMITTER_POSITION(2))^2)+ sqrt((TARGET1_POSITION(1)-RECIEVER_POSITION(1))^2+(TARGET1_POSITION(2)-RECIEVER_POSITION(2))^2); 
 % Initializing the channel of emitter-reciever values
 
 distance_emitter_reciever = sqrt(sum((RECIEVER_POSITION-EMITTER_POSITION).^2));
@@ -58,7 +57,6 @@ losses_emitter_receiver = ((4*pi*distance_emitter_reciever*1000)/(PROPAGATION_VE
 channel_coeficients_emitter_reciever = 0:1/Fs:(distance_emitter_reciever*1000)/PROPAGATION_VELOCITY;
 channel_coeficients_emitter_reciever(1:end-1) = 0;
 channel_coeficients_emitter_reciever(end) = 1/losses_emitter_receiver;
-%channel_coeficients_emitter_reciever(end) = 1;
 
 
 %% Iterations
@@ -97,7 +95,6 @@ while i< NUMBER_ITERATIONS
     % Calculus of the channel between the emitter and the target
     channel_coeficients_emitter_target = 0:1/Fs:(distance_emitter_target*1000)/PROPAGATION_VELOCITY;
     channel_coeficients_emitter_target(end) = 1/losses_emitter_target;
-    %channel_coeficients_emitter_target(end) = 1;
     channel_coeficients_emitter_target(1:end-1) = 0;
     
     % Signal is delayed

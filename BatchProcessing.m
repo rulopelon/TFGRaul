@@ -7,8 +7,6 @@ function [correlation_matrix,doppler_axis] = BatchProcessing(reference_batches,s
     load("variables.mat","PLOT","BATCH_SIZE","Fs_used")
     PLOT = true;
     % The signal is adapted to have the desired length
-%     surveillance_batches = [surveillance_batches;zeros(ceil(length(surveillance_batches)/BATCH_SIZE)*BATCH_SIZE-length(surveillance_batches),1)];
-%     reference_batches = [reference_batches;zeros(length(surveillance_batches)-length(reference_batches),1)];
     surveillance_batches = surveillance_batches(1:floor(length(surveillance_batches)/BATCH_SIZE)*BATCH_SIZE);
     reference_batches = reference_batches(1:floor(length(reference_batches)/BATCH_SIZE)*BATCH_SIZE);
 

@@ -102,7 +102,6 @@ function [frame_synchronized,base_line]  = symbolSynchronization(data_input)
             frame = data_input(index-NFFT-prefix_length+1:index,1);
             %Frequency deviation estimation
             frequency_deviation = frequency_estimator(index)/length(frame);
-            %frequency_deviation = 0;
             %Frequency deviation correction
             n =0:1:length(frame)-1;
             frame = frame.*exp(-1i*2*pi*frequency_deviation*n.');

@@ -1,3 +1,4 @@
+%Function to interpolate the signal by the desired factor
 function signal_upsampled = interpolation(signal,L)
     signal_upsampled = [];
     if L >1

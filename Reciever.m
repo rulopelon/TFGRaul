@@ -46,7 +46,6 @@ for i = 1:1:symbols
     %Query points for the interpolation
 
     channel_estimation_interpolated = fillmissing(channel_estimation,'nearest');
-    %channel_estimation_interpolated = ones(NFFT,1);
     channel_estimation_interpolated(end-(NFFT-CARRIERS-1)/2:end) = 0;
     channel_estimation_interpolated(1:(NFFT-CARRIERS-1)/2-1) =0;
     % Calculating the correction
@@ -56,10 +55,7 @@ for i = 1:1:symbols
     for index= inf_indexes
         frequency_correction(index)=0;
     end
-    %frequency_correction(end-(NFFT-CARRIERS-1)/2 +1:end) = 0;
-    %frequency_correction(1:(NFFT-CARRIERS-1)/2) =0;
-
-    %i_interpolated = ifft(ifftshift(frequency_response));
+ 
     % The symbol is equalized
     symbol_frequency_corrected = symbol_equalize_fft.*frequency_correction;
     
@@ -103,6 +99,7 @@ doppler_frequency = doppler_axis(doppler_index);
 step_distance = (1/Fs_used)*PROPAGATION_VELOCITY;
 bistatic_range  = bistatic_range*step_distance;
 base_line = base_line *step_distance;
+
 if base_line < bistatic_range
     %Calculating ellipse parameters
     a = bistatic_range/2;
