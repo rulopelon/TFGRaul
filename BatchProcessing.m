@@ -35,6 +35,7 @@ function [correlation_matrix,doppler_axis] = BatchProcessing(reference_batches,s
     
     % Calculating on the doppler domain
     correlation_matrix = abs(fftshift(fft(correlation_matrix,512,2),2)); 
+   
     %Calculating the axis for the frequency shift representation
     Fs_analysis = Fs_used/BATCH_SIZE;
     doppler_axis = linspace(-0.5*Fs_analysis,0.5*Fs_analysis,512);
@@ -46,7 +47,7 @@ function [correlation_matrix,doppler_axis] = BatchProcessing(reference_batches,s
         range_axis= 1:1:BATCH_SIZE;
         [X,Y] = meshgrid(range_axis,doppler_axis);
         f = figure;
-        surf(X,Y,abs(correlation_matrix.'),'EdgeColor','none')
+        surf(X,Y,20*log10(abs(correlation_matrix.')),'EdgeColor','none')
         xlabel('Delay')
         ylabel('Doppler')
         zlabel('Correlation')

@@ -8,12 +8,10 @@ function [symbol_estimated] = QAMDetection(data)
     values = values-(sqrt(nAM)-1)/2;
     % Getting the pilot indexes
     [indexes, ~]=getContinuousPilots();
-    i = 0;
     indexes= indexes+(NFFT-CARRIERS-1)/2;
     for index = 1:1:length(data)
         % Check that it is not a pilot
         if ismember(index,indexes)==0 && index>=(NFFT-CARRIERS-1)/2 &&index<(NFFT-CARRIERS)/2+CARRIERS+1
-            i = i+1;
             % Real and complex parts are compared
             value = data(index);
             real_part = real(data(index));

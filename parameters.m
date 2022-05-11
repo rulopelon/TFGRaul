@@ -6,8 +6,6 @@ signal_buffer = [];
 reference_buffer = [];
 surveillance_buffer = [];
 threshold = 0.15; 
-
-
 %% Parameters used for the simulation environment
 
 NUMBER_ITERATIONS = 100;   % Initial aproach AJUST VALUE
@@ -20,16 +18,12 @@ RECIEVER_POSITION = [5,0,0]; % Defining reciever coordinates
 
 %Targets for simulation
 TARGET1_POSITION = [5,5,10];
+%TARGET1_POSITION = [1,1,5];
 TARGET1_VELOCITY = [20,0,0];   %The reference point is the emitter
 
 PROPAGATION_VELOCITY = 3e8;
 
-SNR  = 20; % Value in db
 
-GAIN_EMITTER = 1.3e11; %In watts
-GAIN_RECIEVER = 1.3e11; %In watts
-
-RADAR_CROSS_SECTION  = 40;
 %% Constraints related to the OFDM signal parameters defined by the standard
 pilot_amplitude = 4/3; % There is no need to multiply this value as all the symbols are normalized
 Fs = 10e6;
@@ -75,8 +69,9 @@ PLOT = false;
 % Time of each OFDM symbol
 T_symbol= symbol_length/Fs;
 % Samples that are analysed on each iteration
-T_batch= 924e-6;
-Vmax = 1/(2*T_batch);
+Vmax = 300;
+
+T_batch = 1/(2*Vmax);
 
 % Number of batches that are "moved" on each iteration
 Number_batches = ceil(TIME_STEP/T_batch);
@@ -91,5 +86,16 @@ Samples_iteration = int64(Number_batches*BATCH_SIZE);
 % Number of OFDM symbols produced on each iteration
 Nsym = ceil(Samples_iteration/symbol_length);
 Nsym_simulation = ceil(Samples_iteration_simulation/symbol_length_emitter);
+
+%% Parameters for the wave propagation
+
+SNR  = 20; % Value in db
+GAIN_EMITTER_DB = 10;
+GAIN_RECIEVER_DB = 10;
+GAIN_EMITTER = 10^(GAIN_EMITTER_DB/10); %In natural units
+GAIN_RECIEVER = 10^(GAIN_RECIEVER_DB/10); %In natural units
+LAMBDA = PROPAGATION_VELOCITY/Fc;
+POWER_TRANSMITED = 5; % in Watts
+RADAR_CROSS_SECTION  = 40;
 save("variables.mat")
 

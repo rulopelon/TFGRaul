@@ -7,7 +7,7 @@ clc;close all force;clear;
 load("variables.mat","NUMBER_ITERATIONS","TIME_STEP","EMITTER_POSITION", ...
     "TARGET1_POSITION","TARGET1_VELOCITY","RECIEVER_POSITION","BATCH_SIZE_SIMULATION", ...
     "Fs","Number_batches","Samples_iteration_simulation","Nsym_simulation","T_batch","PROPAGATION_VELOCITY", ...
-    "Fc","SNR","GAIN_EMITTER","GAIN_RECIEVER","RADAR_CROSS_SECTION")
+    "Fc","SNR","GAIN_EMITTER","GAIN_RECIEVER","RADAR_CROSS_SECTION","POWER_TRANSMITED","LAMBDA")
 
 %% Variables declaration
 
@@ -50,23 +50,29 @@ disp("The simulation starts")
 
 distance_emitter_reciever = sqrt(sum((RECIEVER_POSITION-EMITTER_POSITION).^2));
 % Calculus of the losses
-losses_emitter_receiver = ((4*pi*distance_emitter_reciever*1000)/(PROPAGATION_VELOCITY/Fc))^2;
+losses_emitter_receiver = ((4*pi*distance_emitter_reciever*1000)/(LAMBDA))^2;
 
 % The coeficients of the emitter and the recievier are only calculated
 % once, as the distance is constants constant
 channel_coeficients_emitter_reciever = 0:1/Fs:(distance_emitter_reciever*1000)/PROPAGATION_VELOCITY;
 channel_coeficients_emitter_reciever(1:end-1) = 0;
-channel_coeficients_emitter_reciever(end) = 1/losses_emitter_receiver;
+channel_coeficients_emitter_reciever(end) = 1/sqrt(losses_emitter_receiver);
+
 
 
 %% Iterations
  %OFDM signal is generated
 while i< NUMBER_ITERATIONS    
     
-    %load("OFDMSignal.mat")
-    [Ofdm_signal ,~]= OFDMModV2(Nsym_simulation);
+    load("OFDMSignal.mat")
+    %[Ofdm_signal ,~]= OFDMModV2(Nsym_simulation);
+    % Controlling the power emited
+    power_emitter = (1/length(Ofdm_signal))*sum(abs(Ofdm_signal).^2);
+    coeficient = POWER_TRANSMITED/power_emitter;
+    % Correcting the transmitted power
+    Ofdm_signal = sqrt(coeficient).*Ofdm_signal;
 
-    
+    % Calculating the coeficient to get the desired power transmited
     %One time step is sended
     signal_emitter = [signal_emitter;Ofdm_signal];  
     signal_emitter_sended = signal_emitter(1:int64(Samples_iteration_simulation));
@@ -80,7 +86,7 @@ while i< NUMBER_ITERATIONS
     % The signal is delayed 
     signal_emitter_reciever_delayed = conv(channel_coeficients_emitter_reciever,signal_emitter_reciever_sended);  
     % Noise is added
-    signal_emitter_reciever_delayed = awgn(signal_emitter_reciever_delayed,SNR,'measured');
+    %signal_emitter_reciever_delayed = awgn(signal_emitter_reciever_delayed,SNR,'measured');
  
     
 
@@ -89,18 +95,17 @@ while i< NUMBER_ITERATIONS
     %Units on Km
     distance_emitter_target = sqrt((TARGET1_POSITION(1)-EMITTER_POSITION(1))^2+(TARGET1_POSITION(2)-EMITTER_POSITION(2))^2 ...
     +(TARGET1_POSITION(3)-EMITTER_POSITION(3))^2);
-    % Calculus of the losses
-    losses_emitter_target = ((4*pi*distance_emitter_target*1000)/(PROPAGATION_VELOCITY/Fc))^2;
+    
 
     % Calculus of the channel between the emitter and the target
     channel_coeficients_emitter_target = 0:1/Fs:(distance_emitter_target*1000)/PROPAGATION_VELOCITY;
-    channel_coeficients_emitter_target(end) = 1/losses_emitter_target;
     channel_coeficients_emitter_target(1:end-1) = 0;
+    channel_coeficients_emitter_target(end) = 1;  
     
     % Signal is delayed
     signal_emitter_target_delayed = conv(channel_coeficients_emitter_target,signal_emitter_sended);   
     %Noise is added
-    signal_emitter_target_delayed = awgn(signal_emitter_target_delayed,SNR,'measured');
+    %signal_emitter_target_delayed = awgn(signal_emitter_target_delayed,SNR,'measured');
     signal_bounced_shifted = [];
     
     bounced_samples =0;
@@ -142,22 +147,32 @@ while i< NUMBER_ITERATIONS
     distance_target_reciever = sqrt((TARGET1_POSITION(1)-RECIEVER_POSITION(1))^2+(TARGET1_POSITION(2)-RECIEVER_POSITION(2))^2 ...
     +(TARGET1_POSITION(3)-RECIEVER_POSITION(3))^2);
     
-    % Calculus of the losses
-    losses_target_reciever = ((4*pi*distance_target_reciever*1000)/(PROPAGATION_VELOCITY/Fc))^2;
-    
+
+
     % Calculus of the channel between the emitter and the target
     channel_coeficients_reciever = 0:1/Fs:(distance_target_reciever*1000)/PROPAGATION_VELOCITY;
     channel_coeficients_reciever(1:end-1) = 0;
-    channel_coeficients_reciever(end) = RADAR_CROSS_SECTION/losses_target_reciever;
+    %losses_target = 5e11;
+    %channel_coeficients_reciever(end) = 1/sqrt(losses_target);
     channel_coeficients_reciever(end) = 1;
-
     % Appending the signal to the target channel buffer
     signal_sended_target = [signal_sended_target,signal_bounced_shifted];
-  
     % The signal is retarded
     signal_target_reciever_delayed = conv(channel_coeficients_reciever,signal_sended_target);
+    
+    % Calculus of the losses
+    power_recieved_desired = (POWER_TRANSMITED*RADAR_CROSS_SECTION*GAIN_EMITTER*100*LAMBDA^2)/((4*pi)^3*(distance_emitter_target*1000)^2*(distance_target_reciever*1000)^2);    
+    % Calculus of the power recieved
+    real_power_recieved = (1/length(signal_target_reciever_delayed))*sum(abs(signal_target_reciever_delayed).^2);
+    coeficient = power_recieved_desired/real_power_recieved;
+    % Correcting the power
+    signal_target_reciever_delayed = signal_target_reciever_delayed.*sqrt(coeficient);
+    
+
+  
+    
     % Noise is added
-    signal_target_reciever_delayed = awgn(signal_target_reciever_delayed,SNR,'measured');
+    %signal_target_reciever_delayed = awgn(signal_target_reciever_delayed,SNR,'measured');
 
     % Deleting the used samples
     signal_sended_target= signal_sended_target(int64(Samples_iteration_simulation):end);
@@ -168,6 +183,7 @@ while i< NUMBER_ITERATIONS
     
     %Signal is sended to the reciever
     Reciever(signal_analyze);
+    %testBatchAtenuation(signal_emitter_reciever_delayed(1:int64(Samples_iteration_simulation)),signal_target_reciever_delayed(1:int64(Samples_iteration_simulation)))
     %Adding the plane to the environment
     plotElement(tp,TARGET1_POSITION,TARGET1_VELOCITY,'Avion')
     

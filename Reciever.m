@@ -41,12 +41,12 @@ for i = 1:1:symbols
     channel_estimation = nan(NFFT,1);
     for index = indexes
         index_evaluate = index+((NFFT-CARRIERS-1)/2);
-        channel_estimation(index_evaluate) =abs(symbol_equalize_fft(index_evaluate))/abs(frequency_reference(index_evaluate));
+        channel_estimation(index_evaluate) =symbol_equalize_fft(index_evaluate)/frequency_reference(index_evaluate);
     end
     %Query points for the interpolation
 
     channel_estimation_interpolated = fillmissing(channel_estimation,'nearest');
-    channel_estimation_interpolated(end-(NFFT-CARRIERS-1)/2:end) = 0;
+    channel_estimation_interpolated(end+1-(NFFT-CARRIERS-1)/2:end) = 0;
     channel_estimation_interpolated(1:(NFFT-CARRIERS-1)/2-1) =0;
     % Calculating the correction
     frequency_correction = 1./channel_estimation_interpolated;
@@ -84,7 +84,7 @@ surveillance_signal = surveillance_signal(:);
 
 [caf_matrix,doppler_axis] = BatchProcessing(reference_signal,surveillance_signal);
 %Deleting random peaks at delay 0
-caf_matrix(1:4,:) = 0;
+%caf_matrix(1:4,:) = 0;
 %Calculating the maximum
 [doppler_columns,time_indexes] = max(caf_matrix);
 [~,doppler_index]= max(doppler_columns);
