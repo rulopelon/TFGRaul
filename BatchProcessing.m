@@ -9,32 +9,31 @@ function [correlation_matrix,doppler_axis] = BatchProcessing(reference_batches,s
     % The signal is adapted to have the desired length
     surveillance_batches = surveillance_batches(1:floor(length(surveillance_batches)/BATCH_SIZE)*BATCH_SIZE);
     reference_batches = reference_batches(1:floor(length(reference_batches)/BATCH_SIZE)*BATCH_SIZE);
-
-
-    
-    correlation_matrix = [];
+   
     % The input array is reshaped to match the size of each batch analyzed
     surveillance_batches = reshape(surveillance_batches,int64(BATCH_SIZE),[]);
     reference_batches = reshape(reference_batches,BATCH_SIZE,[]);
     
     % Each column of the surveillance_batches array represents a delay in time
     [~,columns] = size(reference_batches);
-    
+    % Prealocating the matrix
+    correlation_matrix = zeros(BATCH_SIZE,columns);
     for batch = 1:1:columns
         % Correlation of the reference signal and the surveillance signal
         % leading to the correlation 
         
-        [cross_correlation,lags] = xcorr(surveillance_batches(:,batch),reference_batches(:,batch),BATCH_SIZE); 
         % There is no need to compute negative correlation, as there cannot be negative ranges, 
-        % so half of the values are dropped
-        index_drop = find(lags==0);
-        cross_correlation = cross_correlation(index_drop+1:end,1);
-        correlation_matrix = [correlation_matrix,cross_correlation];
+        % so half of the values are dropped        
+        cross_correlation = fft(surveillance_batches(:,batch),BATCH_SIZE).*fft(conj(flip(reference_batches(:,batch))),BATCH_SIZE);
+        cross_correlation_ifft = ifft(cross_correlation,BATCH_SIZE);
+        correlation_matrix(:,batch) =cross_correlation_ifft';
     end
     
-    
     % Calculating on the doppler domain
-    correlation_matrix = abs(fftshift(fft(correlation_matrix,512,2),2)); 
+    correlation_matrix = abs(fftshift(fft(correlation_matrix,512,2),2));
+    % Deleting the negative delays correlation, as the signal will only be present
+    % with positive delays
+    %correlation_matrix = correlation_matrix(1:length(cross_correlation_ifft)/2,:);
    
     %Calculating the axis for the frequency shift representation
     Fs_analysis = Fs_used/BATCH_SIZE;
