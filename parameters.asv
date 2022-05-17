@@ -76,7 +76,8 @@ T_batch = 1/(2*Vmax);
 % Number of batches that are "moved" on each iteration
 Number_batches = ceil(TIME_STEP/T_batch);
 %Aproximating the Batch size to a power of two value
-BATCH_SIZE = 2^ceil(log2(T_batch*Fs_used));
+
+BATCH_SIZE = ceil(T_batch*Fs_used);
 BATCH_SIZE_SIMULATION = BATCH_SIZE*M/L;
 
 % Muliplied by M and divided by L to get the number of samples at 10 Mhz
