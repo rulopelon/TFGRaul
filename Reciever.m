@@ -16,7 +16,7 @@ prefix_length = PREFIX*NFFT;
 
 %Frame synchronism
 % Getting the indexes with the start of each symbol
-[frame_synchronized,base_line] = symbolSynchronization(data_resampled);
+[frame_synchronized,indexes_synchronization,modes] = symbolSynchronization(data_resampled);
 
 % Symbol equalization
 % Symbols are equalized independently
@@ -61,10 +61,11 @@ for i = 1:1:symbols
     
     
     %Processing to get two signals
-    symbol_QAM_corrected =QAMDetection(symbol_frequency_corrected); 
+    symbol_QAM_corrected =QAMDetectionV2(symbol_frequency_corrected,modes(i));
+    
     %Deleting clutter
     signal_substracted = symbol_equalize_fft -channel_estimation_interpolated(:,1).*symbol_QAM_corrected(:,1);
-
+    
     
     filtered_signal(:,i) =  ifft(ifftshift(signal_substracted));
     symbols_equalization(:,i) = ifft(ifftshift(symbol_QAM_corrected));
