@@ -7,7 +7,8 @@ load("variables.mat","PROPAGATION_VELOCITY","Fs","Nsym")
 %signal = signal.';
 % The surveillance signal is retarded
 
-coeficients_retard = 0:1/Fs:1000/PROPAGATION_VELOCITY;
+%coeficients_retard = 0:1/Fs:1000/PROPAGATION_VELOCITY;
+coeficients_retard = zeros(4000,1);
 coeficients_retard(1:end-1) = 0;
 coeficients_retard(end) = 1;
 signal_surveillance = conv(coeficients_retard,signal);  
