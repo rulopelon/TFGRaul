@@ -13,13 +13,13 @@ NUMBER_ITERATIONS = 100;   % Initial aproach AJUST VALUE
 TIME_STEP = 250e-3; %Units in seconds 250ms
 
 %UNITS ARE IN KM the origin is at [0,0,0]
-EMITTER_POSITION = [0,0,0]; % The origin of coordinates is the emitter 
+EMITTER_POSITION = [-5,0,0]; % The origin of coordinates is the emitter 
 RECIEVER_POSITION = [5,0,0]; % Defining reciever coordinates
 
 %Targets for simulation
 TARGET1_POSITION = [5,5,10];
 %TARGET1_POSITION = [1,1,5];
-TARGET1_VELOCITY = [20,0,0];   %The reference point is the emitter
+TARGET1_VELOCITY = [0,300,0];   %The reference point is the emitter
 
 PROPAGATION_VELOCITY = 3e8;
 
@@ -42,6 +42,8 @@ symbol_length = (PREFIX*NFFT+NFFT);
 symbol_length_emitter =(PREFIX*NFFT+NFFT)*M/L;
 % Reconstruction filter
 reconstruction_filter = getFilter(L,M);
+% Number of scattered pilots
+number_scatter_pilots = 564;
 
 pilot_cells = [0 48 54 87 141 156 192 201 255 279 282 333 432 450 ...
 483 525 531 618 636 714 759 765 780 804 873 888 ...
