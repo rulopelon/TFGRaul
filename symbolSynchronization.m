@@ -95,7 +95,7 @@ function [frame_synchronized,indexes_synchronization,modes]  = symbolSynchroniza
             
             % Saving the mode
             modes(i) = j;
-            
+            mode = j;
             % Knowing the mode of the scattered pilots, fine symbol
             % correction can be performed
 
@@ -124,7 +124,11 @@ function [frame_synchronized,indexes_synchronization,modes]  = symbolSynchroniza
             scattered_pilots_vector = scattered_pilots_vector(1:find(scattered_pilots_vector>CARRIERS));
 
             % On the synchronization techniques for wireless OFDM systems
-            shift = angle(sum(frame(scattered_pilots_vector).*conj(frame(scattered_pilots_vector))));
+            shift = 0;
+            for scatter_pilot = 1:1:length(scattered_pilots_vector)-1
+                shift = shift+angle(frame(scatter_pilot+1).*conj(frame(scatter_pilot)));
+            end
+            %shift = angle(sum(frame(scattered_pilots_vector).*conj(frame(scattered_pilots_vector))));
             % Calculating the index
             fine_index = round(index_synchronization+shift);
             frame = data_input(fine_index-NFFT-prefix_length+1:fine_index,1);

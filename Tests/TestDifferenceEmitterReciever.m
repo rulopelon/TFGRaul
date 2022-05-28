@@ -163,7 +163,7 @@ while i< NUMBER_ITERATIONS
     signal_target_reciever_delayed = conv(channel_coeficients_reciever,signal_sended_target);
     
     % Calculus of the losses
-    db_relation = 80;
+    db_relation = 100;
     natual_units_relation = 10^(40/10);
     
     % Calculus of the power recieved
