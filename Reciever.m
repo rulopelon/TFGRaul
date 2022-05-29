@@ -31,9 +31,9 @@ function  Reciever(data)
     frequency_reference = zeros(NFFT,1);
     [indexes, pilot_values]=getContinuousPilots();
     
-    for i = indexes
-        frequency_reference(i+(NFFT-CARRIERS-1)/2,1) = pilot_values(i+1);
-    end
+%     for i = indexes
+%         frequency_reference(i+(NFFT-CARRIERS-1)/2,1) = pilot_values(i+1);
+%     end
     
     %Reference sequence for the scatter pilot equalization
     reference_sequence = getReferenceSequence();
@@ -43,10 +43,10 @@ function  Reciever(data)
         symbol_equalize_fft = fftshift(fft(symbol_equalize));
         channel_estimation = nan(NFFT,1);
     
-        for index = indexes
-            index_evaluate = index+((NFFT-CARRIERS-1)/2);
-            channel_estimation(index_evaluate) =symbol_equalize_fft(index_evaluate)/frequency_reference(index_evaluate);
-        end
+%         for index = indexes
+%             index_evaluate = index+((NFFT-CARRIERS-1)/2);
+%             channel_estimation(index_evaluate) =symbol_equalize_fft(index_evaluate)/frequency_reference(index_evaluate);
+%         end
         % Scattered pilots vector
         scattered_pilots_vector =(0 + 3*rem(1,4) + 12*(0:CARRIERS));
         % Depending on the mode, the scattered pilots are on different
@@ -72,17 +72,17 @@ function  Reciever(data)
         scattered_pilots_vector = scattered_pilots_vector(1:find(scattered_pilots_vector>CARRIERS+(NFFT-CARRIERS-1)/2));
         
         pilot = 1;
-%         for carrier= 1:1:CARRIERS+(NFFT-CARRIERS-1)/2
-%             if carrier == scattered_pilots_vector(pilot) 
-%                 frequency_reference(carrier) = 4/3*2*(1/2-reference_sequence(carrier-(NFFT-CARRIERS-1)/2));
-%                 pilot = pilot+1;
-%             end
-%         end
+        for carrier= 1:1:CARRIERS+(NFFT-CARRIERS-1)/2
+            if carrier == scattered_pilots_vector(pilot) 
+                frequency_reference(carrier) = 4/3*2*(1/2-reference_sequence(carrier-(NFFT-CARRIERS-1)/2));
+                pilot = pilot+1;
+            end
+        end
         
-%         for scatter_pilot = 1:1:length(scattered_pilots_vector)-1
-%             index_evaluate = scattered_pilots_vector(scatter_pilot);
-%             channel_estimation(index_evaluate) = symbol_equalize_fft(index_evaluate)/frequency_reference(index_evaluate);
-%         end
+        for scatter_pilot = 1:1:length(scattered_pilots_vector)-1
+            index_evaluate = scattered_pilots_vector(scatter_pilot);
+            channel_estimation(index_evaluate) = symbol_equalize_fft(index_evaluate)/frequency_reference(index_evaluate);
+        end
         %Query points for the interpolation
     
         channel_estimation_interpolated = fillmissing(channel_estimation,'nearest');
