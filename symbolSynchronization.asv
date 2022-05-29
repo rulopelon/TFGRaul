@@ -88,7 +88,7 @@ function [frame_synchronized,indexes_synchronization,modes]  = symbolSynchroniza
             correlations  = zeros(length(k_values),1);
             i_values_vector = 1:1:(NFFT/12)-1;
             for k= k_values
-                indexed_positions  = 3*k+12*i_values_vector+(NFFT-CARRIERS-1)/2;
+                indexed_positions  = 3*k+i_values_vector+(NFFT-CARRIERS-1)/2;
                 correlations(k+1) = sum(frame(indexed_positions).*conj(frame(indexed_positions)));
             end
             [value,mode] = max(correlations);
@@ -126,7 +126,7 @@ function [frame_synchronized,indexes_synchronization,modes]  = symbolSynchroniza
             % On the synchronization techniques for wireless OFDM systems
             shift = 0;
             for scatter_pilot = 1:1:length(scattered_pilots_vector)-1
-                shift = shift+angle(frame(scattered_pilots_vector(scatter_pilot+1)).*conj(frame(scattered_pilots_vector(scatter_pilot))));
+                shift = shift+angle(frame(scatter_pilot+1).*conj(frame(scatter_pilot)));
             end
             %shift = angle(sum(frame(scattered_pilots_vector).*conj(frame(scattered_pilots_vector))));
             % Calculating the index
