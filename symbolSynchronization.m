@@ -74,13 +74,15 @@ function [frame_synchronized,indexes_synchronization,modes]  = symbolSynchroniza
     for index_synchronization= indexes_synchronization
         if index_synchronization-NFFT-prefix_length+1<=length(data_input)-NFFT-prefix_length && index_synchronization-NFFT-prefix_length >0
             frame = data_input(index_synchronization-NFFT-prefix_length+1:index_synchronization,1);
-            frame = fftshift(fft(frame));
             %Frequency deviation estimation
             frequency_deviation = frequency_estimator(index_synchronization)/length(frame);
 
-            %Frequency deviation correction
+            % Coarse frequency deviation correction
             n =0:1:length(frame)-1;
-            %frame = frame.*exp(-1i*2*pi*frequency_deviation*n.');
+            frame = frame.*exp(-1i*2*pi*frequency_deviation*n.');
+            
+            % Transforming to the frequency domain
+            frame = fftshift(fft(frame));
 
             % Performing scattered pilot detection as in timing
             % synchronization for DVB-T Systems
@@ -121,7 +123,7 @@ function [frame_synchronized,indexes_synchronization,modes]  = symbolSynchroniza
             scattered_pilots_vector = scattered_pilots_vector+(NFFT-CARRIERS-1)/2;
 
             % Delete the values that exceed the last carrier index
-            scattered_pilots_vector = scattered_pilots_vector(1:find(scattered_pilots_vector>CARRIERS));
+            scattered_pilots_vector = scattered_pilots_vector(1:find(scattered_pilots_vector>CARRIERS+(NFFT-CARRIERS-1)/2));
 
             % On the synchronization techniques for wireless OFDM systems
             shift = 0;
@@ -130,7 +132,7 @@ function [frame_synchronized,indexes_synchronization,modes]  = symbolSynchroniza
             end
             %shift = angle(sum(frame(scattered_pilots_vector).*conj(frame(scattered_pilots_vector))));
             % Calculating the index
-            fine_index = round(index_synchronization+shift);
+            fine_index = round(index_synchronization);
             frame = data_input(fine_index-NFFT-prefix_length+1:fine_index,1);
             
             %Frequency deviation estimation

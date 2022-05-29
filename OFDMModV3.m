@@ -28,7 +28,8 @@ for iteration = 1:1:Nsym
     % The symbols are generated randomly
     % Symbols is the vector that will be transformed with the ifft   
     symbols = (randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2)+1i*(randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2);
-    %symbols = zeros(NFFT,1);
+
+ 
     % Deleting CARRIERS not used
     symbols(end-(NFFT-CARRIERS-1)/2 +1:end,:) = 0;
     symbols(1:(NFFT-CARRIERS-1)/2) =0;
@@ -41,10 +42,10 @@ for iteration = 1:1:Nsym
         symbols(i+(NFFT-CARRIERS-1)/2,1) = pilot_values(i+1);
     end
     % Introducing the scattered pilots
-    for i= 1:CARRIERS
-        if i == scattered_pilots_vector(pilot) && i+3*j<CARRIERS
+    for i= 1:1:CARRIERS
+        if i == scattered_pilots_vector(pilot) && i+3*j<(CARRIERS+((NFFT-CARRIERS-1)/2))
             symbols(i+3*j+(NFFT-CARRIERS-1)/2) = 4/3*2*(1/2-reference_sequence(i));
-            %symbols(i+3*j) = 4/3*2*(1/2-reference_sequence(i));
+            
             pilot = pilot+1;
         end
     end

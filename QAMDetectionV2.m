@@ -28,7 +28,7 @@ function [symbol_estimated] = QAMDetectionV2(data,mode)
     % Shifting the vector to match the DVB-T standard
     scattered_pilots_vector = scattered_pilots_vector+(NFFT-CARRIERS-1)/2;
     % Delete the values that exceed the last carrier index
-    scattered_pilots_vector = scattered_pilots_vector(1:find(scattered_pilots_vector>CARRIERS));
+    scattered_pilots_vector = scattered_pilots_vector(1:find(scattered_pilots_vector>CARRIERS+(NFFT-CARRIERS-1)/2));
 
     values = 0:1:sqrt(nAM)-1;
     values = values-(sqrt(nAM)-1)/2;
@@ -38,7 +38,7 @@ function [symbol_estimated] = QAMDetectionV2(data,mode)
 
     for index = 1:1:length(data)
         % Check that it is not a pilot (continual or scattered)
-        if ismember(index,indexes)==0 && index>=(NFFT-CARRIERS-1)/2 &&index<(NFFT-CARRIERS)/2+CARRIERS+1 && ismember(index,scattered_pilots_vector)==0
+        if ismember(index,indexes)==0 && index>=(NFFT-CARRIERS-1)/2 &&index<(NFFT-CARRIERS)/2+CARRIERS && ismember(index,scattered_pilots_vector)==0
             % Real and complex parts are compared
             value = data(index);
             real_part = real(data(index));

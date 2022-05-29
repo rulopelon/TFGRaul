@@ -34,7 +34,12 @@ function [correlation_matrix,doppler_axis] = BatchProcessing(reference_batches,s
     % Deleting the negative delays correlation, as the signal will only be present
     % with positive delays
     %correlation_matrix = correlation_matrix(1:length(cross_correlation_ifft)/2,:);
-   
+    
+    %Deleting random peaks at delay 0
+    correlation_matrix(1:4,:) = 0;
+    %Deleting random peaks at the last index
+    correlation_matrix(end-4:end,1) = 0;
+
     %Calculating the axis for the frequency shift representation
     Fs_analysis = Fs_used/BATCH_SIZE;
     doppler_axis = linspace(-0.5*Fs_analysis,0.5*Fs_analysis,512);
