@@ -85,9 +85,10 @@ function  Reciever(data)
         end
         %Query points for the interpolation
     
-        channel_estimation_interpolated = fillmissing(channel_estimation,'nearest');
+        channel_estimation_interpolated = fillmissing(channel_estimation,'linear');
         channel_estimation_interpolated(end+1-(NFFT-CARRIERS-1)/2:end) = 0;
         channel_estimation_interpolated(1:(NFFT-CARRIERS-1)/2-1) =0;
+        
         % Calculating the correction
         frequency_correction = 1./channel_estimation_interpolated;
         %Substituting inf values with zeros
@@ -102,7 +103,7 @@ function  Reciever(data)
         
         
         %Processing to get two signals
-        symbol_QAM_corrected =QAMDetectionV2(symbol_frequency_corrected,modes(i));
+        symbol_QAM_corrected =QAMDetectionV2(symbol_frequency_corrected,scattered_pilots_vector);
         
         %Deleting clutter
         signal_substracted = symbol_equalize_fft -channel_estimation_interpolated(:,1).*symbol_QAM_corrected(:,1);
@@ -123,9 +124,9 @@ function  Reciever(data)
     %Adding reference and surveillance signal 
     
     % Calculation of the range and doppler of the signal is performed
-    
     [caf_matrix,doppler_axis] = BatchProcessing(reference_signal,surveillance_signal);
 
+ 
     %Calculating the maximum
     [doppler_columns,time_indexes] = max(caf_matrix);
     [~,doppler_index]= max(doppler_columns);
@@ -137,6 +138,7 @@ function  Reciever(data)
     
     %Showing the ellipse of the posible positions of the plane
     %Calculating the distance of each step
+    base_line = 0;
     step_distance = (1/Fs_used)*PROPAGATION_VELOCITY;
     bistatic_range  = bistatic_range*step_distance;
     base_line = base_line *step_distance;
@@ -182,5 +184,3 @@ function  Reciever(data)
 
 
 end
-
-

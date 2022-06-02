@@ -81,9 +81,6 @@ function [frame_synchronized,indexes_synchronization,modes]  = symbolSynchroniza
         if index_synchronization-NFFT-prefix_length+1<=length(data_input)-NFFT-prefix_length && index_synchronization-NFFT-prefix_length >0
             frame = data_input(index_synchronization-NFFT:index_synchronization-1,1);
             
-            %Frequency deviation estimation
-            frequency_deviation = frequency_estimator(index_synchronization/length(NFFT));
-
             % Coarse frequency deviation correction
             n =0:1:length(frame)-1;
             frame = frame.*exp(-1i*2*pi*frequency_deviation*n.');

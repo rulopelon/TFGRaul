@@ -17,7 +17,7 @@ EMITTER_POSITION = [-5,0,0]; % The origin of coordinates is the emitter
 RECIEVER_POSITION = [5,0,0]; % Defining reciever coordinates
 
 %Targets for simulation
-TARGET1_POSITION = [5,5,10];
+TARGET1_POSITION = [5,5,5];
 %TARGET1_POSITION = [1,1,5];
 TARGET1_VELOCITY = [0,300,0];   %The reference point is the emitter
 

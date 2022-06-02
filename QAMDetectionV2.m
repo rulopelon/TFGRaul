@@ -1,4 +1,4 @@
-function [symbol_estimated] = QAMDetectionV2(data,mode)
+function [symbol_estimated] = QAMDetectionV2(data,scattered_pilots_vector)
     load("variables.mat","nAM","NFFT","CARRIERS")
    
     %The minimum distance algorithm is going to be used
@@ -7,31 +7,12 @@ function [symbol_estimated] = QAMDetectionV2(data,mode)
     % The algorithm must ifnore the values at the continual piltos
     % positions and the scattered pilots positions
     
-    % Scattered pilots vector
-    scattered_pilots_vector =(0 + 3*rem(1,4) + 12*(0:CARRIERS));
-    % Depending on the mode, the scattered pilots are on different
-    % positions
-    switch mode
-        case 1
-            %Do nothing
-        case 2
-            % Add 3 to the scattered pilots vector
-            scattered_pilots_vector =scattered_pilots_vector+3;
-        case 3
-            % Add 6 to the scattered pilots vector
-            scattered_pilots_vector =scattered_pilots_vector+6;
-        case 4
-            % Add 9 to the scattered pilots vector
-            scattered_pilots_vector =scattered_pilots_vector+9;
-    end
-    
-    % Shifting the vector to match the DVB-T standard
-    scattered_pilots_vector = scattered_pilots_vector+(NFFT-CARRIERS-1)/2;
-    % Delete the values that exceed the last carrier index
-    scattered_pilots_vector = scattered_pilots_vector(1:find(scattered_pilots_vector>CARRIERS+(NFFT-CARRIERS-1)/2));
 
     values = 0:1:sqrt(nAM)-1;
     values = values-(sqrt(nAM)-1)/2;
+    values = values*2;
+    values = values./sqrt(42);
+     
     % Getting the pilot indexes
     [indexes, ~]=getContinuousPilots();
     indexes= indexes+(NFFT-CARRIERS-1)/2;

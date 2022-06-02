@@ -73,7 +73,7 @@ while i< NUMBER_ITERATIONS
     Ofdm_signal = sqrt(coeficient).*Ofdm_signal;
 
     % Calculating the coeficient to get the desired power transmited
-    %One time step is sended
+    % One time step is sended
     signal_emitter = [signal_emitter;Ofdm_signal];  
     signal_emitter_sended = signal_emitter(1:int64(Samples_iteration_simulation));
     
@@ -163,6 +163,7 @@ while i< NUMBER_ITERATIONS
     
     % Calculus of the losses
     power_recieved_desired = (POWER_TRANSMITED*RADAR_CROSS_SECTION*GAIN_EMITTER*100*LAMBDA^2)/((4*pi)^3*(distance_emitter_target*1000)^2*(distance_target_reciever*1000)^2);    
+    %power_recieved_desired = 3e-10;
     % Calculus of the power recieved
     real_power_recieved = (1/length(signal_target_reciever_delayed))*sum(abs(signal_target_reciever_delayed).^2);
     coeficient = power_recieved_desired/real_power_recieved;
@@ -173,7 +174,7 @@ while i< NUMBER_ITERATIONS
   
     
     % Noise is added
-    signal_target_reciever_delayed = awgn(signal_target_reciever_delayed,SNR,'measured');
+    %signal_target_reciever_delayed = awgn(signal_target_reciever_delayed,SNR,'measured');
 
     % Deleting the used samples
     signal_sended_target= signal_sended_target(int64(Samples_iteration_simulation):end);
@@ -184,7 +185,7 @@ while i< NUMBER_ITERATIONS
     
     %Signal is sended to the reciever
     Reciever(signal_analyze);
-    %testBatchAtenuation(signal_emitter_reciever_delayed(1:int64(Samples_iteration_simulation)),signal_target_reciever_delayed(1:int64(Samples_iteration_simulation)))
+    testBatchAtenuation(signal_emitter_reciever_delayed(1:int64(Samples_iteration_simulation)),signal_target_reciever_delayed(1:int64(Samples_iteration_simulation)))
     %Adding the plane to the environment
     plotElement(tp,TARGET1_POSITION,TARGET1_VELOCITY,'Avion')
     

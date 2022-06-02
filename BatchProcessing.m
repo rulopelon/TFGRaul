@@ -51,7 +51,7 @@ function [correlation_matrix,doppler_axis] = BatchProcessing(reference_batches,s
         range_axis= 1:1:BATCH_SIZE;
         [X,Y] = meshgrid(range_axis,doppler_axis);
         f = figure;
-        surf(X,Y,20*log10(abs(correlation_matrix.')),'EdgeColor','none')
+        surf(X,Y,(abs(correlation_matrix.')),'EdgeColor','none')
         xlabel('Delay')
         ylabel('Doppler')
         zlabel('Correlation')
