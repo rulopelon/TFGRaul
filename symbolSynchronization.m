@@ -77,7 +77,7 @@ function [frame_synchronized,indexes_synchronization,modes]  = symbolSynchroniza
     
     %Iterating all the symbols
     
-    for index_synchronization= artificial_indexes
+    for index_synchronization= indexes_synchronization
         if index_synchronization-NFFT-prefix_length+1<=length(data_input)-NFFT-prefix_length && index_synchronization-NFFT-prefix_length >0
             frame = data_input(index_synchronization-NFFT:index_synchronization-1,1);
             
@@ -104,8 +104,13 @@ function [frame_synchronized,indexes_synchronization,modes]  = symbolSynchroniza
             [value,mode] = max(correlations);
             
             % Saving the mode
+            mode = mode-1;
+            if mode == 0
+                mode = 4;
+            end
             modes(i) = j;
             mode = j;
+            
             % Knowing the mode of the scattered pilots, fine symbol
             % correction can be performed
 
