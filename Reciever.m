@@ -143,44 +143,46 @@ function  Reciever(data)
     bistatic_range  = bistatic_range*step_distance;
     base_line = base_line *step_distance;
     
-    if base_line < bistatic_range
-        %Calculating ellipse parameters
-        a = bistatic_range/2;
-        b = sqrt((bistatic_range/2)^2-(base_line/2)^2);
-        x1  =0;
-        y1 = 0;
-        x2 = x1+base_line;
-        y2 = 0;
-        
-        t = linspace(0,2*pi);
-        X = a*cos(t);
-        Y = b*sin(t);
-        w = atan2(y2-y1,x2-x1);
-        x = (x1+x2)/2 + X*cos(w) - Y*sin(w);
-        y = (y1+y2)/2 + X*sin(w) + Y*cos(w);
-        
-        %Plotting the results
-        figure
-        plot(x,y)
-        hold on
-        plot(x1,y1,'o')
-        plot(x2,y2,'o')
-        axis equal
-        title("2D Biestatic estimation")
-        
-        %Plotting on 3d
-        [x,y,z] = ellipsoid(base_line/2,0,0,a,b,a);
-        z(1:int64(floor(length(z)))/2,:) = 0;
-        figure
-        surf(x,y,z,'FaceAlpha',0.5)
-        hold on
-        plot3(x1,y1,0,'ko','MarkerSize',3,'MarkerFaceColor','yellow','MarkerEdgeColor','yellow')
-        plot3(x2,y2,0,'ko','MarkerSize',3,'MarkerFaceColor','yellow','MarkerEdgeColor','yellow')
-        title("3D Biestatic estimation")
-    else
-        disp("There is an error on the estimation")
-         input("Waiting your input")
-    end
+    plotResults(caf_matrix)
+    
+%     if base_line < bistatic_range
+%         %Calculating ellipse parameters
+%         a = bistatic_range/2;
+%         b = sqrt((bistatic_range/2)^2-(base_line/2)^2);
+%         x1  =0;
+%         y1 = 0;
+%         x2 = x1+base_line;
+%         y2 = 0;
+%         
+%         t = linspace(0,2*pi);
+%         X = a*cos(t);
+%         Y = b*sin(t);
+%         w = atan2(y2-y1,x2-x1);
+%         x = (x1+x2)/2 + X*cos(w) - Y*sin(w);
+%         y = (y1+y2)/2 + X*sin(w) + Y*cos(w);
+%         
+%         %Plotting the results
+%         figure
+%         plot(x,y)
+%         hold on
+%         plot(x1,y1,'o')
+%         plot(x2,y2,'o')
+%         axis equal
+%         title("2D Biestatic estimation")
+%         
+%         %Plotting on 3d
+%         [x,y,z] = ellipsoid(base_line/2,0,0,a,b,a);
+%         z(1:int64(floor(length(z)))/2,:) = 0;
+%         figure
+%         surf(x,y,z,'FaceAlpha',0.5)
+%         hold on
+%         plot3(x1,y1,0,'ko','MarkerSize',3,'MarkerFaceColor','yellow','MarkerEdgeColor','yellow')
+%         plot3(x2,y2,0,'ko','MarkerSize',3,'MarkerFaceColor','yellow','MarkerEdgeColor','yellow')
+%         title("3D Biestatic estimation")
+%     else
+%         disp("There is an error on the estimation")
+%          input("Waiting your input")
+%     end
 
 
 end

@@ -161,7 +161,7 @@ while i< NUMBER_ITERATIONS
     signal_target_reciever_delayed = conv(channel_coeficients_reciever,signal_sended_target);
     
     % Calculus of the losses
-    power_recieved_desired = (POWER_TRANSMITED*RADAR_CROSS_SECTION*GAIN_EMITTER*GAIN_RECIEVER*LAMBDA^2)/((4*pi)^3*(distance_emitter_target*1000)^2*(distance_target_reciever*1000)^2);    
+    power_recieved_desired = (POWER_TRANSMITED*RADAR_CROSS_SECTION*GAIN_EMITTER*100*LAMBDA^2)/((4*pi)^3*(distance_emitter_target*1000)^2*(distance_target_reciever*1000)^2);    
     % Calculus of the power recieved
     real_power_recieved = (1/length(signal_target_reciever_delayed))*sum(abs(signal_target_reciever_delayed).^2);
     coeficient = power_recieved_desired/real_power_recieved;

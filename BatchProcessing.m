@@ -4,8 +4,8 @@ function [correlation_matrix,doppler_axis] = BatchProcessing(reference_batches,s
     % shift within a block of the signal is negligible. Becasuse of that the cross anmibguity function can
     % be calculated with the cross correlation of both signals and the fourier
     % transform of the result.
-    load("variables.mat","PLOT","BATCH_SIZE","Fs_used")
-    PLOT = true;
+    load("variables.mat","BATCH_SIZE","Fs_used")
+  
     % The signal is adapted to have the desired length
     surveillance_batches = surveillance_batches(1:floor(length(surveillance_batches)/BATCH_SIZE)*BATCH_SIZE);
     reference_batches = reference_batches(1:floor(length(reference_batches)/BATCH_SIZE)*BATCH_SIZE);
@@ -45,21 +45,6 @@ function [correlation_matrix,doppler_axis] = BatchProcessing(reference_batches,s
     doppler_axis = linspace(-0.5*Fs_analysis,0.5*Fs_analysis,512);
 
     
-    if PLOT
-        Fs_analysis = Fs_used/BATCH_SIZE;
-        doppler_axis = linspace(-0.5*Fs_analysis,0.5*Fs_analysis,512);
-        range_axis= 1:1:BATCH_SIZE;
-        [X,Y] = meshgrid(range_axis,doppler_axis);
-        f = figure;
-        surf(X,Y,(abs(correlation_matrix.')),'EdgeColor','none')
-        xlabel('Delay')
-        ylabel('Doppler')
-        zlabel('Correlation')
-        ax = gca;
-        ax.Color = 'white';
-        title("CAF representation")
-%         nombre = input("Introduzca el nombre de la figura");
-%         guardaFiguraPaper(nombre,f,ax,'-djpeg',0)
-    end
+   
 end
 
