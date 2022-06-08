@@ -13,11 +13,11 @@ NUMBER_ITERATIONS = 100;   % Initial aproach AJUST VALUE
 TIME_STEP = 250e-3; %Units in seconds 250ms
 
 %UNITS ARE IN KM the origin is at [0,0,0]
-EMITTER_POSITION = [-5,0,0]; % The origin of coordinates is the emitter 
-RECIEVER_POSITION = [5,0,0]; % Defining reciever coordinates
+EMITTER_POSITION = [0,0,0]; % The origin of coordinates is the emitter 
+RECIEVER_POSITION = [10,0,0]; % Defining reciever coordinates
 
 %Targets for simulation
-TARGET1_POSITION = [5,5,5];
+TARGET1_POSITION = [3,5,5];
 %TARGET1_POSITION = [1,1,5];
 TARGET1_VELOCITY = [280,0,0];   %The reference point is the emitter
 
