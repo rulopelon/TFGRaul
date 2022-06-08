@@ -123,16 +123,27 @@ while i< NUMBER_ITERATIONS
         
         signal_bounced = signal_emitter_target_delayed(1:int64(bounced_samples));
         %The signal bounces of the plane
-        % Calculating the doppler shift with the projected velocity on the bistatic vector    
+
+        % Calculating the doppler shift with the projected velocity on the
+        % bistatic plane
         velocity_vector = [TARGET1_VELOCITY(1),TARGET1_VELOCITY(2)];
-        % The angle beetwen both vectors
-        alfa = acos(dot(velocity_vector,[1,0])/(norm(velocity_vector)*norm([1,0])));
-        % Checking the sign of the velocity
-        projected_velocity = cos(alfa)*norm(velocity_vector);
-         if TARGET1_POSITION(1)> RECIEVER_POSITION(1)
-            projected_velocity = -1*projected_velocity;
-        end
-        doppler_shift = (Fc*(1-PROPAGATION_VELOCITY/(PROPAGATION_VELOCITY-projected_velocity)));
+        velocity = sqrt(sum(velocity_vector.^2));
+
+        % Calculating beta
+        target_emitter_vector = [EMITTER_POSITION(1)-TARGET1_POSITION(1),EMITTER_POSITION(2)-TARGET1_POSITION(2)];
+        target_reciever_vector = [RECIEVER_POSITION(1)-TARGET1_POSITION(1),RECIEVER_POSITION(2)-TARGET1_POSITION(2)];
+        % The angle between the vectors previously declared
+        beta = acos(dot(target_emitter_vector,target_reciever_vector)/(norm(target_emitter_vector)*norm(target_reciever_vector)));
+        % Calculating alpha, the angle between the velocity vector and the
+        % beta/2 vector from the target
+        
+        % Angle between the velocity vector and the emitter_target vector
+        alpha = min(acos(dot(velocity_vector,target_reciever_vector)/(norm(velocity_vector)*norm(target_reciever_vector))),acos(dot(target_emitter_vector,velocity_vector)/(norm(target_emitter_vector)*norm(velocity_vector))));
+        alpha = alpha+beta/2;
+        
+         % Calculating the doppler shift
+        doppler_shift = (2*velocity/LAMBDA)*cos(beta/2)*cos(alpha);
+        
         %The doppler shift is applied to the signal
         signal_vector = 0:1:bounced_samples-1;
         doppler_shift = doppler_shift/Fs;
