@@ -2,23 +2,20 @@ clear
 
 %% Parameters and variables used on the reciever
 
-signal_buffer = [];
-reference_buffer = [];
-surveillance_buffer = [];
 threshold = 0.15; 
 %% Parameters used for the simulation environment
 
 NUMBER_ITERATIONS = 100;   % Initial aproach AJUST VALUE
 %The time step is the integration time of the reciever
-TIME_STEP = 250e-3; %Units in seconds 250ms
+TIME_SIMULATION = 250e-3; %Units in seconds 250ms
 
-%UNITS ARE IN KM the origin is at [0,0,0]
+%UNITS ARE IN M the origin is at [0,0,0]
 EMITTER_POSITION = [0,0,0]; % The origin of coordinates is the emitter 
-RECIEVER_POSITION = [10,0,0]; % Defining reciever coordinates
+RECIEVER_POSITION = [10000,0,0]; % Defining reciever coordinates
 
 %Targets for simulation
-TARGET1_POSITION = [3,5,5];
-%TARGET1_POSITION = [1,1,5];
+TARGET1_POSITION = [3000,5000,5000];
+%TARGET1_POSITION = [10000,10000,5000];
 TARGET1_VELOCITY = [280,0,0];   %The reference point is the emitter
 
 PROPAGATION_VELOCITY = 3e8;
@@ -33,7 +30,7 @@ PREFIX = 1/8;
 prefix_length = PREFIX*NFFT;
 Fc = 306e6;
 CARRIERS = 6817;
-Fs_used = 9.14e6;
+Fs_used = (64/7)*1e6;
 L = 64;     
 M = 70;  
 % Symbol length whitout performing the samples frequency change
@@ -76,7 +73,7 @@ Vmax = 300;
 T_batch = 1/(2*Vmax);
 
 % Number of batches that are "moved" on each iteration
-Number_batches = ceil(TIME_STEP/T_batch);
+Number_batches = ceil(TIME_SIMULATION/T_batch);
 %Aproximating the Batch size to a power of two value
 BATCH_SIZE = 2^ceil(log2(T_batch*Fs_used));
 BATCH_SIZE_SIMULATION = BATCH_SIZE*M/L;
@@ -84,7 +81,10 @@ BATCH_SIZE_SIMULATION = BATCH_SIZE*M/L;
 % Muliplied by M and divided by L to get the number of samples at 10 Mhz
 Samples_iteration_simulation = Number_batches*BATCH_SIZE_SIMULATION;
 Samples_iteration = int64(Number_batches*BATCH_SIZE);
-%BATCH_SIZE = int64(BATCH_SIZE);
+
+%Samples for each step inside of the iteration
+Samples_step = 30;
+
 % Number of OFDM symbols produced on each iteration
 Nsym = ceil(Samples_iteration/symbol_length);
 Nsym_simulation = ceil(Samples_iteration_simulation/symbol_length_emitter);
@@ -92,8 +92,8 @@ Nsym_simulation = ceil(Samples_iteration_simulation/symbol_length_emitter);
 %% Parameters for the wave propagation
 
 SNR  = 20; % Value in db
-GAIN_EMITTER_DB = 10;
-GAIN_RECIEVER_DB = 10;
+GAIN_EMITTER_DB = 40;
+GAIN_RECIEVER_DB = 20;
 GAIN_EMITTER = 10^(GAIN_EMITTER_DB/10); %In natural units
 GAIN_RECIEVER = 10^(GAIN_RECIEVER_DB/10); %In natural units
 LAMBDA = PROPAGATION_VELOCITY/Fc;
