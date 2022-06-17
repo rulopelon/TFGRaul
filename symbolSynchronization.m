@@ -47,7 +47,7 @@ function [frame_synchronized,indexes_synchronization,modes]  = symbolSynchroniza
     frequency_estimator =-(1/(2*pi)).*angle(estimator);
     %% Symbol splitting
     initial_index = indexes_synchronization(1);
-    %initial_index = 9521;   
+    initial_index = 9521;
     disp(initial_index)
     N_symbols = ceil(length(data_input)/symbol_length);
     
@@ -56,13 +56,15 @@ function [frame_synchronized,indexes_synchronization,modes]  = symbolSynchroniza
         artificial_indexes(i+1) =(NFFT+prefix_length)*i+initial_index;
         
     end
+    diferences = zeros(N_symbols,1);
     %Reference signal for equalization
     frequency_reference = zeros(NFFT,1);
     [indexes_equalization, pilot_values]=getContinuousPilots();
+
     
-%     for i = indexes_equalization
-%         frequency_reference(i+(NFFT-CARRIERS-1)/2,1) = pilot_values(i+1);
-%     end
+    for i = indexes_equalization
+        frequency_reference(i+(NFFT-CARRIERS-1)/2,1) = pilot_values(i+1);
+    end
 
     % Number of symbols recieved
     frame_synchronized = zeros(NFFT,N_symbols);
@@ -76,20 +78,21 @@ function [frame_synchronized,indexes_synchronization,modes]  = symbolSynchroniza
     reference_sequence = getReferenceSequence();
     
     %Iterating all the symbols
-    
+    indexes_equalization = indexes_equalization+((NFFT-CARRIERS-1)/2);
+
     for index_synchronization= indexes_synchronization
         if index_synchronization-NFFT-prefix_length+1<=length(data_input)-NFFT-prefix_length && index_synchronization-NFFT-prefix_length >0
-            frame = data_input(index_synchronization-NFFT:index_synchronization-1,1);
+            frame = data_input(index_synchronization-NFFT+1:index_synchronization,1);
             
             %Frequency deviation estimation
             frequency_deviation = frequency_estimator(index_synchronization/length(NFFT));
 
             % Coarse frequency deviation correction
             n =0:1:length(frame)-1;
-            frame = frame.*exp(-1i*2*pi*frequency_deviation*n.');
+            %frame = frame.*exp(-1i*2*pi*frequency_deviation*n.');
             
             % Transforming to the frequency domain
-            frame = fftshift(fft(frame));
+            frame = fftshift(fft(frame,NFFT));
 
             % Performing scattered pilot detection as in timing
             % synchronization for DVB-T Systems
@@ -142,38 +145,61 @@ function [frame_synchronized,indexes_synchronization,modes]  = symbolSynchroniza
             % Fine symbol synchronization based on the channel response
             channel_estimation = nan(NFFT,1);
 
-            %Signal for equalization
-            frequency_reference = zeros(NFFT,1);
+%             %Signal for equalization
+%             frequency_reference = zeros(NFFT,1);
+% 
+%             pilot = 1;
+%             for carrier= 1:1:CARRIERS+(NFFT-CARRIERS-1)/2
+%                 if carrier == scattered_pilots_vector(pilot) 
+%                     frequency_reference(carrier) = 4/3*2*(1/2-reference_sequence(carrier-(NFFT-CARRIERS-1)/2));
+%                     pilot = pilot+1;
+%                 end
+%             end
+          % Deleting CARRIERS not used
+            frequency_reference(end-(NFFT-CARRIERS-1)/2 +1:end,:) = 0;
+            frequency_reference(1:(NFFT-CARRIERS-1)/2) =0;
 
-            pilot = 1;
-            for carrier= 1:1:CARRIERS+(NFFT-CARRIERS-1)/2
-                if carrier == scattered_pilots_vector(pilot) 
-                    frequency_reference(carrier) = 4/3*2*(1/2-reference_sequence(carrier-(NFFT-CARRIERS-1)/2));
-                    pilot = pilot+1;
-                end
-            end
-            
-            for scatter_pilot = 1:1:length(scattered_pilots_vector)-1
-                index_evaluate = scattered_pilots_vector(scatter_pilot);
-                channel_estimation(index_evaluate) = frame(index_evaluate)/frequency_reference(index_evaluate);
-            end
+%             for index = indexes_equalization
+%                 index_evaluate = index+((NFFT-CARRIERS-1)/2);
+%                 channel_estimation(index_evaluate) =frame(index_evaluate)/frequency_reference(index_evaluate);
+%             end
+            channel_estimation(indexes_equalization)=frame(indexes_equalization)./frequency_reference(indexes_equalization);
+
+   
+
+%             for scatter_pilot = 1:1:length(scattered_pilots_vector)-1
+%                 index_evaluate = scattered_pilots_vector(scatter_pilot);
+%                 channel_estimation(index_evaluate) = frame(index_evaluate)/frequency_reference(index_evaluate);
+%             end
 
             %Query points for the interpolation
-            channel_estimation_interpolated = fillmissing(channel_estimation,'linear');
+            channel_estimation_interpolated = interp1(indexes_equalization,channel_estimation(indexes_equalization,:),1:NFFT,'linear','extrap');
+            %channel_estimation_interpolated = fillmissing(channel_estimation,'linear');
             channel_estimation_interpolated(end+1-(NFFT-CARRIERS-1)/2:end) = 0;
             channel_estimation_interpolated(1:(NFFT-CARRIERS-1)/2-1) =0;
+  
+            %Substituting inf values with zeros
+            inf_indexes = find(isinf(channel_estimation_interpolated));
+            channel_estimation_interpolated(inf_indexes) = 0;
+
+            impulse_response= ifft(ifftshift(channel_estimation_interpolated));
+            %b = fft(a);
             
-            shift = mean(-1*diff(unwrap(angle(channel_estimation_interpolated)))*NFFT/(2*pi)); 
-            %shift= 0;
+            %shift = mean(-1*diff(unwrap(angle(b(1:round(NFFT))))*NFFT/(2*pi))); 
+            [~,shift] = max(abs(impulse_response));
+            if shift>=NFFT/2
+                shift = shift-NFFT;
+            end
+            %shift =0;
             % Calculating the index
             fine_index = round(index_synchronization+shift);
-            %artificial_indexes = round(artificial_indexes+shift);
-            final_frame = data_input(fine_index-NFFT:fine_index-1,1);
+            diferences(i) = artificial_indexes(i)-fine_index;
+            final_frame = data_input(fine_index-NFFT+1:fine_index,1);
             %Frequency deviation estimation
-            final_frequency_deviation = frequency_estimator(fine_index)/length(frame);
+            final_frequency_deviation = frequency_estimator(fine_index)/length(final_frame);
             %Frequency deviation correction
             n =0:1:length(final_frame)-1;
-            final_frame = final_frame.*exp(-1i*2*pi*final_frequency_deviation*n.');
+            %final_frame = final_frame.*exp(-1i*2*pi*final_frequency_deviation*n.');
             
             % Adding the synchronized frame to the output
             frame_synchronized(:,i) = final_frame;

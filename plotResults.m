@@ -6,19 +6,20 @@ function plotResults(correlation_matrix)
     range_axis= 1:1:BATCH_SIZE;
     [X,Y] = meshgrid(range_axis,doppler_axis);
     f = figure;
-    representation = surf(X,Y,20*log10((abs(correlation_matrix.'))),'EdgeColor','none')
+    surf(X,Y,20*log10((abs(correlation_matrix.'))),'EdgeColor','none')
     xlabel('Delay')
     ylabel('Doppler')
     zlabel('Correlation')
     ax = gca;
     ax.Color = 'white';
-    colormap hsv
+    colormap jet
     title("CAF representation")
     
-    %image(representation.CData,'CDataMapping','scaled')
-    a = 2
-%         nombre = input("Introduzca el nombre de la figura");
-%         guardaFiguraPaper(nombre,f,ax,'-djpeg',0)
+%     figure
+%     image(representation.CData,'CDataMapping','scaled')
+    a = 2;
+    nombre = input("Introduzca el nombre de la figura");
+    guardaFiguraPaper(nombre,f,ax,'-djpeg',0)
 
 
 

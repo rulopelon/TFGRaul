@@ -26,17 +26,16 @@ function [ofdm_exit,ofdm_exit_2]=OFDMModV3(Nsym)
     for iteration = 1:1:Nsym
         % The symbols are generated randomly
         % Symbols is the vector that will be transformed with the ifft   
-        symbols = 2*(randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2)+2i*(randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2);
+        symbols = (randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2)+1i*(randi(sqrt(nAM),NFFT,1)-1-(sqrt(nAM)-1)/2);
         %symbols = zeros(NFFT,1);
         % Value defined by the standard alpha = 1
-        symbols = symbols./sqrt(42);
+        %symbols = symbols./sqrt(42);
      
         % Deleting CARRIERS not used
         symbols(end-(NFFT-CARRIERS-1)/2 +1:end,:) = 0;
         symbols(1:(NFFT-CARRIERS-1)/2) =0;
     
-        % Variable for the scattered pilots
-        pilot  = 1;
+   
         
         %Introducing continuous pilots
         for i = indexes
@@ -65,7 +64,8 @@ function [ofdm_exit,ofdm_exit_2]=OFDMModV3(Nsym)
         % Delete the values that exceed the last carrier index
         scattered_pilots_vector = scattered_pilots_vector(1:find(scattered_pilots_vector>CARRIERS+(NFFT-CARRIERS-1)/2));
         
-       
+        % Variable for the scattered pilots
+        pilot  = 1;
         for carrier= 1:1:CARRIERS+(NFFT-CARRIERS-1)/2
             if carrier == scattered_pilots_vector(pilot) 
                 symbols(carrier) = 4/3*2*(1/2-reference_sequence(carrier-(NFFT-CARRIERS-1)/2));

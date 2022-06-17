@@ -21,12 +21,7 @@ function testBatchAtenuation(direct_path,surveillance_path)
 
 
     [caf_matrix,doppler_axis] = BatchProcessing(direct_path_processed,surveillance_path_processed);
-    [doppler_columns,time_indexes] = max(caf_matrix);
-    [~,doppler_index]= max(doppler_columns);
-        
-    bistatic_range = time_indexes(doppler_index);
-    disp(bistatic_range)
-    doppler_frequency = doppler_axis(doppler_index);
+    plotResults(caf_matrix)
 
 end
 

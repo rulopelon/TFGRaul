@@ -1,14 +1,15 @@
 function [symbol_estimated] = QAMDetection(data)
     load("variables.mat","nAM","NFFT","CARRIERS")
    
-    %The minimum distance algorithm is going to be used
-    % Based on the type of Qam modulation, the branches for the detection
-    % are created
     values = 0:1:sqrt(nAM)-1;
     values = values-(sqrt(nAM)-1)/2;
+    %values = values*2;
+    %values = values./sqrt(42);
+     
     % Getting the pilot indexes
     [indexes, ~]=getContinuousPilots();
     indexes= indexes+(NFFT-CARRIERS-1)/2;
+
     for index = 1:1:length(data)
         % Check that it is not a pilot
         if ismember(index,indexes)==0 && index>=(NFFT-CARRIERS-1)/2 &&index<(NFFT-CARRIERS)/2+CARRIERS+1

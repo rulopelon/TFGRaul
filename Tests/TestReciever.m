@@ -2,7 +2,7 @@
 % Inizialization
 clear,clc,close all force;
 load("variables.mat","PROPAGATION_VELOCITY","Fs","Nsym")
-[signal,~] = OFDMModV3(Nsym);
+[signal,~] = OFDMModV3(4);
 
 %signal = signal.';
 % The surveillance signal is retarded
@@ -24,6 +24,6 @@ signal_surveillance = signal_surveillance.*(2e-15);
 direct_signal = conv(coeficients_retard,signal);
 %direct_signal = signal;
 % Adding two signals
-signal_surveillance = signal_surveillance(1:length(signal))+direct_signal(1:length(signal));
+signal_surveillance = signal_surveillance(1:length(signal))%;+direct_signal(1:length(signal));
 % Synchronization
 Reciever(signal_surveillance.');
