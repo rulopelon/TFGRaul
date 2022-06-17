@@ -10,8 +10,8 @@ function [symbol_estimated] = QAMDetectionV2(data,scattered_pilots_vector)
 
     values = 0:1:sqrt(nAM)-1;
     values = values-(sqrt(nAM)-1)/2;
-    values = values*2;
-    values = values./sqrt(42);
+    %values = values*2;
+    %values = values./sqrt(42);
      
     % Getting the pilot indexes
     [indexes, ~]=getContinuousPilots();
