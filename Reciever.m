@@ -30,24 +30,23 @@ function  Reciever(data)
     %Signal for equalization
     frequency_reference = zeros(NFFT,1);
     [indexes, pilot_values]=getContinuousPilots();
-    
+
 %     for i = indexes
 %         frequency_reference(i+(NFFT-CARRIERS-1)/2,1) = pilot_values(i+1);
 %     end
     
+
     %Reference sequence for the scatter pilot equalization
     reference_sequence = getReferenceSequence();
+    indexes_equalization = indexes+((NFFT-CARRIERS-1)/2);
 
     for i = 1:1:symbols
         symbol_equalize = frame_synchronized(:,i);
         symbol_equalize_fft = fftshift(fft(symbol_equalize));
-        channel_estimation = nan(NFFT,1);
+        channel_estimation = zeros(NFFT,1);
     
-%         for index = indexes
-%             index_evaluate = index+((NFFT-CARRIERS-1)/2);
-%             channel_estimation(index_evaluate) =symbol_equalize_fft(index_evaluate)/frequency_reference(index_evaluate);
-%         end
-        % Scattered pilots vector
+
+%         % Scattered pilots vector
         scattered_pilots_vector =(0 + 3*rem(1,4) + 12*(0:CARRIERS));
         % Depending on the mode, the scattered pilots are on different
         % positions
@@ -72,6 +71,7 @@ function  Reciever(data)
         scattered_pilots_vector = scattered_pilots_vector(1:find(scattered_pilots_vector>CARRIERS+(NFFT-CARRIERS-1)/2));
         
         pilot = 1;
+        frequency_reference = zeros(NFFT,1);
         for carrier= 1:1:CARRIERS+(NFFT-CARRIERS-1)/2
             if carrier == scattered_pilots_vector(pilot) 
                 frequency_reference(carrier) = 4/3*2*(1/2-reference_sequence(carrier-(NFFT-CARRIERS-1)/2));
@@ -83,31 +83,49 @@ function  Reciever(data)
             index_evaluate = scattered_pilots_vector(scatter_pilot);
             channel_estimation(index_evaluate) = symbol_equalize_fft(index_evaluate)/frequency_reference(index_evaluate);
         end
+        
+        %channel_estimation(indexes_equalization)=symbol_equalize_fft(indexes_equalization)./frequency_reference(indexes_equalization);
+        channel_estimation_interpolated = interp1(scattered_pilots_vector(1:end-1),channel_estimation(scattered_pilots_vector(1:end-1),:),1:NFFT,'linear','extrap');
+        channel_estimation_interpolated = channel_estimation_interpolated.';
         %Query points for the interpolation
     
-        channel_estimation_interpolated = fillmissing(channel_estimation,'linear');
+        %channel_estimation_interpolated = fillmissing(channel_estimation,'linear');
         channel_estimation_interpolated(end+1-(NFFT-CARRIERS-1)/2:end) = 0;
         channel_estimation_interpolated(1:(NFFT-CARRIERS-1)/2-1) =0;
+        %channel_estimation_interpolated(channel_estimation_interpolated==0) = 1;
+
         
         % Calculating the correction
         frequency_correction = 1./channel_estimation_interpolated;
+        frequency_correction(end+1-(NFFT-CARRIERS-1)/2:end) = 0;
+        frequency_correction(1:(NFFT-CARRIERS-1)/2-1) =0;
         %Substituting inf values with zeros
         inf_indexes = find(isinf(frequency_correction));
-
-        for index= inf_indexes
-            frequency_correction(index)=0;
-        end
+        frequency_correction(inf_indexes) = 0;
      
         % The symbol is equalized
         symbol_frequency_corrected = symbol_equalize_fft.*frequency_correction;
-        
+       
         
         %Processing to get two signals
         symbol_QAM_corrected =QAMDetectionV2(symbol_frequency_corrected,scattered_pilots_vector);
+        pilot = 1;
+        for carrier= 1:1:CARRIERS+(NFFT-CARRIERS-1)/2
+            if carrier == scattered_pilots_vector(pilot) 
+                symbol_QAM_corrected(carrier) = 4/3*2*(1/2-reference_sequence(carrier-(NFFT-CARRIERS-1)/2));
+                pilot = pilot+1;
+            end
+       end
+  
         
         %Deleting clutter
-        signal_substracted = symbol_equalize_fft -channel_estimation_interpolated(:,1).*symbol_QAM_corrected(:,1);
-        
+        signal_substracted = symbol_equalize_fft -channel_estimation_interpolated.*symbol_QAM_corrected;
+
+        symbol_QAM_corrected(end+1-(NFFT-CARRIERS-1)/2:end) = 0;
+        symbol_QAM_corrected(1:(NFFT-CARRIERS-1)/2-1) =0;
+
+        signal_substracted(end+1-(NFFT-CARRIERS-1)/2:end) = 0;
+        signal_substracted(1:(NFFT-CARRIERS-1)/2-1) =0;
         
         filtered_signal(:,i) =  ifft(ifftshift(signal_substracted));
         symbols_equalization(:,i) = ifft(ifftshift(symbol_QAM_corrected));
