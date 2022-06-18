@@ -1,1 +1,89 @@
-<mxfile host="app.diagrams.net" modified="2022-06-18T10:48:56.778Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36" version="20.0.1" etag="4-SIZyAKqmXZPXkdvfnF" type="github"><diagram id="Nd16n7NBunU-I2EHx7CY">UzV2zq1wL0osyPDNT0nNUTV2VTV2LsrPL4GwciucU3NyVI0MMlNUjV1UjYwMgFjVyA2HrCFY1qAgsSg1rwSLBiADYTaQg2Y1AA==</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2022-06-18T12:28:10.318Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36" etag="e6uiXMabK4qUzF147wYe" version="20.0.1" type="github">
+  <diagram id="Nd16n7NBunU-I2EHx7CY" name="Page-1">
+    <mxGraphModel dx="3160" dy="1693" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="1" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-10" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=20;endArrow=none;endFill=0;" edge="1" parent="1" source="MP2WACs4-sLn1RNzfsrc-1" target="MP2WACs4-sLn1RNzfsrc-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-1" value="&lt;font style=&quot;font-size: 19px;&quot;&gt;ADC&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="20" y="135" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontSize=20;endArrow=none;endFill=0;" edge="1" parent="1" source="MP2WACs4-sLn1RNzfsrc-4">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="660" y="164.97560975609758" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-4" value="Adaptación frecuencia de muestreo" style="swimlane;fontSize=19;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="160" y="90" width="470" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-12" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=20;endArrow=classicThin;endFill=1;" edge="1" parent="MP2WACs4-sLn1RNzfsrc-4" source="MP2WACs4-sLn1RNzfsrc-3" target="MP2WACs4-sLn1RNzfsrc-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-3" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;$$\uparrow 64$$&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="MP2WACs4-sLn1RNzfsrc-4">
+          <mxGeometry x="30" y="45" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontSize=20;endArrow=classicThin;endFill=1;" edge="1" parent="MP2WACs4-sLn1RNzfsrc-4" source="MP2WACs4-sLn1RNzfsrc-5" target="MP2WACs4-sLn1RNzfsrc-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-5" value="" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="MP2WACs4-sLn1RNzfsrc-4">
+          <mxGeometry x="175" y="45" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-6" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;$$\downarrow 70$$&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="MP2WACs4-sLn1RNzfsrc-4">
+          <mxGeometry x="330" y="45" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-8" value="" style="shape=image;verticalLabelPosition=bottom;labelBackgroundColor=default;verticalAlign=top;aspect=fixed;imageAspect=0;image=https://www.simbologia-electronica.com/imagenes/simbolos-electronicos/filtros-electricos/pasa-baja_1.png;" vertex="1" parent="MP2WACs4-sLn1RNzfsrc-4">
+          <mxGeometry x="200" y="40" width="70" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=20;endArrow=classicThin;endFill=1;" edge="1" parent="MP2WACs4-sLn1RNzfsrc-4" source="MP2WACs4-sLn1RNzfsrc-4" target="MP2WACs4-sLn1RNzfsrc-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-16" value="Sincronismo de símbolo" style="swimlane;fontSize=19;rounded=1;" vertex="1" parent="1">
+          <mxGeometry x="660" y="90" width="470" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=20;endArrow=classicThin;endFill=1;" edge="1" parent="MP2WACs4-sLn1RNzfsrc-16" source="MP2WACs4-sLn1RNzfsrc-18" target="MP2WACs4-sLn1RNzfsrc-20">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-18" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Sincronismo inicial&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="MP2WACs4-sLn1RNzfsrc-16">
+          <mxGeometry x="30" y="45" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-19" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontSize=20;endArrow=classicThin;endFill=1;" edge="1" parent="MP2WACs4-sLn1RNzfsrc-16" source="MP2WACs4-sLn1RNzfsrc-20" target="MP2WACs4-sLn1RNzfsrc-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-20" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Estimación de canal&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="MP2WACs4-sLn1RNzfsrc-16">
+          <mxGeometry x="175" y="45" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-21" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Sincronismo fino&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="MP2WACs4-sLn1RNzfsrc-16">
+          <mxGeometry x="330" y="45" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=20;endArrow=classicThin;endFill=1;" edge="1" parent="MP2WACs4-sLn1RNzfsrc-16" source="MP2WACs4-sLn1RNzfsrc-16" target="MP2WACs4-sLn1RNzfsrc-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;fontSize=20;endArrow=none;endFill=0;" edge="1" parent="1" source="MP2WACs4-sLn1RNzfsrc-6">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="630" y="164.97560975609758" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-26" value="Separación de canales" style="swimlane;rounded=1;fontSize=20;" vertex="1" parent="1">
+          <mxGeometry x="30" y="370" width="560" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-27" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Estimación de canal&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="MP2WACs4-sLn1RNzfsrc-26">
+          <mxGeometry x="20" y="90" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-28" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Ecualización&lt;br&gt;&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="MP2WACs4-sLn1RNzfsrc-26">
+          <mxGeometry x="150" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-29" value="&lt;font style=&quot;font-size: 20px;&quot;&gt;Demodulador QAM&lt;/font&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="MP2WACs4-sLn1RNzfsrc-26">
+          <mxGeometry x="290" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-30" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Inserción prefijo cíclico&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="MP2WACs4-sLn1RNzfsrc-26">
+          <mxGeometry x="410" y="130" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="MP2WACs4-sLn1RNzfsrc-31" value="&lt;span style=&quot;font-size: 20px;&quot;&gt;Inserción prefijo cíclico&lt;/span&gt;" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="MP2WACs4-sLn1RNzfsrc-26">
+          <mxGeometry x="420" y="43" width="120" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
