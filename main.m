@@ -126,7 +126,7 @@ while i< NUMBER_ITERATIONS
     signal_analyze = signal_emitter_reciever+surveillance_signal;
     %Signal is sended to the reciever
     Reciever(signal_analyze);
-    testBatchAtenuation(signal_emitter_reciever,surveillance_signal)
+    %testBatchAtenuation(signal_emitter_reciever,surveillance_signal)
     %Adding the plane to the environment
     plotElement(tp,TARGET1_POSITION,TARGET1_VELOCITY,'Avion')
     
