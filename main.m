@@ -5,7 +5,7 @@
 clc;close all force;clear;
 %% Loading global parameters for the simulation
 load("variables.mat","NUMBER_ITERATIONS","","EMITTER_POSITION", ...
-    "TARGET1_POSITION","TARGET1_VELOCITY","RECIEVER_POSITION","BATCH_SIZE_SIMULATION", ...
+    "TARGET1_POSITION","TARGET1_VELOCITY","TARGET1_ACELERATION","TARGET1_UNITARY_VECTOR","RECIEVER_POSITION","BATCH_SIZE_SIMULATION", ...
     "Fs","Number_batches","Samples_iteration_simulation","Nsym_simulation","T_batch","PROPAGATION_VELOCITY", ...
     "Fc","SNR","GAIN_EMITTER","GAIN_RECIEVER","RADAR_CROSS_SECTION","POWER_TRANSMITED","LAMBDA","Samples_step")
 
@@ -22,9 +22,9 @@ disp("All variables loaded and declared")
 %DATA
 
 %The emitter is plotted
-plotElement(tp,EMITTER_POSITION,[0,0,0],'Emisor')
+plotElement(tp,EMITTER_POSITION./1000,[0,0,0],'Emisor')
 %The reciever is plotted
-plotElement(tp,RECIEVER_POSITION,[0,0,0],'Receptor')
+plotElement(tp,RECIEVER_POSITION./1000,[0,0,0],'Receptor')
 
 disp("3D environment created")
 %% Main loop of the passive radar simulation
@@ -40,13 +40,16 @@ channel_coeficients_emitter_reciever(1:end-1) = 0;
 channel_coeficients_emitter_reciever(end) = 1;
 
 
-
+TARGET_VELOCITY = [0,0,0];
+iteration = 0;
+save("iteration.mat","iteration")
 %% Iterations
  %OFDM signal is generated
 while i< NUMBER_ITERATIONS    
     
-    %load("OFDMSignal.mat")
+     %load("OFDMSignal.mat")
     [Ofdm_signal ,~]= OFDMModV3(Nsym_simulation);
+
     % Controlling the power emited
     power_emitter = (1/length(Ofdm_signal))*sum(abs(Ofdm_signal).^2);
     % Calculating the coeficient to get the desired power transmited
@@ -79,7 +82,9 @@ while i< NUMBER_ITERATIONS
     % Iterating over each step 
     for step = 1:1:length(Ofdm_signal)/Samples_step
         % Updating the position
-        TARGET_POSITION = TARGET1_POSITION+TARGET1_VELOCITY*elapsed_time*(step-1);
+        %TARGET1_INITIAL_POSITION = TARGET1_INITIAL_POSITION+TARGET_VELOCITY*elapsed_time*(step-1);
+        TARGET_POSITION = TARGET1_INITIAL_POSITION+0.5.*TARGET1_ACELERATION.*(elapsed_time*(step-1))^2+TARGET_VELOCITY*elapsed_time*(step-1);
+        TARGET_VELOCITY_STEP = TARGET1_ACELERATION.*elapsed_time*(step-1)+TARGET_VELOCITY;
 
         % Calculating the distances
         distance_emitter_target = sqrt(sum((TARGET_POSITION-EMITTER_POSITION).^2));
@@ -99,14 +104,16 @@ while i< NUMBER_ITERATIONS
             a = 1;
 
         end
+
         
     end
     %Updating positions
-    TARGET1_POSITION = TARGET_POSITION;
+    TARGET1_INITIAL_POSITION = TARGET_POSITION;
+    TARGET_VELOCITY = TARGET_VELOCITY_STEP;
 
     % Calculus of the losses
-    distance_emitter_target = sqrt(sum((TARGET1_POSITION-EMITTER_POSITION).^2));
-    distance_target_reciever  = sqrt(sum((RECIEVER_POSITION-TARGET1_POSITION).^2));
+    distance_emitter_target = sqrt(sum((TARGET1_INITIAL_POSITION-EMITTER_POSITION).^2));
+    distance_target_reciever  = sqrt(sum((RECIEVER_POSITION-TARGET1_INITIAL_POSITION).^2));
 
     power_recieved_desired = (POWER_TRANSMITED*RADAR_CROSS_SECTION*GAIN_EMITTER*GAIN_RECIEVER*LAMBDA^2)/((4*pi)^3*(distance_emitter_target)^2*(distance_target_reciever)^2);    
     %power_recieved_desired = 1e-15;
@@ -116,19 +123,15 @@ while i< NUMBER_ITERATIONS
     % Correcting the power
     surveillance_signal = surveillance_signal.*sqrt(coeficient_recieved_desired);
     
-
-  
-    
     % Noise is added
     %surveillance_signal = awgn(surveillance_signal,SNR,'measured');
-
-   
+    
     signal_analyze = signal_emitter_reciever+surveillance_signal;
     %Signal is sended to the reciever
     Reciever(signal_analyze);
     %testBatchAtenuation(signal_emitter_reciever,surveillance_signal)
     %Adding the plane to the environment
-    plotElement(tp,TARGET1_POSITION,TARGET1_VELOCITY,'Avion')
+    %plotElement(tp,TARGET1_INITIAL_POSITION/1000,TARGET_VELOCITY,'Avion')
     
 
 
@@ -139,3 +142,4 @@ while i< NUMBER_ITERATIONS
     % Adding one iteration to the simulation
     i= i+1;
 end
+a = 1;

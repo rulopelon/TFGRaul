@@ -5,18 +5,28 @@ clear
 threshold = 0.15; 
 %% Parameters used for the simulation environment
 
-NUMBER_ITERATIONS = 100;   % Initial aproach AJUST VALUE
+
+%Total time of the simulation
+SIMULATION_TIME = 30; % Units in seconds
 %The time step is the integration time of the reciever
-TIME_SIMULATION = 250e-3; %Units in seconds 250ms
+INTEGRATION_TIME = 200e-3; %Units in seconds 250ms
+NUMBER_ITERATIONS = SIMULATION_TIME/INTEGRATION_TIME;   % Initial aproach AJUST VALUE
 
 %UNITS ARE IN M the origin is at [0,0,0]
 EMITTER_POSITION = [0,0,0]; % The origin of coordinates is the emitter 
 RECIEVER_POSITION = [10000,0,0]; % Defining reciever coordinates
 
 %Targets for simulation
-TARGET1_POSITION = [3000,5000,5000];
-%TARGET1_POSITION = [10000,10000,5000];
-TARGET1_VELOCITY = [280,0,0];   %The reference point is the emitter
+% Variables for the simulation of a takeoff
+TARGET1_INITIAL_POSITION = [1000,1000,0];
+TARGET1_ACELERATION = [10,0,10]; % Units in m/s^2
+% Final velocity for the target
+TARGET1_FINAL_VELOCITY = TARGET1_ACELERATION.*SIMULATION_TIME;   %The reference point is the emitter
+% Final position of the target
+TARGET1_FINAL_POSITION = 1/2.*TARGET1_ACELERATION.*SIMULATION_TIME^2.+TARGET1_INITIAL_POSITION ;
+TARGET1_VECTOR = TARGET1_FINAL_POSITION-TARGET1_INITIAL_POSITION;
+% Target unitary vector
+TARGET1_UNITARY_VECTOR = TARGET1_VECTOR./sqrt(sum(TARGET1_VECTOR.^2));
 
 PROPAGATION_VELOCITY = 3e8;
 
@@ -73,7 +83,7 @@ Vmax = 300;
 T_batch = 1/(2*Vmax);
 
 % Number of batches that are "moved" on each iteration
-Number_batches = ceil(TIME_SIMULATION/T_batch);
+Number_batches = ceil(INTEGRATION_TIME/T_batch);
 %Aproximating the Batch size to a power of two value
 BATCH_SIZE = 2^ceil(log2(T_batch*Fs_used));
 BATCH_SIZE_SIMULATION = BATCH_SIZE*M/L;
