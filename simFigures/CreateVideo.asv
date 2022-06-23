@@ -1,0 +1,19 @@
+%% Code for generating a video from a secuence of images
+clc,clear
+imageNames = dir(fullfile('simFigures','*.jpg'));
+
+imageNames = {imageNames.name}';
+outputVideo = VideoWriter(fullfile('simFigures','radarRepresentation'));
+outputVideo.FrameRate = 20;
+listNames = [];
+for element= 1:1:length(imageNames)
+    listNames=[ listNames;imageNames{element}];
+end
+sortrows(imageNames,1)
+open(outputVideo)
+for ii = 1:length(imageNames)
+   img = imread(fullfile('simFigures',imageNames{ii}));
+   writeVideo(outputVideo,img)
+end
+
+close(outputVideo)
