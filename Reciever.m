@@ -9,6 +9,8 @@ function  Reciever(data)
     reconstruction_filter_reciever = getFilter(M,L);
     % Filtering the signal to eliminate not wanted frequencies caused by the interpolation
     data_filtered = conv(data_interpolated,reconstruction_filter_reciever,'same');
+    %data_filtered = filter(1,reconstruction_filter_reciever,data_interpolated);
+
     %Decimation
     data_resampled = data_filtered(1:M:length(data_filtered));
     prefix_length = PREFIX*NFFT;
