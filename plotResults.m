@@ -17,10 +17,15 @@ function plotResults(correlation_matrix)
     
 %     figure
 %     image(representation.CData,'CDataMapping','scaled')
+    
+    %nombre = input("Introduzca el nombre de la figura");
+    nombre = load("iteration.mat");
+    iteration = nombre.iteration+1;
+    nombreguardar = ['simFigures/' num2str(iteration)];
+    guardaFiguraPaper(nombreguardar,f,ax,'-djpeg',0)
+    close all
+    save("iteration.mat","iteration")
     a = 2;
-    nombre = input("Introduzca el nombre de la figura");
-    guardaFiguraPaper(nombre,f,ax,'-djpeg',0)
-
 
 
 end
