@@ -116,17 +116,18 @@ while i< NUMBER_ITERATIONS
     distance_target_reciever  = sqrt(sum((RECIEVER_POSITION-TARGET1_INITIAL_POSITION).^2));
 
     power_recieved_desired = (POWER_TRANSMITED*RADAR_CROSS_SECTION*GAIN_EMITTER*GAIN_RECIEVER*LAMBDA^2)/((4*pi)^3*(distance_emitter_target)^2*(distance_target_reciever)^2);    
-    %power_recieved_desired = 1e-15;
     % Calculus of the power recieved
     real_power_recieved = (1/length(surveillance_signal))*sum(abs(surveillance_signal).^2);
     coeficient_recieved_desired = power_recieved_desired/real_power_recieved;
     % Correcting the power
     surveillance_signal = surveillance_signal.*sqrt(coeficient_recieved_desired);
     
-    % Noise is added
-    %surveillance_signal = awgn(surveillance_signal,SNR,'measured');
+
     
     signal_analyze = signal_emitter_reciever+surveillance_signal;
+    % Noise is added
+    %signal_analyze = awgn(signal_analyze,SNR,'measured');
+    
     %Signal is sended to the reciever
     Reciever(signal_analyze);
     %testBatchAtenuation(signal_emitter_reciever,surveillance_signal)
