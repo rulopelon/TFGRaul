@@ -101,7 +101,7 @@ Nsym_simulation = ceil(Samples_iteration_simulation/symbol_length_emitter);
 
 %% Parameters for the wave propagation
 
-SNR  = 20; % Value in db
+SNR  = 10; % Value in db
 GAIN_EMITTER_DB = 40;
 GAIN_RECIEVER_DB = 20;
 GAIN_EMITTER = 10^(GAIN_EMITTER_DB/10); %In natural units
