@@ -109,5 +109,11 @@ GAIN_RECIEVER = 10^(GAIN_RECIEVER_DB/10); %In natural units
 LAMBDA = PROPAGATION_VELOCITY/Fc;
 POWER_TRANSMITED = 5; % in Watts
 RADAR_CROSS_SECTION  = 40;
+
+%% CFAR parameters
+Range_training_cells = 8;
+Doppler_training_cells = 4;
+Range_guard_cells = 4;
+Doppler_guard_cells = 2; 
 save("variables.mat")
 
