@@ -38,7 +38,7 @@ function [correlation_matrix,doppler_axis] = BatchProcessing(reference_batches,s
     %Deleting random peaks at delay 0
     correlation_matrix(1:4,:) = 0;
     %Deleting random peaks at the last index
-    correlation_matrix(end-4:end,1) = 0;
+    correlation_matrix(end-4:end,:) = 0;
 
     %Calculating the axis for the frequency shift representation
     Fs_analysis = Fs_used/BATCH_SIZE;

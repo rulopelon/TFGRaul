@@ -11,7 +11,7 @@ load("variables.mat","NUMBER_ITERATIONS","","EMITTER_POSITION", ...
 
 %% Variables declaration
 i = 0;                    %Variable to iterate over the loops
-
+total_time = 0;
 disp("All variables loaded and declared")
 
 %% Main loop of the passive radar simulation
@@ -31,10 +31,12 @@ TARGET_VELOCITY = [0,0,0];
 iteration = 0;
 save("iteration.mat","iteration","TARGET1_INITIAL_POSITION")
 %% Iterations
- %OFDM signal is generated
+
 while i< NUMBER_ITERATIONS    
     
      %load("OFDMSignal.mat")
+    
+    %OFDM signal is generated
     [Ofdm_signal ,~]= OFDMModV3(Nsym_simulation);
 
     % Controlling the power emited
@@ -70,8 +72,8 @@ while i< NUMBER_ITERATIONS
     for step = 1:1:length(Ofdm_signal)/Samples_step
         % Updating the position
         %TARGET1_INITIAL_POSITION = TARGET1_INITIAL_POSITION+TARGET_VELOCITY*elapsed_time*(step-1);
-        TARGET_POSITION = TARGET1_INITIAL_POSITION+0.5.*TARGET1_ACELERATION.*(elapsed_time*(step-1))^2+TARGET_VELOCITY*elapsed_time*(step-1);
-        TARGET_VELOCITY_STEP = TARGET1_ACELERATION.*elapsed_time*(step-1)+TARGET_VELOCITY;
+        TARGET_POSITION = TARGET1_INITIAL_POSITION+0.5.*TARGET1_ACELERATION.*(total_time+elapsed_time*(step-1))^2;%+TARGET_VELOCITY*elapsed_time*(step-1);
+        TARGET_VELOCITY_STEP = TARGET1_ACELERATION.*elapsed_time+TARGET_VELOCITY;
 
         % Calculating the distances
         distance_emitter_target = sqrt(sum((TARGET_POSITION-EMITTER_POSITION).^2));
@@ -115,7 +117,7 @@ while i< NUMBER_ITERATIONS
     signal_analyze = awgn(signal_analyze,SNR,'measured');
     
     %Signal is sended to the reciever
-    Reciever(signal_analyze);
+    %Reciever(signal_analyze);
     %testBatchAtenuation(signal_emitter_reciever,surveillance_signal)
 
     %% Elements added to 3d environment
@@ -137,9 +139,10 @@ while i< NUMBER_ITERATIONS
     signal_sended_target = [];
 
     %Updating positions
-    TARGET1_INITIAL_POSITION = TARGET_POSITION;
-    save("iteration.mat","TARGET1_INITIAL_POSITION","-append")
+    %TARGET1_INITIAL_POSITION = TARGET_POSITION;
+    save("iteration.mat","TARGET_POSITION","-append")
 
+    total_time = total_time+elapsed_time*length(Ofdm_signal)/Samples_step;
     % Adding one iteration to the simulation
     i= i+1;
 end

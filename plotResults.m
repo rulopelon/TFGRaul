@@ -16,7 +16,7 @@ function plotResults(correlation_matrix)
     surf(X,Y,20*log10((abs(correlation_matrix.'))),'EdgeColor','none')
     xlabel('Delay m')
     ylabel('Velocity m/s')
-    zlabel('Correlation')
+    zlabel('Correlation dB')
     ax = gca;
     ax.Color = 'white';
     colormap jet
@@ -33,8 +33,10 @@ function plotResults(correlation_matrix)
     plot3(TARGET1_INITIAL_POSITION(1)/1000,TARGET1_INITIAL_POSITION(2)/1000,TARGET1_INITIAL_POSITION(3)/1000,'s')
     clear xlim
     clear ylim
+    clear zlim
     xlim([-10 TARGET1_INITIAL_POSITION(1)/1000+10])
     ylim([-10 TARGET1_INITIAL_POSITION(2)/1000+10])
+    zlim([0 TARGET1_INITIAL_POSITION(3)/1000+2])
     ax = gca;
     ax.Color = 'white';
     title("Scenery representation")
@@ -43,7 +45,7 @@ function plotResults(correlation_matrix)
     guardaFiguraPaper(nombreguardar,f2,ax,'-djpeg',0)
     close 
     
-    save("variables.mat","iteration","-append")
+    save("iteration.mat","iteration","-append")
 %     figure
 %     image(representation.CData,'CDataMapping','scaled')
     

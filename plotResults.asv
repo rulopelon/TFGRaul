@@ -1,5 +1,5 @@
 function plotResults(correlation_matrix)
-    load("variables.mat","Fs_used","BATCH_SIZE","PROPAGATION_VELOCITY","Fc")
+    load("variables.mat","Fs_used","BATCH_SIZE","PROPAGATION_VELOCITY","Fc","EMITTER_POSITION","RECIEVER_POSITION")
 
     Fs_analysis = Fs_used/BATCH_SIZE;
     doppler_axis = linspace(-0.5*Fs_analysis,0.5*Fs_analysis,512);
@@ -8,14 +8,15 @@ function plotResults(correlation_matrix)
     distance_axis = range_axis.*(1/Fs_used)*PROPAGATION_VELOCITY;
     [X,Y] = meshgrid(distance_axis,velocity_axis);
 
-    nombre = load("iteration.mat");
-    iteration = nombre.iteration+1;
-    
+    variables = load("iteration.mat");
+    iteration = variables.iteration+1;
+    TARGET1_INITIAL_POSITION = variables.TARGET1_INITIAL_POSITION;
+
     f = figure;
     surf(X,Y,20*log10((abs(correlation_matrix.'))),'EdgeColor','none')
     xlabel('Delay m')
     ylabel('Velocity m/s')
-    zlabel('Correlation')
+    zlabel('Correlation dB')
     ax = gca;
     ax.Color = 'white';
     colormap jet
@@ -23,28 +24,37 @@ function plotResults(correlation_matrix)
 
     nombreguardar = ['simFigures/' num2str(iteration)];
     guardaFiguraPaper(nombreguardar,f,ax,'-djpeg',0)
-
-    figure
+    
+    close 
+    f2 = figure;
     plot3(EMITTER_POSITION(1)/1000,EMITTER_POSITION(2)/1000,EMITTER_POSITION(3)/1000,'s')
     hold on
     plot3(RECIEVER_POSITION(1)/1000,RECIEVER_POSITION(2)/1000,RECIEVER_POSITION(3)/1000,'s')
     plot3(TARGET1_INITIAL_POSITION(1)/1000,TARGET1_INITIAL_POSITION(2)/1000,TARGET1_INITIAL_POSITION(3)/1000,'s')
     clear xlim
     clear ylim
+    clear zlim
     xlim([-10 TARGET1_INITIAL_POSITION(1)/1000+10])
-    ylim([-10 TARGET1_INITIAL_POSITION(2)/1000+10])
-    
-    nombreguardar = ['simFigures/' num2str(iteration)];
-    guardaFiguraPaper(nombreguardar,f,ax,'-djpeg',0)
+    ylim([-1 TARGET1_INITIAL_POSITION(2)/1000+10])
+    zlim([0 TARGET1_INITIAL_POSITION(3)/1000+2])
+    ax = gca;
+    ax.Color = 'white';
+    grid on
+    title("Scenery representation")
 
+    nombreguardar = ['sceneryFigures/' num2str(iteration)];
+    guardaFiguraPaper(nombreguardar,f2,ax,'-djpeg',0)
+    close 
     
+    
+    save("iteration.mat","iteration","-append")
 %     figure
 %     image(representation.CData,'CDataMapping','scaled')
     
     %nombre = input("Introduzca el nombre de la figura");
    
    
-    close 
+    
     a = 2;
 
 
