@@ -29,7 +29,8 @@ channel_coeficients_emitter_reciever(end) = 1;
 
 TARGET_VELOCITY = [0,0,0];
 iteration = 0;
-save("iteration.mat","iteration","TARGET1_INITIAL_POSITION")
+save("iteration.mat","iteration")
+save("iteration.mat","TARGET1_INITIAL_POSITION")
 %% Iterations
  %OFDM signal is generated
 while i< NUMBER_ITERATIONS    
@@ -131,6 +132,15 @@ while i< NUMBER_ITERATIONS
 %     %Adding the plane to the environment
 %     plotElement(tp,TARGET1_INITIAL_POSITION/1000,TARGET_VELOCITY,'Avion')
     
+    nombre = load("iteration.mat");
+    iteration = nombre.iteration+1;
+    nombreguardar = ['sceneryFigures/' num2str(iteration)];
+    guardaFiguraPaper(nombreguardar,f,ax,'-djpeg',0)
+    
+
+    close all    
+
+
     %Removing used samples
     signal_emitter_reciever =[];
     signal_emitter = [];
@@ -138,7 +148,7 @@ while i< NUMBER_ITERATIONS
 
     %Updating positions
     TARGET1_INITIAL_POSITION = TARGET_POSITION;
-    save("iteration.mat","TARGET1_INITIAL_POSITION","-append")
+    save("iteration.mat","TARGET1_INITIAL_POSITION")
 
     % Adding one iteration to the simulation
     i= i+1;

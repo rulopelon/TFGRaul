@@ -1,29 +1,50 @@
 function plotResults(correlation_matrix)
-    load("variables.mat","Fs_used","BATCH_SIZE")
+    load("variables.mat","Fs_used","BATCH_SIZE","PROPAGATION_VELOCITY","Fc")
 
     Fs_analysis = Fs_used/BATCH_SIZE;
     doppler_axis = linspace(-0.5*Fs_analysis,0.5*Fs_analysis,512);
+    velocity_axis = doppler_axis.*(PROPAGATION_VELOCITY/Fc);
     range_axis= 1:1:BATCH_SIZE;
-    [X,Y] = meshgrid(range_axis,doppler_axis);
+    distance_axis = range_axis.*(1/Fs_used)*PROPAGATION_VELOCITY;
+    [X,Y] = meshgrid(distance_axis,velocity_axis);
+
+    nombre = load("iteration.mat");
+    iteration = nombre.iteration+1;
+    
     f = figure;
     surf(X,Y,20*log10((abs(correlation_matrix.'))),'EdgeColor','none')
-    xlabel('Delay')
-    ylabel('Doppler')
+    xlabel('Delay m')
+    ylabel('Velocity m/s')
     zlabel('Correlation')
     ax = gca;
     ax.Color = 'white';
     colormap jet
     title("CAF representation")
+
+    nombreguardar = ['simFigures/' num2str(iteration)];
+    guardaFiguraPaper(nombreguardar,f,ax,'-djpeg',0)
+
+    figure
+    plot3(EMITTER_POSITION(1)/1000,EMITTER_POSITION(2)/1000,EMITTER_POSITION(3)/1000,'s')
+    hold on
+    plot3(RECIEVER_POSITION(1)/1000,RECIEVER_POSITION(2)/1000,RECIEVER_POSITION(3)/1000,'s')
+    plot3(TARGET1_INITIAL_POSITION(1)/1000,TARGET1_INITIAL_POSITION(2)/1000,TARGET1_INITIAL_POSITION(3)/1000,'s')
+    clear xlim
+    clear ylim
+    xlim([-10 TARGET1_INITIAL_POSITION(1)/1000+10])
+    ylim([-10 TARGET1_INITIAL_POSITION(2)/1000+10])
+    
+    nombreguardar = ['simFigures/' num2str(iteration)];
+    guardaFiguraPaper(nombreguardar,f,ax,'-djpeg',0)
+
     
 %     figure
 %     image(representation.CData,'CDataMapping','scaled')
     
     %nombre = input("Introduzca el nombre de la figura");
-    nombre = load("iteration.mat");
-    iteration = nombre.iteration+1;
-    nombreguardar = ['/simFigures/' num2str(iteration)];
-    guardaFiguraPaper(num2str(iteration),f,ax,'-djpeg',0)
-    save("iteration.mat","iteration")
+   
+   
+    close 
     a = 2;
 
 
