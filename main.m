@@ -117,7 +117,7 @@ while i< NUMBER_ITERATIONS
     signal_analyze = awgn(signal_analyze,SNR,'measured');
     
     %Signal is sended to the reciever
-    %Reciever(signal_analyze);
+    Reciever(signal_analyze);
     %testBatchAtenuation(signal_emitter_reciever,surveillance_signal)
 
     %% Elements added to 3d environment

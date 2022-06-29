@@ -10,7 +10,7 @@ function plotResults(correlation_matrix)
 
     variables = load("iteration.mat");
     iteration = variables.iteration+1;
-    TARGET1_INITIAL_POSITION = variables.TARGET1_INITIAL_POSITION;
+    %TARGET_POSITION = variables.TARGET_POSITION;
 
     f = figure;
     surf(X,Y,20*log10((abs(correlation_matrix.'))),'EdgeColor','none')
@@ -25,27 +25,29 @@ function plotResults(correlation_matrix)
     nombreguardar = ['simFigures/' num2str(iteration)];
     guardaFiguraPaper(nombreguardar,f,ax,'-djpeg',0)
     
-    close 
-    f2 = figure;
-    plot3(EMITTER_POSITION(1)/1000,EMITTER_POSITION(2)/1000,EMITTER_POSITION(3)/1000,'s')
-    hold on
-    plot3(RECIEVER_POSITION(1)/1000,RECIEVER_POSITION(2)/1000,RECIEVER_POSITION(3)/1000,'s')
-    plot3(TARGET1_INITIAL_POSITION(1)/1000,TARGET1_INITIAL_POSITION(2)/1000,TARGET1_INITIAL_POSITION(3)/1000,'s')
-    clear xlim
-    clear ylim
-    clear zlim
-    xlim([-10 TARGET1_INITIAL_POSITION(1)/1000+10])
-    ylim([-10 TARGET1_INITIAL_POSITION(2)/1000+10])
-    zlim([0 TARGET1_INITIAL_POSITION(3)/1000+2])
-    ax = gca;
-    ax.Color = 'white';
-    title("Scenery representation")
-
-    nombreguardar = ['sceneryFigures/' num2str(iteration)];
-    guardaFiguraPaper(nombreguardar,f2,ax,'-djpeg',0)
-    close 
-    
-    save("iteration.mat","iteration","-append")
+%     close 
+%     f2 = figure;
+%     plot3(EMITTER_POSITION(1)/1000,EMITTER_POSITION(2)/1000,EMITTER_POSITION(3)/1000,'s')
+%     hold on
+%     plot3(RECIEVER_POSITION(1)/1000,RECIEVER_POSITION(2)/1000,RECIEVER_POSITION(3)/1000,'s')
+%     plot3(TARGET_POSITION(1)/1000,TARGET_POSITION(2)/1000,TARGET_POSITION(3)/1000,'s')
+%     clear xlim
+%     clear ylim
+%     clear zlim
+%     xlim([-10 TARGET_POSITION(1)/1000+10])
+%     ylim([-1 TARGET_POSITION(2)/1000+10])
+%     zlim([0 TARGET_POSITION(3)/1000+2])
+%     ax = gca;
+%     ax.Color = 'white';
+%     grid on
+%     title("Scenery representation")
+% 
+%     nombreguardar = ['sceneryFigures/' num2str(iteration)];
+%     guardaFiguraPaper(nombreguardar,f2,ax,'-djpeg',0)
+%     close 
+%     
+%     
+%     save("iteration.mat","iteration","-append")
 %     figure
 %     image(representation.CData,'CDataMapping','scaled')
     
