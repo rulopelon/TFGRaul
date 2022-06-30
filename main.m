@@ -31,13 +31,13 @@ TARGET_VELOCITY = [0,0,0];
 iteration = 0;
 save("iteration.mat","iteration","TARGET1_INITIAL_POSITION")
 %% Iterations
-
+[Ofdm_signal ,~]= OFDMModV3(Nsym_simulation);
 while i< NUMBER_ITERATIONS    
     
      %load("OFDMSignal.mat")
     
     %OFDM signal is generated
-    [Ofdm_signal ,~]= OFDMModV3(Nsym_simulation);
+    
 
     % Controlling the power emited
     power_emitter = (1/length(Ofdm_signal))*sum(abs(Ofdm_signal).^2);
@@ -115,29 +115,21 @@ while i< NUMBER_ITERATIONS
     signal_analyze = signal_emitter_reciever+surveillance_signal;
     % Noise is added
     signal_analyze = awgn(signal_analyze,SNR,'measured');
-    
+    save("iteration.mat","TARGET_POSITION","-append")
+
     %Signal is sended to the reciever
-    Reciever(signal_analyze);
+    %Reciever(signal_analyze);
     %testBatchAtenuation(signal_emitter_reciever,surveillance_signal)
 
     %% Elements added to 3d environment
     %This environment is just to visualize data NOT FOR SIMULATION NOR EXTRACT
     %DATA
 
-%     %Object to plot all the elements in the 
-%     tp = theaterPlot('XLim',[-90,90],'YLim',[-90,90],'ZLim',[0,40]);
-%     %The emitter is plotted
-%     plotElement(tp,EMITTER_POSITION./1000,[0,0,0],'Emisor')
-%     %The reciever is plotted
-%     plotElement(tp,RECIEVER_POSITION./1000,[0,0,0],'Receptor')
-%     %Adding the plane to the environment
-%     plotElement(tp,TARGET1_INITIAL_POSITION/1000,TARGET_VELOCITY,'Avion')
-    
     %Removing used samples
     signal_emitter_reciever =[];
     signal_emitter = [];
     signal_sended_target = [];
-
+    
     %Updating positions
     %TARGET1_INITIAL_POSITION = TARGET_POSITION;
     save("iteration.mat","TARGET_POSITION","-append")
