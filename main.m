@@ -31,11 +31,12 @@ TARGET_VELOCITY = [0,0,0];
 iteration = 0;
 save("iteration.mat","iteration","TARGET1_INITIAL_POSITION")
 %% Iterations
-[Ofdm_signal ,~]= OFDMModV3(Nsym_simulation);
 while i< NUMBER_ITERATIONS    
     
+
      %load("OFDMSignal.mat")
-    
+    [Ofdm_signal ,~]= OFDMModV3(Nsym_simulation);
+
     %OFDM signal is generated
     
 
@@ -118,7 +119,7 @@ while i< NUMBER_ITERATIONS
     save("iteration.mat","TARGET_POSITION","-append")
 
     %Signal is sended to the reciever
-    %Reciever(signal_analyze);
+    Reciever(signal_analyze);
     %testBatchAtenuation(signal_emitter_reciever,surveillance_signal)
 
     %% Elements added to 3d environment
@@ -132,7 +133,6 @@ while i< NUMBER_ITERATIONS
     
     %Updating positions
     %TARGET1_INITIAL_POSITION = TARGET_POSITION;
-    save("iteration.mat","TARGET_POSITION","-append")
 
     total_time = total_time+elapsed_time*length(Ofdm_signal)/Samples_step;
     % Adding one iteration to the simulation

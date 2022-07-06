@@ -1,14 +1,14 @@
 %% Code for generating a video from a secuence of images
 clc,clear
-imageNames = dir(fullfile('simFigures','*.jpg'));
+imageNames = dir(fullfile('sceneryFigures','*.jpg'));
 
 imageNames = {imageNames.name}';
-outputVideo = VideoWriter(fullfile('simFigures','radarRepresentation'));
+outputVideo = VideoWriter(fullfile('sceneryFigures','sceneryVideo'));
 outputVideo.FrameRate = 20;
 listNames = natsort(imageNames);
 open(outputVideo)
 for ii = 1:length(listNames)
-   img = imread(fullfile('simFigures',listNames{ii}));
+   img = imread(fullfile('sceneryFigures',listNames{ii}));
    writeVideo(outputVideo,img)
 end
 

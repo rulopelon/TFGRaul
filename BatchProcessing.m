@@ -36,7 +36,7 @@ function [correlation_matrix,doppler_axis] = BatchProcessing(reference_batches,s
     %correlation_matrix = correlation_matrix(1:length(cross_correlation_ifft)/2,:);
     
     %Deleting random peaks at delay 0
-    correlation_matrix(1:4,:) = 0;
+    correlation_matrix(1,:) = 0;
     %Deleting random peaks at the last index
     correlation_matrix(end-4:end,:) = 0;
 
