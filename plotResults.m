@@ -38,8 +38,8 @@ function plotResults(correlation_matrix)
     clear xlim
     clear ylim
     clear zlim
-    xlim([-1 TARGET_POSITION(2)/1000+5])
-    ylim([-1 TARGET_POSITION(2)/1000+])
+    xlim([-1 TARGET_POSITION(2)/1000+10])
+    ylim([-1 TARGET_POSITION(2)/1000+10])
     zlim([0 6])
     ax = gca;
     ax.Color = 'white';
