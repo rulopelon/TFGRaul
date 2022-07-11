@@ -25,13 +25,15 @@ samples = data_resampled;
 %samples = samples(end-int64(Samples_iteration)+1:end);
 n = 0:1:length(samples)-1;
 n = n';
-shift = 80; % In hertz
+shift = -200; % In hertz
 shift = shift/Fs_used;
 
 %% Samples are shifted on frequency 
+delay_filter1 = zeros(5,1);
+delay_filter1(end) = 1;
 
-
-shifted = samples.*exp(-1i*2*pi*shift*n);
+delayed = filter(delay_filter1,1,samples);
+shifted = delayed.*exp(-1i*2*pi*shift*n);
 % Samples are analyzed
 [correlation_matrix_doppler,~]= BatchProcessing(samples,shifted);
 plotResults(correlation_matrix_doppler)

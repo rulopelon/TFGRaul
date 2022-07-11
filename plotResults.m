@@ -23,6 +23,7 @@ function plotResults(correlation_matrix)
     title("CAF representation")
 
     nombreguardar = ['simFigures/' num2str(iteration)];
+    nombreguardar = "shifted";
     guardaFiguraPaper(nombreguardar,f,ax,'-djpeg',0)
     colorData = representation.CData(:,1:200);
     close
